@@ -30,28 +30,32 @@ export class GameScene extends Phaser.Scene {
     this._resetArrow();
     this._setTargetToRandomPosition();
 
-    this.physics.world.on('worldbounds', arrowBody => {
-      const nextLives = this.registry.get('lives') - 1
-      if (nextLives === 0) {
-        this._endGame();
-      }
+    this.physics.world.on('worldbounds', this._onArrowWorldBoundsCollide, this);
 
-      this.registry.set('lives', nextLives);
-
-      this._resetForNextLife();
-    });
-
-    this.physics.add.collider(this.arrow, this.target, (arrow, target) => {
-      this.registry.set('score', this.registry.get('score') + 10);
-
-      this._resetForNextLife();
-    });
+    this.physics.add.collider(this.arrow, this.target, () => this._onArrowTargetCollide());
   }
 
   update() {
     if (this.arrow.body.allowGravity) {
       this.arrow.rotation = Phaser.Math.Angle.BetweenPoints(Phaser.Math.Vector2.ZERO, this.arrow.body.velocity);
     }
+  }
+
+  _onArrowWorldBoundsCollide() {
+    const nextLives = this.registry.get('lives') - 1
+    if (nextLives === 0) {
+      this._endGame();
+    }
+
+    this.registry.set('lives', nextLives);
+
+    this._resetForNextLife();
+  }
+
+  _onArrowTargetCollide() {
+    this.registry.set('score', this.registry.get('score') + 10);
+
+    this._resetForNextLife();
   }
 
   _angleArrowWithMouse(pointer) {
