@@ -121,8 +121,8 @@ export class GameScene extends Phaser.Scene {
   }
 
   _setTargetToRandomPosition() {
-    this.target.x = Phaser.Math.RND.integerInRange(500, 650);
-    this.target.y = Phaser.Math.RND.integerInRange(300, 500);
+    this.target.x = Phaser.Math.RND.integerInRange(500, 620);
+    this.target.y = Phaser.Math.RND.integerInRange(300, 420);
 
     this.target.alpha = 1;
   }
