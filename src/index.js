@@ -1,6 +1,7 @@
 import 'phaser';
 
-import { GameScene } from './scenes/simple-scene';
+import { GameScene } from './scenes/game-scene';
+import { UiScene } from './scenes/ui-scene';
 
 const gameConfig = {
   width: 640,
@@ -14,7 +15,7 @@ const gameConfig = {
       }
     }
   },
-  scene: GameScene,
+  scene: [GameScene, UiScene],
 };
 
 new Phaser.Game(gameConfig);

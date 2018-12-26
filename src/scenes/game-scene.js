@@ -1,10 +1,17 @@
 export class GameScene extends Phaser.Scene {
+  constructor() {
+    super({ key: 'game' })
+  }
+
   preload() {
     this.load.image('target', 'assets/target.png');
     this.load.image('arrow', 'assets/arrow.png');
   }
 
   create() {
+    this.registry.set('score', 0);
+    this.scene.launch('ui');
+
     this.input.setDefaultCursor('crosshair');
 
     this.arrow = this.physics.add.image(50, 400, 'arrow');
@@ -38,6 +45,7 @@ export class GameScene extends Phaser.Scene {
             },
             duration: 200,
             onComplete: () => {
+              this.registry.set('score', this.registry.get('score') + 1);
               this._resetArrow();
               this._setTargetToRandomPosition();
             },
