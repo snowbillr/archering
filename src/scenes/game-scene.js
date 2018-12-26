@@ -37,7 +37,7 @@ export class GameScene extends Phaser.Scene {
     });
 
     this.physics.add.collider(this.arrow, this.target, (arrow, target) => {
-      this.registry.set('score', this.registry.get('score') + 1);
+      this.registry.set('score', this.registry.get('score') + 10);
 
       this._resetForNextLife();
     });

@@ -14,8 +14,16 @@ export class UiScene extends Phaser.Scene {
     this.registry.events.on('changedata_lives', this._updateLivesText, this);
   }
 
-  _updateScoreText(parent, value) {
-    this.scoreText.text = `Score: ${value}`;
+  _updateScoreText(parent, value, previousValue) {
+    this.tweens.addCounter({
+      from: previousValue || 0,
+      to: value,
+      duration: 500,
+      onUpdate: tween => {
+        const roundedValue = Phaser.Math.RoundTo(tween.targets[0].value)
+        this.scoreText.text = `Score: ${roundedValue}`;
+      }
+    })
   }
 
   _updateLivesText(parent, value) {
