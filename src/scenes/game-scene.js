@@ -31,7 +31,12 @@ export class GameScene extends Phaser.Scene {
     this._setTargetToRandomPosition();
 
     this.physics.world.on('worldbounds', arrowBody => {
-      this.registry.set('lives', this.registry.get('lives') - 1);
+      const nextLives = this.registry.get('lives') - 1
+      if (nextLives === 0) {
+        this._endGame();
+      }
+
+      this.registry.set('lives', nextLives);
 
       this._resetForNextLife();
     });
@@ -52,6 +57,12 @@ export class GameScene extends Phaser.Scene {
   _angleArrowWithMouse(pointer) {
     const angle = Phaser.Math.Angle.BetweenPoints(this.arrow, pointer);
     this.arrow.rotation = angle;
+  }
+
+  _endGame() {
+    this.scene.stop('game');
+    this.scene.stop('ui');
+    this.scene.start('results');
   }
 
   _resetForNextLife() {

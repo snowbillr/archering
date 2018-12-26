@@ -14,6 +14,11 @@ export class UiScene extends Phaser.Scene {
     this.registry.events.on('changedata_lives', this._updateLivesText, this);
   }
 
+  destroy() {
+    this.registry.events.off('changedata_score', this._updateScoreText, this);
+    this.registry.events.off('changedata_lives', this._updateLivesText, this);
+  }
+
   _updateScoreText(parent, value, previousValue) {
     this.tweens.addCounter({
       from: previousValue || 0,

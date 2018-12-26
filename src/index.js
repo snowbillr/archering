@@ -2,6 +2,7 @@ import 'phaser';
 
 import { GameScene } from './scenes/game-scene';
 import { UiScene } from './scenes/ui-scene';
+import { ResultsScene } from './scenes/results-scene';
 
 const gameConfig = {
   width: 640,
@@ -15,7 +16,7 @@ const gameConfig = {
       }
     }
   },
-  scene: [GameScene, UiScene],
+  scene: [GameScene, UiScene, ResultsScene],
 };
 
 new Phaser.Game(gameConfig);
