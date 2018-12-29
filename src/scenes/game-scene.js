@@ -25,15 +25,15 @@ export class GameScene extends Phaser.Scene {
 
     this.physics.world.setBounds(0, 0, 640, 300);
 
-    this.backgroundBack = this.add.tileSprite(0, 0, 640, 300, 'background-back');
+    this.backgroundBack = this.add.tileSprite(0, 0, 1000, 300, 'background-back');
     this.backgroundBack.setOrigin(0, 0);
     this.backgroundBack.setTileScale(1, 1.35);
 
-    this.backgroundMiddle = this.add.tileSprite(0, 0, 640, 300, 'background-middle');
+    this.backgroundMiddle = this.add.tileSprite(0, 0, 1000, 300, 'background-middle');
     this.backgroundMiddle.setOrigin(0, 0);
     this.backgroundMiddle.setTileScale(1, 1.35);
 
-    this.backgroundFront = this.add.tileSprite(0, 0, 640, 300, 'background-front');
+    this.backgroundFront = this.add.tileSprite(0, 0, 1000, 300, 'background-front');
     this.backgroundFront.setOrigin(0, 0);
     this.backgroundFront.setTileScale(1, 1.35);
 
@@ -49,10 +49,6 @@ export class GameScene extends Phaser.Scene {
       allowGravity: false,
       immovable: true,
       classType: Phaser.Physics.Arcade.Image,
-      createCallback: target => {
-        // target.active = false;
-        // target.body.enable = false;
-      }
     });
 
     this._loadLevel();
@@ -65,6 +61,11 @@ export class GameScene extends Phaser.Scene {
   update() {
     if (this.arrow.body.allowGravity) {
       this.arrow.rotation = Phaser.Math.Angle.BetweenPoints(Phaser.Math.Vector2.ZERO, this.arrow.body.velocity);
+    }
+
+    const xScrollAmount = this.arrow.x - 50 - 400;
+    if (xScrollAmount > 0) {
+      this.cameras.main.scrollX = xScrollAmount;
     }
   }
 
@@ -141,14 +142,25 @@ export class GameScene extends Phaser.Scene {
 
     this._angleArrowWithMouse(this.input.mousePointer);
 
-    this.input.on('pointermove', this._angleArrowWithMouse, this);
+    this.tweens.add({
+      targets: this.cameras.main,
+      props: {
+        scrollX: 0,
+      },
+      duration: 300,
+      ease: Phaser.Math.Easing.Quadratic.Out,
+      onComplete: () => {
 
-    this.input.once('pointerdown', pointer => {
-      this.input.off('pointermove', this._angleArrowWithMouse, this);
+        this.input.on('pointermove', this._angleArrowWithMouse, this);
+        this.input.once('pointerdown', pointer => {
+          this.input.off('pointermove', this._angleArrowWithMouse, this);
 
-      this.arrow.body.allowGravity = true;
-      this.physics.velocityFromRotation(this.arrow.rotation, 500, this.arrow.body.velocity)
+          this.arrow.body.allowGravity = true;
+          this.physics.velocityFromRotation(this.arrow.rotation, 500, this.arrow.body.velocity)
+        });
+      },
     });
+
   }
 
   _tweenFadeOut(target, callback) {

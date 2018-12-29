@@ -6,8 +6,8 @@ export class UiScene extends Phaser.Scene {
   create() {
     this.events.on('shutdown', this._cleanupRegistryListeners, this);
 
-    this.scoreText = this.add.text(50, 50, 'test');
-    this.livesText = this.add.text(50, 75, 'test');
+    this.scoreText = this.add.text(30, 15, 'test');
+    this.livesText = this.add.text(30, 40, 'test');
 
     this._updateScoreText(null, this.registry.get('score'));
     this._updateLivesText(null, this.registry.get('lives'));
