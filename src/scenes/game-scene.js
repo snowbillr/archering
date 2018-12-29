@@ -15,9 +15,9 @@ export class GameScene extends Phaser.Scene {
 
     this.input.setDefaultCursor('crosshair');
 
-    this.physics.world.setBounds(0, 0, 640, 480);
+    this.physics.world.setBounds(0, 0, 640, 300);
 
-    this.arrow = this.physics.add.image(50, 400, 'arrow');
+    this.arrow = this.physics.add.image(50, 250, 'arrow');
     this.arrow.body.collideWorldBounds = true;
     this.arrow.body.onWorldBounds = true;
     this.arrow.setScale(0.75);
@@ -34,7 +34,7 @@ export class GameScene extends Phaser.Scene {
     });
     this.targets.getChildren().forEach((target, i) => {
       target.x = ((1 + i) * 100) + 300;
-      target.y = 400;
+      target.y = 250;
     });
 
     this._resetArrow();
@@ -89,7 +89,7 @@ export class GameScene extends Phaser.Scene {
 
   _resetArrow() {
     this.arrow.x = 50;
-    this.arrow.y = 400;
+    this.arrow.y = 250;
 
     this.arrow.alpha = 1;
 

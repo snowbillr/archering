@@ -6,7 +6,7 @@ import { ResultsScene } from './scenes/results-scene';
 
 const gameConfig = {
   width: 640,
-  height: 480,
+  height: 300,
   pixelArt: true,
   physics: {
     default: 'arcade',
