@@ -23,16 +23,25 @@ export class GameScene extends Phaser.Scene {
     this.arrow.setScale(0.75);
     this.arrow.body.allowGravity = false;
 
-    this.target = this.physics.add.image(600, 400, 'target');
-    this.target.body.allowGravity = false;
-    this.target.body.immovable = true;
+    this.targets = this.physics.add.group({
+      allowGravity: false,
+      immovable: true,
+      classType: Phaser.Physics.Arcade.Image,
+    });
+    this.targets.createMultiple({
+      key: 'target',
+      repeat: 2,
+    });
+    this.targets.getChildren().forEach((target, i) => {
+      target.x = ((1 + i) * 100) + 300;
+      target.y = 400;
+    });
 
     this._resetArrow();
-    this._setTargetToRandomPosition();
 
     this.physics.world.on('worldbounds', this._onArrowWorldBoundsCollide, this);
 
-    this.physics.add.collider(this.arrow, this.target, () => this._onArrowTargetCollide());
+    this.physics.add.collider(this.arrow, this.targets, (arrow, target) => this._onArrowTargetCollide(arrow, target));
   }
 
   update() {
@@ -49,13 +58,22 @@ export class GameScene extends Phaser.Scene {
 
     this.registry.set('lives', nextLives);
 
-    this._resetForNextLife();
+    this.arrow.body.allowGravity = false;
+    this.arrow.body.enable = false;
+    this._tweenFadeOut(this.arrow, () => this._resetArrow());
   }
 
-  _onArrowTargetCollide() {
+  _onArrowTargetCollide(arrow, target) {
     this.registry.set('score', this.registry.get('score') + 10);
 
-    this._resetForNextLife();
+    this.arrow.body.allowGravity = false;
+    this.arrow.body.enable = false;
+
+    this._tweenFadeOut([arrow, target], () => {
+      this._resetArrow();
+      target.active = false;
+      target.body.enable = false;
+    })
   }
 
   _angleArrowWithMouse(pointer) {
@@ -67,34 +85,6 @@ export class GameScene extends Phaser.Scene {
     this.scene.stop('game');
     this.scene.stop('ui');
     this.scene.start('results');
-  }
-
-  _resetForNextLife() {
-    this.arrow.body.allowGravity = false;
-    this.arrow.body.enable = false;
-
-    this.tweens.add({
-      targets: [this.arrow, this.target],
-      props: {
-        alpha: 0,
-      },
-      duration: 200,
-      yoyo: true,
-      repeat: 1,
-      onComplete: () => {
-        this.tweens.add({
-          targets: [this.arrow, this.target],
-          props: {
-            alpha: 0,
-          },
-          duration: 200,
-          onComplete: () => {
-            this._resetArrow();
-            this._setTargetToRandomPosition();
-          },
-        })
-      },
-    });
   }
 
   _resetArrow() {
@@ -120,10 +110,27 @@ export class GameScene extends Phaser.Scene {
     });
   }
 
-  _setTargetToRandomPosition() {
-    this.target.x = Phaser.Math.RND.integerInRange(500, 620);
-    this.target.y = Phaser.Math.RND.integerInRange(300, 420);
-
-    this.target.alpha = 1;
+  _tweenFadeOut(target, callback) {
+    this.tweens.add({
+      targets: target,
+      props: {
+        alpha: 0,
+      },
+      duration: 200,
+      yoyo: true,
+      repeat: 1,
+      onComplete: () => {
+        this.tweens.add({
+          targets: target,
+          props: {
+            alpha: 0,
+          },
+          duration: 200,
+          onComplete: () => {
+            callback();
+          },
+        })
+      },
+    });
   }
 }
