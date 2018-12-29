@@ -1,6 +1,10 @@
+import levels from '../levels.json';
+
 export class GameScene extends Phaser.Scene {
   constructor() {
     super({ key: 'game' })
+
+    this.levelIndex = 0;
   }
 
   preload() {
@@ -17,27 +21,25 @@ export class GameScene extends Phaser.Scene {
 
     this.physics.world.setBounds(0, 0, 640, 300);
 
-    this.arrow = this.physics.add.image(50, 250, 'arrow');
+    this.arrow = this.physics.add.image(0, 0, 'arrow');
+    this.arrow.setScale(0.75);
     this.arrow.body.collideWorldBounds = true;
     this.arrow.body.onWorldBounds = true;
-    this.arrow.setScale(0.75);
     this.arrow.body.allowGravity = false;
+    this._resetArrow();
 
     this.targets = this.physics.add.group({
+      defaultKey: 'target',
       allowGravity: false,
       immovable: true,
       classType: Phaser.Physics.Arcade.Image,
-    });
-    this.targets.createMultiple({
-      key: 'target',
-      repeat: 2,
-    });
-    this.targets.getChildren().forEach((target, i) => {
-      target.x = ((1 + i) * 100) + 300;
-      target.y = 250;
+      createCallback: target => {
+        // target.active = false;
+        // target.body.enable = false;
+      }
     });
 
-    this._resetArrow();
+    this._loadLevel();
 
     this.physics.world.on('worldbounds', this._onArrowWorldBoundsCollide, this);
 
@@ -48,6 +50,25 @@ export class GameScene extends Phaser.Scene {
     if (this.arrow.body.allowGravity) {
       this.arrow.rotation = Phaser.Math.Angle.BetweenPoints(Phaser.Math.Vector2.ZERO, this.arrow.body.velocity);
     }
+  }
+
+  _loadNextLevel() {
+    this.levelIndex += 1;
+    this._loadLevel();
+  }
+
+  _loadLevel() {
+    const level = levels[this.levelIndex];
+
+    level.targets.forEach(coordinates => {
+      const target = this.targets.get();
+      target.alpha = 1;
+      target.active = true;
+      target.body.enable = true;
+
+      target.x = coordinates.x;
+      target.y = coordinates.y;
+    });
   }
 
   _onArrowWorldBoundsCollide() {
@@ -73,7 +94,11 @@ export class GameScene extends Phaser.Scene {
       this._resetArrow();
       target.active = false;
       target.body.enable = false;
-    })
+
+      if (this.targets.countActive() === 0) {
+        this._loadNextLevel();
+      }
+    });
   }
 
   _angleArrowWithMouse(pointer) {
