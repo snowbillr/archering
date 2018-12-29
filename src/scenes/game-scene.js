@@ -10,6 +10,10 @@ export class GameScene extends Phaser.Scene {
   preload() {
     this.load.image('target', 'assets/target.png');
     this.load.image('arrow', 'assets/arrow.png');
+
+    this.load.image('background-back', 'assets/background-back.png');
+    this.load.image('background-middle', 'assets/background-middle.png');
+    this.load.image('background-front', 'assets/background-front.png');
   }
 
   create() {
@@ -20,6 +24,18 @@ export class GameScene extends Phaser.Scene {
     this.input.setDefaultCursor('crosshair');
 
     this.physics.world.setBounds(0, 0, 640, 300);
+
+    this.backgroundBack = this.add.tileSprite(0, 0, 640, 300, 'background-back');
+    this.backgroundBack.setOrigin(0, 0);
+    this.backgroundBack.setTileScale(1, 1.35);
+
+    this.backgroundMiddle = this.add.tileSprite(0, 0, 640, 300, 'background-middle');
+    this.backgroundMiddle.setOrigin(0, 0);
+    this.backgroundMiddle.setTileScale(1, 1.35);
+
+    this.backgroundFront = this.add.tileSprite(0, 0, 640, 300, 'background-front');
+    this.backgroundFront.setOrigin(0, 0);
+    this.backgroundFront.setTileScale(1, 1.35);
 
     this.arrow = this.physics.add.image(0, 0, 'arrow');
     this.arrow.setScale(0.75);
@@ -114,7 +130,7 @@ export class GameScene extends Phaser.Scene {
 
   _resetArrow() {
     this.arrow.x = 50;
-    this.arrow.y = 250;
+    this.arrow.y = 240;
 
     this.arrow.alpha = 1;
 
