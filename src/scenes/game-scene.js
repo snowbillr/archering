@@ -27,15 +27,15 @@ export class GameScene extends Phaser.Scene {
 
     this.physics.world.setBounds(0, 0, 640, 300);
 
-    this.backgroundBack = this.add.tileSprite(0, 0, 1000, 300, 'background-back');
+    this.backgroundBack = this.add.tileSprite(0, 0, 640, 300, 'background-back');
     this.backgroundBack.setOrigin(0, 0);
     this.backgroundBack.setTileScale(1, 1.35);
 
-    this.backgroundMiddle = this.add.tileSprite(0, 0, 1000, 300, 'background-middle');
+    this.backgroundMiddle = this.add.tileSprite(0, 0, 640, 300, 'background-middle');
     this.backgroundMiddle.setOrigin(0, 0);
     this.backgroundMiddle.setTileScale(1, 1.35);
 
-    this.backgroundFront = this.add.tileSprite(0, 0, 1000, 300, 'background-front');
+    this.backgroundFront = this.add.tileSprite(0, 0, 640, 300, 'background-front');
     this.backgroundFront.setOrigin(0, 0);
     this.backgroundFront.setTileScale(1, 1.35);
 
@@ -62,6 +62,15 @@ export class GameScene extends Phaser.Scene {
     const xScrollAmount = this.arrow.x - 50 - 400;
     if (xScrollAmount > 0) {
       this.cameras.main.scrollX = xScrollAmount;
+
+      this.backgroundBack.x = xScrollAmount;
+      this.backgroundBack.tilePositionX = xScrollAmount;
+
+      this.backgroundMiddle.x = xScrollAmount;
+      this.backgroundMiddle.tilePositionX = xScrollAmount;
+
+      this.backgroundFront.x = xScrollAmount;
+      this.backgroundFront.tilePositionX = xScrollAmount;
     }
   }
 
@@ -132,5 +141,14 @@ export class GameScene extends Phaser.Scene {
       duration: 300,
       ease: Phaser.Math.Easing.Quadratic.Out,
     });
+    this.tweens.add({
+      targets: [this.backgroundBack, this.backgroundMiddle, this.backgroundFront],
+      props: {
+        x: 0,
+        tilePositionX: 0,
+      },
+      duration: 300,
+      ease: Phaser.Math.Easing.Quadratic.Out,
+    })
   }
 }
