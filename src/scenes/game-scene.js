@@ -1,6 +1,6 @@
 import levels from '../levels.json';
 import { Arrow } from '../entities/arrow.js';
-import { FlashOut, flashOut } from '../effects/flash-out';
+import { Effects } from '../effects';
 
 export class GameScene extends Phaser.Scene {
   constructor() {
@@ -94,7 +94,7 @@ export class GameScene extends Phaser.Scene {
 
     this.registry.set('lives', nextLives);
 
-    flashOut([this.arrow], () => {
+    Effects.flashOut([this.arrow], () => {
       this._resetCamera();
       this.arrow.reset();
     });
@@ -105,7 +105,7 @@ export class GameScene extends Phaser.Scene {
 
     this.registry.set('score', this.registry.get('score') + 10);
 
-    flashOut([arrow, target], () => {
+    Effects.flashOut([arrow, target], () => {
       this.arrow.reset();
       this._resetCamera();
       this.physics.world.disableBody(target.body);
