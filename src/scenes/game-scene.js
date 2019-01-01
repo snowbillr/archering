@@ -1,4 +1,6 @@
 import levels from '../levels.json';
+import { Arrow } from '../entities/arrow.js';
+import { FlashOut, flashOut } from '../effects/flash-out';
 
 export class GameScene extends Phaser.Scene {
   constructor() {
@@ -37,12 +39,8 @@ export class GameScene extends Phaser.Scene {
     this.backgroundFront.setOrigin(0, 0);
     this.backgroundFront.setTileScale(1, 1.35);
 
-    this.arrow = this.physics.add.image(0, 0, 'arrow');
-    this.arrow.setScale(0.75);
-    this.arrow.body.collideWorldBounds = true;
-    this.arrow.body.onWorldBounds = true;
-    this.arrow.body.allowGravity = false;
-    this._resetArrow();
+    this.arrow = new Arrow(this);
+    this.arrow.reset();
 
     this.targets = this.physics.add.group({
       defaultKey: 'target',
@@ -59,9 +57,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   update() {
-    if (this.arrow.body.allowGravity) {
-      this.arrow.rotation = Phaser.Math.Angle.BetweenPoints(Phaser.Math.Vector2.ZERO, this.arrow.body.velocity);
-    }
+    this.arrow.update();
 
     const xScrollAmount = this.arrow.x - 50 - 400;
     if (xScrollAmount > 0) {
@@ -89,6 +85,8 @@ export class GameScene extends Phaser.Scene {
   }
 
   _onArrowWorldBoundsCollide() {
+    this.arrow.disablePhysics();
+
     const nextLives = this.registry.get('lives') - 1
     if (nextLives === 0) {
       this._endGame();
@@ -96,31 +94,25 @@ export class GameScene extends Phaser.Scene {
 
     this.registry.set('lives', nextLives);
 
-    this.arrow.body.allowGravity = false;
-    this.arrow.body.enable = false;
-    this._tweenFadeOut(this.arrow, () => this._resetArrow());
+    flashOut([this.arrow], () => {
+      this._resetCamera();
+      this.arrow.reset();
+    });
   }
 
   _onArrowTargetCollide(arrow, target) {
+    this.arrow.disablePhysics();
+
     this.registry.set('score', this.registry.get('score') + 10);
 
-    this.arrow.body.allowGravity = false;
-    this.arrow.body.enable = false;
-
-    this._tweenFadeOut([arrow, target], () => {
-      this._resetArrow();
-      target.active = false;
-      target.body.enable = false;
+    flashOut([arrow, target], () => {
+      this.arrow.reset();
+      this._resetCamera();
 
       if (this.targets.countActive() === 0) {
         this._loadNextLevel();
       }
     });
-  }
-
-  _angleArrowWithMouse(pointer) {
-    const angle = Phaser.Math.Angle.BetweenPoints(this.arrow, pointer);
-    this.arrow.rotation = angle;
   }
 
   _endGame() {
@@ -129,19 +121,7 @@ export class GameScene extends Phaser.Scene {
     this.scene.start('results');
   }
 
-  _resetArrow() {
-    this.arrow.x = 50;
-    this.arrow.y = 240;
-
-    this.arrow.alpha = 1;
-
-    this.arrow.body.enable = true;
-    this.arrow.body.allowGravity = false;
-    this.arrow.body.velocity.x = 0;
-    this.arrow.body.velocity.y = 0;
-
-    this._angleArrowWithMouse(this.input.mousePointer);
-
+  _resetCamera() {
     this.tweens.add({
       targets: this.cameras.main,
       props: {
@@ -149,41 +129,6 @@ export class GameScene extends Phaser.Scene {
       },
       duration: 300,
       ease: Phaser.Math.Easing.Quadratic.Out,
-      onComplete: () => {
-
-        this.input.on('pointermove', this._angleArrowWithMouse, this);
-        this.input.once('pointerdown', pointer => {
-          this.input.off('pointermove', this._angleArrowWithMouse, this);
-
-          this.arrow.body.allowGravity = true;
-          this.physics.velocityFromRotation(this.arrow.rotation, 500, this.arrow.body.velocity)
-        });
-      },
-    });
-
-  }
-
-  _tweenFadeOut(target, callback) {
-    this.tweens.add({
-      targets: target,
-      props: {
-        alpha: 0,
-      },
-      duration: 200,
-      yoyo: true,
-      repeat: 1,
-      onComplete: () => {
-        this.tweens.add({
-          targets: target,
-          props: {
-            alpha: 0,
-          },
-          duration: 200,
-          onComplete: () => {
-            callback();
-          },
-        })
-      },
     });
   }
 }
