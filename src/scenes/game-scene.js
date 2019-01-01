@@ -75,9 +75,9 @@ export class GameScene extends Phaser.Scene {
 
     level.targets.forEach(coordinates => {
       const target = this.targets.get();
+      this.physics.world.enableBody(target);
       target.alpha = 1;
       target.active = true;
-      target.body.enable = true;
 
       target.x = coordinates.x;
       target.y = coordinates.y;
@@ -85,7 +85,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   _onArrowWorldBoundsCollide() {
-    this.arrow.disablePhysics();
+    this.arrow.onHit();
 
     const nextLives = this.registry.get('lives') - 1
     if (nextLives === 0) {
@@ -101,13 +101,15 @@ export class GameScene extends Phaser.Scene {
   }
 
   _onArrowTargetCollide(arrow, target) {
-    this.arrow.disablePhysics();
+    this.arrow.onHit();
 
     this.registry.set('score', this.registry.get('score') + 10);
 
     flashOut([arrow, target], () => {
       this.arrow.reset();
       this._resetCamera();
+      this.physics.world.disableBody(target.body);
+      target.active = false;
 
       if (this.targets.countActive() === 0) {
         this._loadNextLevel();
