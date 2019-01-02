@@ -2,6 +2,13 @@ import levels from '../levels.json';
 import { Arrow } from '../entities/arrow.js';
 import { Effects } from '../effects';
 
+const STATES = {
+  REST: 0,
+  CHARGE: 1,
+  FLY: 2,
+  HIT: 3,
+}
+
 export class GameScene extends Phaser.Scene {
   constructor() {
     super({ key: 'game' })
@@ -21,6 +28,7 @@ export class GameScene extends Phaser.Scene {
   create() {
     this.registry.set('score', 0);
     this.registry.set('lives', 3);
+    this.registry.set('charge', 200);
     this.scene.launch('ui');
 
     this.input.setDefaultCursor('crosshair');
@@ -52,12 +60,23 @@ export class GameScene extends Phaser.Scene {
     this._loadLevel();
 
     this.physics.world.on('worldbounds', this._onArrowWorldBoundsCollide, this);
-
     this.physics.add.collider(this.arrow, this.targets, (arrow, target) => this._onArrowTargetCollide(arrow, target));
+
+    this.input.on('pointermove', this.arrow.angleToPointer, this.arrow);
+    this.input.on('pointerdown', this._startCharge, this);
+    this.input.on('pointerup', this._fireArrow, this);
+
+    this.state = STATES.REST;
   }
 
   update() {
     this.arrow.update();
+
+    if (this.state === STATES.CHARGE) {
+      const chargeAmount = this.registry.get('charge');
+      const newCharge = Phaser.Math.Clamp(chargeAmount + 5, 200, 700);
+      this.registry.set('charge', newCharge);
+    }
 
     const xScrollAmount = this.arrow.x - 50 - 400;
     if (xScrollAmount > 0) {
@@ -97,7 +116,19 @@ export class GameScene extends Phaser.Scene {
     });
   }
 
+  _startCharge() {
+    this.state = STATES.CHARGE;
+  }
+
+  _fireArrow() {
+    this.input.off('pointermove', this.arrow.angleToPointer, this);
+    this.state = STATES.FLY;
+    this.arrow.fire();
+  }
+
+
   _onArrowWorldBoundsCollide() {
+    this.state = STATES.HIT;
     this.arrow.onHit();
 
     const nextLives = this.registry.get('lives') - 1
@@ -108,19 +139,23 @@ export class GameScene extends Phaser.Scene {
     this.registry.set('lives', nextLives);
 
     Effects.flashOut([this.arrow], () => {
-      this._resetCamera();
-      this.arrow.reset();
+      this.state = STATES.REST;
+
+      this._reset();
     });
   }
 
   _onArrowTargetCollide(arrow, target) {
+    this.state = STATES.HIT;
     this.arrow.onHit();
 
     this.registry.set('score', this.registry.get('score') + 10);
 
     Effects.flashOut([arrow, target], () => {
-      this.arrow.reset();
-      this._resetCamera();
+      this.state = STATES.REST;
+
+      this._reset();
+
       this.physics.world.disableBody(target.body);
       target.active = false;
 
@@ -134,6 +169,12 @@ export class GameScene extends Phaser.Scene {
     this.scene.stop('game');
     this.scene.stop('ui');
     this.scene.start('results');
+  }
+
+  _reset() {
+    this._resetCamera();
+    this.arrow.reset();
+    this.registry.set('charge', 200);
   }
 
   _resetCamera() {
