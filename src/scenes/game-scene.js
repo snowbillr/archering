@@ -28,8 +28,6 @@ export class GameScene extends Phaser.Scene {
 
     this.input.setDefaultCursor('crosshair');
 
-    this.physics.world.setBounds(0, 0, 640, 300);
-
     this.parallaxBackground = new ParallaxBackground(this, 'background-back', 'background-middle', 'background-front');
 
     this.arrow = new Arrow(this);
@@ -42,9 +40,14 @@ export class GameScene extends Phaser.Scene {
       classType: Phaser.Physics.Arcade.Image,
     });
 
+    this.groundZone = this.add.zone(0, 260).setSize(640, 40).setScrollFactor(0);
+    this.physics.world.enable(this.groundZone);
+    this.groundZone.body.allowGravity = false;
+    this.groundZone.body.immovable = true;
+
     this._loadLevel();
 
-    this.physics.world.on('worldbounds', this._onArrowWorldBoundsCollide, this);
+    this.physics.add.collider(this.arrow, this.groundZone, () => this._onArrowWorldBoundsCollide());
     this.physics.add.collider(this.arrow, this.targets, (arrow, target) => this._onArrowTargetCollide(arrow, target));
 
     this.input.on('pointerdown', this._startCharge, this);
@@ -63,6 +66,8 @@ export class GameScene extends Phaser.Scene {
       const newCharge = Phaser.Math.Clamp(chargeAmount + 5, 200, 700);
       this.registry.set('charge', newCharge);
     } else if (state === STATES.FLY) {
+      this.groundZone.x = this.cameras.main.scrollX;
+
       const xScrollAmount = this.arrow.x - 50 - 400;
       if (xScrollAmount > 0) {
         this.cameras.main.scrollX = xScrollAmount;
@@ -145,6 +150,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   _reset() {
+    this.groundZone.x = 0;
     this._resetCamera();
     this.arrow.reset();
     this.registry.set('charge', 200);

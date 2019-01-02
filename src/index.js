@@ -11,6 +11,11 @@ const gameConfig = {
   physics: {
     default: 'arcade',
     arcade: {
+      debug: true,
+      x: 0,
+      y: 0,
+      width: 640 * 2,
+      height: 300,
       gravity: {
         y: 400,
       }
