@@ -77,10 +77,10 @@ export class GameScene extends Phaser.Scene {
         this.cameras.main.scrollX = xScrollAmount;
 
         this.backgroundBack.x = xScrollAmount;
-        this.backgroundBack.tilePositionX = xScrollAmount;
+        this.backgroundBack.tilePositionX = xScrollAmount / 3;
 
         this.backgroundMiddle.x = xScrollAmount;
-        this.backgroundMiddle.tilePositionX = xScrollAmount;
+        this.backgroundMiddle.tilePositionX = xScrollAmount / 2;
 
         this.backgroundFront.x = xScrollAmount;
         this.backgroundFront.tilePositionX = xScrollAmount;
