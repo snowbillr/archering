@@ -1,13 +1,7 @@
 import levels from '../levels.json';
+import * as STATES from '../game-states';
 import { Arrow } from '../entities/arrow.js';
 import { Effects } from '../effects';
-
-const STATES = {
-  REST: 0,
-  CHARGE: 1,
-  FLY: 2,
-  HIT: 3,
-}
 
 export class GameScene extends Phaser.Scene {
   constructor() {
@@ -66,13 +60,13 @@ export class GameScene extends Phaser.Scene {
     this.input.on('pointerdown', this._startCharge, this);
     this.input.on('pointerup', this._fireArrow, this);
 
-    this.state = STATES.REST;
+    this.registry.set('state', STATES.REST);
   }
 
   update() {
     this.arrow.update();
 
-    if (this.state === STATES.CHARGE) {
+    if (this.registry.get('state') === STATES.CHARGE) {
       const chargeAmount = this.registry.get('charge');
       const newCharge = Phaser.Math.Clamp(chargeAmount + 5, 200, 700);
       this.registry.set('charge', newCharge);
@@ -117,17 +111,17 @@ export class GameScene extends Phaser.Scene {
   }
 
   _startCharge() {
-    this.state = STATES.CHARGE;
+    this.registry.set('state', STATES.CHARGE);
   }
 
   _fireArrow() {
-    this.state = STATES.FLY;
+    this.registry.set('state', STATES.FLY);
     this.arrow.fire();
   }
 
 
   _onArrowWorldBoundsCollide() {
-    this.state = STATES.HIT;
+    this.registry.set('state', STATES.HIT);
     this.arrow.onHit();
 
     const nextLives = this.registry.get('lives') - 1
@@ -138,20 +132,20 @@ export class GameScene extends Phaser.Scene {
     this.registry.set('lives', nextLives);
 
     Effects.flashOut([this.arrow], () => {
-      this.state = STATES.REST;
+      this.registry.set('state', STATES.REST);
 
       this._reset();
     });
   }
 
   _onArrowTargetCollide(arrow, target) {
-    this.state = STATES.HIT;
+    this.registry.set('state', STATES.HIT);
     this.arrow.onHit();
 
     this.registry.set('score', this.registry.get('score') + 10);
 
     Effects.flashOut([arrow, target], () => {
-      this.state = STATES.REST;
+      this.registry.set('state', STATES.REST);
 
       this._reset();
 

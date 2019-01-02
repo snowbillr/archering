@@ -1,11 +1,5 @@
 import Phaser from 'phaser';
-
-const STATES = {
-  REST: 0,
-  CHARGE: 1,
-  FLY: 2,
-  HIT: 3,
-};
+import * as STATES from '../game-states';
 
 export class Arrow extends Phaser.Physics.Arcade.Sprite {
   constructor(scene) {
@@ -18,8 +12,6 @@ export class Arrow extends Phaser.Physics.Arcade.Sprite {
     this.body.collideWorldBounds = true;
     this.body.onWorldBounds = true;
     this.body.allowGravity = false;
-
-    this.state = STATES.REST;
   }
 
   destroy() {
@@ -27,19 +19,17 @@ export class Arrow extends Phaser.Physics.Arcade.Sprite {
   }
 
   update() {
-    if (this.state === STATES.FLY) {
+    if (this.scene.registry.get('state') === STATES.FLY) {
       this.rotation = Phaser.Math.Angle.BetweenPoints(Phaser.Math.Vector2.ZERO, this.body.velocity);
     }
   }
 
   fire() {
-    this.state = STATES.FLY;
     this.body.allowGravity = true;
     this.scene.physics.velocityFromRotation(this.rotation, this.scene.registry.get('charge'), this.body.velocity)
   }
 
   reset() {
-    this.state = STATES.REST;
     this.body.enable = true;
 
     this.x = 50;
@@ -54,13 +44,12 @@ export class Arrow extends Phaser.Physics.Arcade.Sprite {
   }
 
   onHit() {
-    this.state = STATES.HIT;
-
     this.body.enable = false;
   }
 
   angleToPointer(pointer) {
-    if (this.state === STATES.REST) {
+    if (this.scene.registry.get('state') === STATES.REST
+        || this.scene.registry.get('state') === STATES.CHARGE) {
       const angle = Phaser.Math.Angle.BetweenPoints(this, pointer);
       this.rotation = angle;
     }
