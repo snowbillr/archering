@@ -65,24 +65,26 @@ export class GameScene extends Phaser.Scene {
   update() {
     this.arrow.update();
 
-    if (this.registry.get('state') === STATES.CHARGE) {
+    const state = this.registry.get('state');
+
+    if (state === STATES.CHARGE) {
       const chargeAmount = this.registry.get('charge');
       const newCharge = Phaser.Math.Clamp(chargeAmount + 5, 200, 700);
       this.registry.set('charge', newCharge);
-    }
+    } else if (state === STATES.FLY) {
+      const xScrollAmount = this.arrow.x - 50 - 400;
+      if (xScrollAmount > 0) {
+        this.cameras.main.scrollX = xScrollAmount;
 
-    const xScrollAmount = this.arrow.x - 50 - 400;
-    if (xScrollAmount > 0) {
-      this.cameras.main.scrollX = xScrollAmount;
+        this.backgroundBack.x = xScrollAmount;
+        this.backgroundBack.tilePositionX = xScrollAmount;
 
-      this.backgroundBack.x = xScrollAmount;
-      this.backgroundBack.tilePositionX = xScrollAmount;
+        this.backgroundMiddle.x = xScrollAmount;
+        this.backgroundMiddle.tilePositionX = xScrollAmount;
 
-      this.backgroundMiddle.x = xScrollAmount;
-      this.backgroundMiddle.tilePositionX = xScrollAmount;
-
-      this.backgroundFront.x = xScrollAmount;
-      this.backgroundFront.tilePositionX = xScrollAmount;
+        this.backgroundFront.x = xScrollAmount;
+        this.backgroundFront.tilePositionX = xScrollAmount;
+      }
     }
   }
 
@@ -113,7 +115,6 @@ export class GameScene extends Phaser.Scene {
     this.registry.set('state', STATES.FLY);
     this.arrow.fire();
   }
-
 
   _onArrowWorldBoundsCollide() {
     this.registry.set('state', STATES.HIT);
