@@ -42,18 +42,6 @@ export class Arrow extends Phaser.Physics.Arcade.Sprite {
     this.state = STATES.REST;
     this.body.enable = true;
 
-    // this.scene.input.on('pointermove', this.angleToPointer, this);
-
-    /*
-    this.scene.input.once('pointerdown', pointer => {
-      this.scene.input.off('pointermove', this.angleToPointer, this);
-
-      this.state = STATES.FLY;
-      this.body.allowGravity = true;
-      this.scene.physics.velocityFromRotation(this.rotation, 500, this.body.velocity)
-    });
-    */
-
     this.x = 50;
     this.y = 240;
 
@@ -72,7 +60,9 @@ export class Arrow extends Phaser.Physics.Arcade.Sprite {
   }
 
   angleToPointer(pointer) {
-    const angle = Phaser.Math.Angle.BetweenPoints(this, pointer);
-    this.rotation = angle;
+    if (this.state === STATES.REST) {
+      const angle = Phaser.Math.Angle.BetweenPoints(this, pointer);
+      this.rotation = angle;
+    }
   }
 }

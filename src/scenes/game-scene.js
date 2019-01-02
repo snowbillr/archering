@@ -121,7 +121,6 @@ export class GameScene extends Phaser.Scene {
   }
 
   _fireArrow() {
-    this.input.off('pointermove', this.arrow.angleToPointer, this);
     this.state = STATES.FLY;
     this.arrow.fire();
   }
