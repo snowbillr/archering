@@ -14,14 +14,21 @@ export class Arrow extends Phaser.Physics.Arcade.Sprite {
     this.body.allowGravity = false;
   }
 
-  destroy() {
-    this.scene.input.off('pointermove', this.angleToPointer, this);
-  }
-
   update() {
-    if (this.scene.registry.get('state') === STATES.FLY) {
+    const state = this.scene.registry.get('state');
+
+    if (state === STATES.FLY) {
       this.rotation = Phaser.Math.Angle.BetweenPoints(Phaser.Math.Vector2.ZERO, this.body.velocity);
     }
+
+    if (state === STATES.REST || state === STATES.CHARGE) {
+      this.angleToPointer();
+    }
+  }
+
+  angleToPointer() {
+    const angle = Phaser.Math.Angle.BetweenPoints(this, this.scene.input.activePointer);
+    this.rotation = angle;
   }
 
   fire() {
@@ -45,13 +52,5 @@ export class Arrow extends Phaser.Physics.Arcade.Sprite {
 
   onHit() {
     this.body.enable = false;
-  }
-
-  angleToPointer(pointer) {
-    if (this.scene.registry.get('state') === STATES.REST
-        || this.scene.registry.get('state') === STATES.CHARGE) {
-      const angle = Phaser.Math.Angle.BetweenPoints(this, pointer);
-      this.rotation = angle;
-    }
   }
 }

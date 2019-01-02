@@ -56,7 +56,6 @@ export class GameScene extends Phaser.Scene {
     this.physics.world.on('worldbounds', this._onArrowWorldBoundsCollide, this);
     this.physics.add.collider(this.arrow, this.targets, (arrow, target) => this._onArrowTargetCollide(arrow, target));
 
-    this.input.on('pointermove', this.arrow.angleToPointer, this.arrow);
     this.input.on('pointerdown', this._startCharge, this);
     this.input.on('pointerup', this._fireArrow, this);
 
@@ -85,10 +84,6 @@ export class GameScene extends Phaser.Scene {
       this.backgroundFront.x = xScrollAmount;
       this.backgroundFront.tilePositionX = xScrollAmount;
     }
-  }
-
-  destroy() {
-    this.arrow.destroy();
   }
 
   _loadNextLevel() {
