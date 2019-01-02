@@ -74,6 +74,10 @@ export class GameScene extends Phaser.Scene {
     }
   }
 
+  destroy() {
+    this.arrow.destroy();
+  }
+
   _loadNextLevel() {
     this.levelIndex += 1;
     this._loadLevel();
