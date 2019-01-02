@@ -2,6 +2,7 @@ import levels from '../levels.json';
 import * as STATES from '../game-states';
 import { Arrow } from '../entities/arrow.js';
 import { Effects } from '../effects';
+import { ParallaxBackground } from '../components/parallax-background.js';
 
 export class GameScene extends Phaser.Scene {
   constructor() {
@@ -29,17 +30,7 @@ export class GameScene extends Phaser.Scene {
 
     this.physics.world.setBounds(0, 0, 640, 300);
 
-    this.backgroundBack = this.add.tileSprite(0, 0, 640, 300, 'background-back');
-    this.backgroundBack.setOrigin(0, 0);
-    this.backgroundBack.setTileScale(1, 1.35);
-
-    this.backgroundMiddle = this.add.tileSprite(0, 0, 640, 300, 'background-middle');
-    this.backgroundMiddle.setOrigin(0, 0);
-    this.backgroundMiddle.setTileScale(1, 1.35);
-
-    this.backgroundFront = this.add.tileSprite(0, 0, 640, 300, 'background-front');
-    this.backgroundFront.setOrigin(0, 0);
-    this.backgroundFront.setTileScale(1, 1.35);
+    this.parallaxBackground = new ParallaxBackground(this, 'background-back', 'background-middle', 'background-front');
 
     this.arrow = new Arrow(this);
     this.arrow.reset();
@@ -76,14 +67,7 @@ export class GameScene extends Phaser.Scene {
       if (xScrollAmount > 0) {
         this.cameras.main.scrollX = xScrollAmount;
 
-        this.backgroundBack.x = xScrollAmount;
-        this.backgroundBack.tilePositionX = xScrollAmount / 3;
-
-        this.backgroundMiddle.x = xScrollAmount;
-        this.backgroundMiddle.tilePositionX = xScrollAmount / 2;
-
-        this.backgroundFront.x = xScrollAmount;
-        this.backgroundFront.tilePositionX = xScrollAmount;
+        this.parallaxBackground.update(xScrollAmount);
       }
     }
   }
@@ -175,14 +159,7 @@ export class GameScene extends Phaser.Scene {
       duration: 300,
       ease: Phaser.Math.Easing.Quadratic.Out,
     });
-    this.tweens.add({
-      targets: [this.backgroundBack, this.backgroundMiddle, this.backgroundFront],
-      props: {
-        x: 0,
-        tilePositionX: 0,
-      },
-      duration: 300,
-      ease: Phaser.Math.Easing.Quadratic.Out,
-    })
+
+    this.parallaxBackground.reset();
   }
 }
