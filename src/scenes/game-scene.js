@@ -45,6 +45,22 @@ export class GameScene extends Phaser.Scene {
     this.groundZone.body.allowGravity = false;
     this.groundZone.body.immovable = true;
 
+    this.scrollingLeft = false;
+    this.leftScrollZone = this.add.zone(0, 0).setSize(150, 300).setInteractive();
+    this.physics.world.enable(this.leftScrollZone);
+    this.leftScrollZone.body.allowGravity = false;
+    this.leftScrollZone.body.immovable = true;
+    this.leftScrollZone.on('pointerover', () => this.scrollingLeft = true);
+    this.leftScrollZone.on('pointerout', () => this.scrollingLeft = false);
+
+    this.scrollingRight = false;
+    this.rightScrollZone = this.add.zone(490, 0).setSize(150, 300).setInteractive();
+    this.physics.world.enable(this.rightScrollZone);
+    this.rightScrollZone.body.allowGravity = false;
+    this.rightScrollZone.body.immovable = true;
+    this.rightScrollZone.on('pointerover', () => this.scrollingRight = true);
+    this.rightScrollZone.on('pointerout', () => this.scrollingRight = false);
+
     this.registry.set('state', STATES.REST);
 
     this.input.on('pointerdown', this._startCharge, this);
@@ -61,6 +77,18 @@ export class GameScene extends Phaser.Scene {
 
     const state = this.registry.get('state');
 
+    if (state === STATES.REST) {
+      if (this.scrollingLeft) {
+        this.cameras.main.scrollX -= 6;
+      } else if (this.scrollingRight) {
+        this.cameras.main.scrollX += 6;
+      }
+
+      this.parallaxBackground.update(this.cameras.main.scrollX);
+
+      this.leftScrollZone.x = this.cameras.main.scrollX;
+      this.rightScrollZone.x = this.cameras.main.scrollX + 490;
+    }
     if (state === STATES.CHARGE) {
       const chargeAmount = this.registry.get('charge');
       const newCharge = Phaser.Math.Clamp(chargeAmount + 5, 200, 700);
