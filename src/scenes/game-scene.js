@@ -2,7 +2,7 @@ import levels from '../levels.json';
 import * as STATES from '../game-states';
 import { Arrow } from '../entities/arrow.js';
 import { Effects } from '../effects';
-import { ParallaxBackground } from '../components/parallax-background.js';
+import { ParallaxBackground } from '../entities/parallax-background.js';
 
 export class GameScene extends Phaser.Scene {
   constructor() {
@@ -25,8 +25,6 @@ export class GameScene extends Phaser.Scene {
     this.registry.set('lives', 3);
     this.registry.set('charge', 200);
     this.scene.launch('ui');
-
-    this.input.setDefaultCursor('crosshair');
 
     this.parallaxBackground = new ParallaxBackground(this, 'background-back', 'background-middle', 'background-front');
 
@@ -56,6 +54,8 @@ export class GameScene extends Phaser.Scene {
     this.rightScrollZone.on('pointerout', () => this.scrollingRight = false);
 
     this.registry.set('state', STATES.PANNING_TO_TARGETS);
+
+    this.input.setDefaultCursor('crosshair');
 
     this.input.on('pointerdown', this._startCharge, this);
     this.input.on('pointerup', this._fireArrow, this);
@@ -192,13 +192,9 @@ export class GameScene extends Phaser.Scene {
 
   _reset() {
     this.groundZone.x = 0;
-    this._resetCamera();
+    this._scroll(0, 300);
     this.arrow.reset();
     this.registry.set('charge', 200);
-  }
-
-  _resetCamera() {
-    this._scroll(0, 300);
   }
 
   _scroll(targetScrollX, duration, additionalTweenProps = {}) {
