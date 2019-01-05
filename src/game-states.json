@@ -1,6 +1,7 @@
 {
-  "REST": 0,
-  "CHARGE": 1,
-  "FLY": 2,
-  "HIT": 3
+  "PANNING_TO_TARGETS": 0,
+  "REST": 1,
+  "CHARGE": 2,
+  "FLY": 3,
+  "HIT": 4
 }

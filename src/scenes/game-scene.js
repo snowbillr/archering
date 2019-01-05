@@ -46,22 +46,16 @@ export class GameScene extends Phaser.Scene {
     this.groundZone.body.immovable = true;
 
     this.scrollingLeft = false;
-    this.leftScrollZone = this.add.zone(0, 0).setSize(150, 300).setInteractive();
-    this.physics.world.enable(this.leftScrollZone);
-    this.leftScrollZone.body.allowGravity = false;
-    this.leftScrollZone.body.immovable = true;
+    this.leftScrollZone = this.add.zone(0, 0).setSize(100, 300).setInteractive();
     this.leftScrollZone.on('pointerover', () => this.scrollingLeft = true);
     this.leftScrollZone.on('pointerout', () => this.scrollingLeft = false);
 
     this.scrollingRight = false;
-    this.rightScrollZone = this.add.zone(490, 0).setSize(150, 300).setInteractive();
-    this.physics.world.enable(this.rightScrollZone);
-    this.rightScrollZone.body.allowGravity = false;
-    this.rightScrollZone.body.immovable = true;
+    this.rightScrollZone = this.add.zone(540, 0).setSize(100, 300).setInteractive();
     this.rightScrollZone.on('pointerover', () => this.scrollingRight = true);
     this.rightScrollZone.on('pointerout', () => this.scrollingRight = false);
 
-    this.registry.set('state', STATES.REST);
+    this.registry.set('state', STATES.PANNING_TO_TARGETS);
 
     this.input.on('pointerdown', this._startCharge, this);
     this.input.on('pointerup', this._fireArrow, this);
@@ -87,7 +81,7 @@ export class GameScene extends Phaser.Scene {
       this.parallaxBackground.update(this.cameras.main.scrollX);
 
       this.leftScrollZone.x = this.cameras.main.scrollX;
-      this.rightScrollZone.x = this.cameras.main.scrollX + 490;
+      this.rightScrollZone.x = this.cameras.main.scrollX + 540;
     }
     if (state === STATES.CHARGE) {
       const chargeAmount = this.registry.get('charge');
@@ -143,12 +137,26 @@ export class GameScene extends Phaser.Scene {
       ease: Phaser.Math.Easing.Quadratic.InOut,
       onUpdate: () => {
         this.parallaxBackground.update(this.cameras.main.scrollX);
+      },
+      onComplete: () => {
+        this.registry.set('state', STATES.REST);
       }
     });
   }
 
   _startCharge() {
     this.registry.set('state', STATES.CHARGE);
+    this.tweens.add({
+      targets: this.cameras.main,
+      props: {
+        scrollX: 0,
+      },
+      duration: 200,
+      ease: Phaser.Math.Easing.Quadratic.Out,
+      onUpdate: () => {
+        this.parallaxBackground.update(this.cameras.main.scrollX);
+      },
+    });
   }
 
   _fireArrow() {
