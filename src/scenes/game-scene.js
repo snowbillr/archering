@@ -21,7 +21,6 @@ export class GameScene extends Phaser.Scene {
   }
 
   create() {
-    this.registry.set('score', 0);
     this.registry.set('lives', 3);
     this.registry.set('charge', 200);
     this.scene.launch('ui');
@@ -167,8 +166,6 @@ export class GameScene extends Phaser.Scene {
   _onArrowTargetCollide(arrow, target) {
     this.registry.set('state', STATES.HIT);
     this.arrow.onHit();
-
-    this.registry.set('score', this.registry.get('score') + 10);
 
     Effects.flashOut([arrow, target], () => {
       this.registry.set('state', STATES.REST);
