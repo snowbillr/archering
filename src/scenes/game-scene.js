@@ -125,38 +125,20 @@ export class GameScene extends Phaser.Scene {
       }
     }, { x: 0, y: 0 });
 
-    this.tweens.add({
-      targets: this.cameras.main,
-      props: {
-        scrollX: furthestTargetCoordinates.x - 500,
-      },
-      duration: 800,
+    this._scroll(furthestTargetCoordinates.x - 500, 800, {
       yoyo: true,
       delay: 400,
       hold: 500,
       ease: Phaser.Math.Easing.Quadratic.InOut,
-      onUpdate: () => {
-        this.parallaxBackground.update(this.cameras.main.scrollX);
-      },
       onComplete: () => {
         this.registry.set('state', STATES.REST);
       }
-    });
+     });
   }
 
   _startCharge() {
     this.registry.set('state', STATES.CHARGE);
-    this.tweens.add({
-      targets: this.cameras.main,
-      props: {
-        scrollX: 0,
-      },
-      duration: 200,
-      ease: Phaser.Math.Easing.Quadratic.Out,
-      onUpdate: () => {
-        this.parallaxBackground.update(this.cameras.main.scrollX);
-      },
-    });
+    this._scroll(0, 200);
   }
 
   _fireArrow() {
@@ -216,15 +198,23 @@ export class GameScene extends Phaser.Scene {
   }
 
   _resetCamera() {
-    this.tweens.add({
+    this._scroll(0, 300);
+  }
+
+  _scroll(targetScrollX, duration, additionalTweenProps = {}) {
+    const defaultTweenProps = {
       targets: this.cameras.main,
       props: {
-        scrollX: 0,
+        scrollX: targetScrollX,
       },
-      duration: 300,
+      duration: duration,
       ease: Phaser.Math.Easing.Quadratic.Out,
-    });
+      onUpdate: () => {
+        this.parallaxBackground.update(this.cameras.main.scrollX);
+      },
+    };
+    const tweenProps = Object.assign(defaultTweenProps, additionalTweenProps);
 
-    this.parallaxBackground.reset();
+    this.tweens.add(tweenProps);
   }
 }

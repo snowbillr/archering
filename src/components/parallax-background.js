@@ -25,15 +25,4 @@ export class ParallaxBackground {
     this.backgroundMiddle.tilePositionX = scrollAmount / 2;
     this.backgroundFront.tilePositionX = scrollAmount;
   }
-
-  reset() {
-    this.scene.tweens.add({
-      targets: [this.backgroundBack, this.backgroundMiddle, this.backgroundFront],
-      props: {
-        tilePositionX: 0,
-      },
-      duration: 300,
-      ease: Phaser.Math.Easing.Quadratic.Out,
-    });
-  }
 }
