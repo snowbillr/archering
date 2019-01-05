@@ -45,15 +45,15 @@ export class GameScene extends Phaser.Scene {
     this.groundZone.body.allowGravity = false;
     this.groundZone.body.immovable = true;
 
-    this._loadLevel();
-
-    this.physics.add.collider(this.arrow, this.groundZone, () => this._onArrowWorldBoundsCollide());
-    this.physics.add.collider(this.arrow, this.targets, (arrow, target) => this._onArrowTargetCollide(arrow, target));
+    this.registry.set('state', STATES.REST);
 
     this.input.on('pointerdown', this._startCharge, this);
     this.input.on('pointerup', this._fireArrow, this);
 
-    this.registry.set('state', STATES.REST);
+    this.physics.add.collider(this.arrow, this.targets, (arrow, target) => this._onArrowTargetCollide(arrow, target));
+    this.physics.add.collider(this.arrow, this.groundZone, () => this._onArrowWorldBoundsCollide());
+
+    this._loadLevel();
   }
 
   update() {
@@ -93,6 +93,29 @@ export class GameScene extends Phaser.Scene {
 
       target.x = coordinates.x;
       target.y = coordinates.y;
+    });
+
+    const furthestTargetCoordinates = level.targets.reduce((furthest, coordinates) => {
+      if (coordinates.x > furthest.x) {
+        return coordinates;
+      } else {
+        return furthest;
+      }
+    }, { x: 0, y: 0 });
+
+    this.tweens.add({
+      targets: this.cameras.main,
+      props: {
+        scrollX: furthestTargetCoordinates.x - 500,
+      },
+      duration: 800,
+      yoyo: true,
+      delay: 400,
+      hold: 500,
+      ease: Phaser.Math.Easing.Quadratic.InOut,
+      onUpdate: () => {
+        this.parallaxBackground.update(this.cameras.main.scrollX);
+      }
     });
   }
 
