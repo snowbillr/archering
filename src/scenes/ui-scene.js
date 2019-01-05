@@ -42,7 +42,6 @@ export class UiScene extends Phaser.Scene {
     this.livesImages
       .getChildren()
       .forEach((lifeImage, i) => {
-        console.log(i, value);
         if (i < value) {
           lifeImage.visible = true;
         } else {
