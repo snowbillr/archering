@@ -84,11 +84,7 @@ export class GameScene extends Phaser.Scene {
       this.leftScrollZone.x = this.cameras.main.scrollX;
       this.rightScrollZone.x = this.cameras.main.scrollX + 540;
     }
-    if (state === STATES.CHARGE) {
-      const chargeAmount = this.registry.get('charge');
-      const newCharge = Phaser.Math.Clamp(chargeAmount + 5, 200, 700);
-      this.registry.set('charge', newCharge);
-    } else if (state === STATES.FLY) {
+    else if (state === STATES.FLY) {
       this.groundZone.x = this.cameras.main.scrollX;
       this.parallaxBackground.update(this.cameras.main.scrollX);
     }
@@ -189,7 +185,6 @@ export class GameScene extends Phaser.Scene {
     this.groundZone.x = 0;
     this._scroll(0, 300);
     this.arrow.reset();
-    this.registry.set('charge', 200);
   }
 
   _scroll(targetScrollX, duration, additionalTweenProps = {}) {

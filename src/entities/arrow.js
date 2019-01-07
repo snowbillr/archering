@@ -24,6 +24,12 @@ export class Arrow extends Phaser.Physics.Arcade.Sprite {
     if (state === STATES.REST || state === STATES.CHARGE) {
       this.angleToPointer();
     }
+
+    if (state === STATES.CHARGE) {
+      const chargeAmount = this.scene.registry.get('charge');
+      const newCharge = Phaser.Math.Clamp(chargeAmount + 5, 200, 700);
+      this.scene.registry.set('charge', newCharge);
+    }
   }
 
   angleToPointer() {
@@ -37,6 +43,8 @@ export class Arrow extends Phaser.Physics.Arcade.Sprite {
   }
 
   reset() {
+    this.scene.registry.set('charge', 200);
+
     this.body.enable = true;
 
     this.x = 50;
