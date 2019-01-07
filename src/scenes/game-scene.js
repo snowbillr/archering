@@ -54,6 +54,8 @@ export class GameScene extends Phaser.Scene {
 
     this.registry.set('state', STATES.PANNING_TO_TARGETS);
 
+    this.cameras.main.setBounds(0, 0, 1500, 300);
+
     this.input.setDefaultCursor('crosshair');
 
     this.input.on('pointerdown', this._startCharge, this);
@@ -88,13 +90,7 @@ export class GameScene extends Phaser.Scene {
       this.registry.set('charge', newCharge);
     } else if (state === STATES.FLY) {
       this.groundZone.x = this.cameras.main.scrollX;
-
-      const xScrollAmount = this.arrow.x - 50 - 400;
-      if (xScrollAmount > 0) {
-        this.cameras.main.scrollX = xScrollAmount;
-
-        this.parallaxBackground.update(xScrollAmount);
-      }
+      this.parallaxBackground.update(this.cameras.main.scrollX);
     }
   }
 
@@ -141,6 +137,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   _fireArrow() {
+    this.cameras.main.startFollow(this.arrow);
     this.registry.set('state', STATES.FLY);
     this.arrow.fire();
   }
@@ -188,6 +185,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   _reset() {
+    this.cameras.main.stopFollow();
     this.groundZone.x = 0;
     this._scroll(0, 300);
     this.arrow.reset();
