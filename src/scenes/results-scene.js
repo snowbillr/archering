@@ -3,16 +3,21 @@ export class ResultsScene extends Phaser.Scene {
     super({ key: 'results' });
   }
 
-  create() {
-    this.add.text(320, 50, 'Results').setOrigin(0.5, 0);
-    this.add.text(320, 100, `Score: ${this.registry.get('score')}`).setOrigin(0.5, 0);
+  create({ didWin }) {
+    const text = didWin ? 'Level Completed!' : 'Level Failed';
+    this.add.text(320, 50, text).setOrigin(0.5, 0);
 
-    this.add.text(320, 150, 'Play Again', {
+    this.add.text(320, 100, 'Back to Level Selet', {
       fill: '#000',
       backgroundColor: '#6c6',
       padding: 6,
     }).setOrigin(0.5, 0)
       .setInteractive({ cursor: 'pointer' })
-      .once('pointerup', () => this.scene.start('game'));
+      .once('pointerup', () => {
+        this.scene.stop('game');
+        this.scene.stop('ui');
+        this.scene.stop('results');
+        this.scene.start('level-select');
+      });
   }
 }

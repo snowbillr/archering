@@ -162,17 +162,17 @@ export class GameScene extends Phaser.Scene {
 
   _winLevel() {
     console.log('win level');
-    this._endLevel();
+    this._endLevel(true);
   }
 
   _loseLevel() {
     console.log('lose level');
-    this._endLevel();
+    this._endLevel(false);
   }
 
-  _endLevel() {
-    this.scene.stop('game');
-    this.scene.stop('ui');
-    this.scene.start('level-select');
+  _endLevel(didWin) {
+    this.scene.pause('game');
+    this.scene.pause('ui');
+    this.scene.launch('results', { didWin });
   }
 }
