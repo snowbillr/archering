@@ -161,12 +161,10 @@ export class GameScene extends Phaser.Scene {
   }
 
   _winLevel() {
-    console.log('win level');
     this._endLevel(true);
   }
 
   _loseLevel() {
-    console.log('lose level');
     this._endLevel(false);
   }
 
