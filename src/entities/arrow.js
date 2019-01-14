@@ -12,6 +12,8 @@ export class Arrow extends Phaser.Physics.Arcade.Sprite {
     this.body.collideWorldBounds = true;
     this.body.onWorldBounds = true;
     this.body.allowGravity = false;
+
+    this.reset();
   }
 
   update() {
