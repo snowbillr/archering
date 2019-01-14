@@ -7,8 +7,6 @@ import { ParallaxBackground } from '../entities/parallax-background.js';
 export class GameScene extends Phaser.Scene {
   constructor() {
     super({ key: 'game' })
-
-    this.levelIndex = 0;
   }
 
   preload() {
@@ -20,7 +18,7 @@ export class GameScene extends Phaser.Scene {
     this.load.image('background-front', 'assets/background-front.png');
   }
 
-  create() {
+  create({ level }) {
     this.registry.set('lives', 3);
     this.registry.set('charge', 200);
     this.scene.launch('ui');
@@ -64,7 +62,7 @@ export class GameScene extends Phaser.Scene {
     this.physics.add.collider(this.arrow, this.targets, (arrow, target) => this._onArrowTargetCollide(arrow, target));
     this.physics.add.collider(this.arrow, this.groundZone, () => this._onArrowWorldBoundsCollide());
 
-    this._loadLevel();
+    this._loadLevel(level);
   }
 
   update() {
@@ -90,14 +88,7 @@ export class GameScene extends Phaser.Scene {
     }
   }
 
-  _loadNextLevel() {
-    this.levelIndex += 1;
-    this._loadLevel();
-  }
-
-  _loadLevel() {
-    const level = levels[this.levelIndex];
-
+  _loadLevel(level) {
     level.targets.forEach(coordinates => {
       const target = this.targets.get();
       this.physics.world.enableBody(target);
@@ -169,7 +160,7 @@ export class GameScene extends Phaser.Scene {
       target.active = false;
 
       if (this.targets.countActive() === 0) {
-        this._loadNextLevel();
+        console.log('level over!')
       }
     });
   }
