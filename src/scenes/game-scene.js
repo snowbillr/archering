@@ -97,16 +97,10 @@ export class GameScene extends Phaser.Scene {
     this.registry.set('state', STATES.HIT);
     this.arrow.onHit();
 
-    const nextLives = this.registry.get('lives') - 1
-    if (nextLives === 0) {
-      this._loseLevel();
-    }
-
-    this.registry.set('lives', nextLives);
-
     Effects.flashOut([this.arrow], () => {
       this.registry.set('state', STATES.REST);
 
+      this._checkLevelOver();
       this._reset();
     });
   }
@@ -119,17 +113,24 @@ export class GameScene extends Phaser.Scene {
     Effects.flashOut([arrow, target], () => {
       this.registry.set('state', STATES.REST);
 
+      this._checkLevelOver();
       this._reset();
-
-      if (this.targets.countActive() === 0) {
-        this._winLevel();
-      }
     });
+  }
+
+  _checkLevelOver() {
+    const nextLives = this.registry.get('lives') - 1
+    this.registry.set('lives', nextLives);
+
+    if (this.targets.countActive() === 0) {
+      this._winLevel();
+    } else if (this.registry.get('lives') === 0) {
+      this._loseLevel();
+    }
   }
 
   _reset() {
     this.cameras.main.stopFollow();
-    this.groundZone.updatePosition(0);
     this._tweenScroll(0, 300);
     this.arrow.reset();
   }
@@ -156,6 +157,7 @@ export class GameScene extends Phaser.Scene {
     this.parallaxBackground.update(targetScrollX);
     this.leftScrollZone.updatePosition(targetScrollX);
     this.rightScrollZone.updatePosition(targetScrollX + 540);
+    this.groundZone.updatePosition(targetScrollX);
   }
 
   _winLevel() {
