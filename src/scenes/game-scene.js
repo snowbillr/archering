@@ -4,6 +4,7 @@ import { Effects } from '../effects';
 import { ParallaxBackground } from '../entities/parallax-background.js';
 import { Targets } from '../groups/targets.js';
 import { GroundZone } from '../entities/ground-zone.js';
+import { ScrollZone } from '../entities/scroll-zone';
 
 export class GameScene extends Phaser.Scene {
   constructor() {
@@ -22,6 +23,9 @@ export class GameScene extends Phaser.Scene {
   create({ level }) {
     this.registry.set('lives', 3);
     this.registry.set('charge', 200);
+    this.registry.set('scrollingDirection', 0);
+    this.registry.set('state', STATES.PANNING_TO_TARGETS);
+
     this.scene.launch('ui');
 
     this.parallaxBackground = new ParallaxBackground(this, 'background-back', 'background-middle', 'background-front');
@@ -29,18 +33,8 @@ export class GameScene extends Phaser.Scene {
     this.arrow = new Arrow(this);
     this.targets = new Targets(this);
     this.groundZone = new GroundZone(this);
-
-    this.scrollingLeft = false;
-    this.leftScrollZone = this.add.zone(0, 0).setSize(100, 300).setInteractive({ cursor: 'w-resize' });
-    this.leftScrollZone.on('pointerover', () => this.scrollingLeft = true);
-    this.leftScrollZone.on('pointerout', () => this.scrollingLeft = false);
-
-    this.scrollingRight = false;
-    this.rightScrollZone = this.add.zone(540, 0).setSize(100, 300).setInteractive({ cursor: 'e-resize' });
-    this.rightScrollZone.on('pointerover', () => this.scrollingRight = true);
-    this.rightScrollZone.on('pointerout', () => this.scrollingRight = false);
-
-    this.registry.set('state', STATES.PANNING_TO_TARGETS);
+    this.leftScrollZone = new ScrollZone(this, -1);
+    this.rightScrollZone = new ScrollZone(this, 1);
 
     this.cameras.main.setBounds(0, 0, 1500, 300);
 
@@ -61,16 +55,12 @@ export class GameScene extends Phaser.Scene {
     const state = this.registry.get('state');
 
     if (state === STATES.REST) {
-      if (this.scrollingLeft) {
-        this.cameras.main.scrollX -= 6;
-      } else if (this.scrollingRight) {
-        this.cameras.main.scrollX += 6;
-      }
+      this.cameras.main.scrollX += 6 * this.registry.get('scrollingDirection');
 
       this.parallaxBackground.update(this.cameras.main.scrollX);
 
-      this.leftScrollZone.x = this.cameras.main.scrollX;
-      this.rightScrollZone.x = this.cameras.main.scrollX + 540;
+      this.leftScrollZone.updatePosition(this.cameras.main.scrollX);
+      this.rightScrollZone.updatePosition(this.cameras.main.scrollX + 540);
     }
     else if (state === STATES.FLY) {
       this.groundZone.updatePosition(this.cameras.main.scrollX);
@@ -99,6 +89,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   _startCharge() {
+    this.registry.set('scrollDirection', 0);
     this.registry.set('state', STATES.CHARGE);
     this._scroll(0, 200);
   }
@@ -143,22 +134,6 @@ export class GameScene extends Phaser.Scene {
     });
   }
 
-  _winLevel() {
-    console.log('win level');
-    this._endLevel();
-  }
-
-  _loseLevel() {
-    console.log('lose level');
-    this._endLevel();
-  }
-
-  _endLevel() {
-    this.scene.stop('game');
-    this.scene.stop('ui');
-    this.scene.start('level-select');
-  }
-
   _reset() {
     this.cameras.main.stopFollow();
     this.groundZone.updatePosition(0);
@@ -176,10 +151,28 @@ export class GameScene extends Phaser.Scene {
       ease: Phaser.Math.Easing.Quadratic.Out,
       onUpdate: () => {
         this.parallaxBackground.update(this.cameras.main.scrollX);
+        this.leftScrollZone.updatePosition(this.cameras.main.scrollX);
+        this.rightScrollZone.updatePosition(this.cameras.main.scrollX + 540);
       },
     };
     const tweenProps = Object.assign(defaultTweenProps, additionalTweenProps);
 
     this.tweens.add(tweenProps);
+  }
+
+  _winLevel() {
+    console.log('win level');
+    this._endLevel();
+  }
+
+  _loseLevel() {
+    console.log('lose level');
+    this._endLevel();
+  }
+
+  _endLevel() {
+    this.scene.stop('game');
+    this.scene.stop('ui');
+    this.scene.start('level-select');
   }
 }
