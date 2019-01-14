@@ -115,7 +115,7 @@ export class GameScene extends Phaser.Scene {
 
     const nextLives = this.registry.get('lives') - 1
     if (nextLives === 0) {
-      this._endGame();
+      this._loseLevel();
     }
 
     this.registry.set('lives', nextLives);
@@ -138,15 +138,25 @@ export class GameScene extends Phaser.Scene {
       this._reset();
 
       if (this.targets.countActive() === 0) {
-        console.log('level over!')
+        this._winLevel();
       }
     });
   }
 
-  _endGame() {
+  _winLevel() {
+    console.log('win level');
+    this._endLevel();
+  }
+
+  _loseLevel() {
+    console.log('lose level');
+    this._endLevel();
+  }
+
+  _endLevel() {
     this.scene.stop('game');
     this.scene.stop('ui');
-    this.scene.start('results');
+    this.scene.start('level-select');
   }
 
   _reset() {
