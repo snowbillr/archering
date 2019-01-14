@@ -143,9 +143,7 @@ export class GameScene extends Phaser.Scene {
       duration: duration,
       ease: Phaser.Math.Easing.Quadratic.Out,
       onUpdate: () => {
-        this.parallaxBackground.update(this.cameras.main.scrollX);
-        this.leftScrollZone.updatePosition(this.cameras.main.scrollX);
-        this.rightScrollZone.updatePosition(this.cameras.main.scrollX + 540);
+        this._immediateScroll(this.cameras.main.scrollX, false);
       },
     };
     const tweenProps = Object.assign(defaultTweenProps, additionalTweenProps);
