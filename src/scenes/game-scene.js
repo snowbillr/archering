@@ -34,12 +34,12 @@ export class GameScene extends Phaser.Scene {
     this.groundZone = new GroundZone(this);
 
     this.scrollingLeft = false;
-    this.leftScrollZone = this.add.zone(0, 0).setSize(100, 300).setInteractive();
+    this.leftScrollZone = this.add.zone(0, 0).setSize(100, 300).setInteractive({ cursor: 'w-resize' });
     this.leftScrollZone.on('pointerover', () => this.scrollingLeft = true);
     this.leftScrollZone.on('pointerout', () => this.scrollingLeft = false);
 
     this.scrollingRight = false;
-    this.rightScrollZone = this.add.zone(540, 0).setSize(100, 300).setInteractive();
+    this.rightScrollZone = this.add.zone(540, 0).setSize(100, 300).setInteractive({ cursor: 'e-resize' });
     this.rightScrollZone.on('pointerover', () => this.scrollingRight = true);
     this.rightScrollZone.on('pointerout', () => this.scrollingRight = false);
 
