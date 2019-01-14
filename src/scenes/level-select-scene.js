@@ -8,7 +8,6 @@ export class LevelSelectScene extends Phaser.Scene {
   }
 
   create() {
-    this.events.once('destroy', this._destroy);
     this.events.once('shutdown', this._shutdown);
 
     this._createLevelButton(320, 150, 0);
@@ -23,10 +22,6 @@ export class LevelSelectScene extends Phaser.Scene {
     }).setOrigin(0.5, 0)
       .setInteractive({ cursor: 'pointer' })
       .once('pointerup', () => this.scene.start('game', { level: levels[levelIndex] }));
-  }
-
-  _destroy() {
-    console.log('destroy');
   }
 
   _shutdown() {

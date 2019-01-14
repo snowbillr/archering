@@ -107,15 +107,19 @@ export class GameScene extends Phaser.Scene {
       }
     }, { x: 0, y: 0 });
 
-    this._scroll(furthestTargetCoordinates.x - 500, 800, {
-      yoyo: true,
-      delay: 400,
-      hold: 500,
-      ease: Phaser.Math.Easing.Quadratic.InOut,
-      onComplete: () => {
-        this.registry.set('state', STATES.REST);
-      }
-     });
+    if (furthestTargetCoordinates.x > 600) {
+      this._scroll(furthestTargetCoordinates.x - 500, 800, {
+        yoyo: true,
+        delay: 400,
+        hold: 500,
+        ease: Phaser.Math.Easing.Quadratic.InOut,
+        onComplete: () => {
+          this.registry.set('state', STATES.REST);
+        }
+      });
+    } else {
+      this.registry.set('state', STATES.REST);
+    }
   }
 
   _startCharge() {
