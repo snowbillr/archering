@@ -23,6 +23,16 @@ export class Targets extends Phaser.Physics.Arcade.Group {
     });
   }
 
+  getFurthestTargetX() {
+    return this.getChildren().reduce((furthestX, target) => {
+      if (target.x > furthestX) {
+        return target.x;
+      } else {
+        return furthestX;
+      }
+    }, 0);
+  }
+
   onTargetHit(target) {
     this.scene.physics.world.disableBody(target.body);
     target.active = false;

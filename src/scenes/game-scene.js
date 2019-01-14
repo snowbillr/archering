@@ -87,16 +87,10 @@ export class GameScene extends Phaser.Scene {
   _loadLevel(level) {
     this.targets.createTargetsForLevel(level);
 
-    const furthestTargetCoordinates = level.targets.reduce((furthest, coordinates) => {
-      if (coordinates.x > furthest.x) {
-        return coordinates;
-      } else {
-        return furthest;
-      }
-    }, { x: 0, y: 0 });
+    const furthestTargetX = this.targets.getFurthestTargetX();
 
-    if (furthestTargetCoordinates.x > 600) {
-      this._scroll(furthestTargetCoordinates.x - 500, 800, {
+    if (furthestTargetX > 600) {
+      this._scroll(furthestTargetX - 500, 800, {
         yoyo: true,
         delay: 400,
         hold: 500,
