@@ -3,6 +3,7 @@ import * as STATES from '../game-states';
 import { Arrow } from '../entities/arrow.js';
 import { Effects } from '../effects';
 import { ParallaxBackground } from '../entities/parallax-background.js';
+import { Targets } from '../groups/targets.js';
 
 export class GameScene extends Phaser.Scene {
   constructor() {
@@ -28,12 +29,7 @@ export class GameScene extends Phaser.Scene {
     this.arrow = new Arrow(this);
     this.arrow.reset();
 
-    this.targets = this.physics.add.group({
-      defaultKey: 'target',
-      allowGravity: false,
-      immovable: true,
-      classType: Phaser.Physics.Arcade.Image,
-    });
+   this.targets = new Targets(this);
 
     this.groundZone = this.add.zone(0, 260).setSize(640, 40).setScrollFactor(0);
     this.physics.world.enable(this.groundZone);
@@ -89,15 +85,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   _loadLevel(level) {
-    level.targets.forEach(coordinates => {
-      const target = this.targets.get();
-      this.physics.world.enableBody(target);
-      target.alpha = 1;
-      target.active = true;
-
-      target.x = coordinates.x;
-      target.y = coordinates.y;
-    });
+    this.targets.createTargetsForLevel(level);
 
     const furthestTargetCoordinates = level.targets.reduce((furthest, coordinates) => {
       if (coordinates.x > furthest.x) {
@@ -154,14 +142,12 @@ export class GameScene extends Phaser.Scene {
   _onArrowTargetCollide(arrow, target) {
     this.registry.set('state', STATES.HIT);
     this.arrow.onHit();
+    this.targets.onTargetHit(target);
 
     Effects.flashOut([arrow, target], () => {
       this.registry.set('state', STATES.REST);
 
       this._reset();
-
-      this.physics.world.disableBody(target.body);
-      target.active = false;
 
       if (this.targets.countActive() === 0) {
         console.log('level over!')
