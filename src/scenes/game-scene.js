@@ -55,16 +55,9 @@ export class GameScene extends Phaser.Scene {
     const state = this.registry.get('state');
 
     if (state === STATES.REST) {
-      this.cameras.main.scrollX += 6 * this.registry.get('scrollingDirection');
-
-      this.parallaxBackground.update(this.cameras.main.scrollX);
-
-      this.leftScrollZone.updatePosition(this.cameras.main.scrollX);
-      this.rightScrollZone.updatePosition(this.cameras.main.scrollX + 540);
-    }
-    else if (state === STATES.FLY) {
-      this.groundZone.updatePosition(this.cameras.main.scrollX);
-      this.parallaxBackground.update(this.cameras.main.scrollX);
+      this._immediateScroll(this.cameras.main.scrollX + (6 * this.registry.get('scrollingDirection')))
+    } else if (state === STATES.FLY) {
+      this._immediateScroll(this.cameras.main.scrollX, false);
     }
   }
 
@@ -74,7 +67,7 @@ export class GameScene extends Phaser.Scene {
     const furthestTargetX = this.targets.getFurthestTargetX();
 
     if (furthestTargetX > 600) {
-      this._scroll(furthestTargetX - 500, 800, {
+      this._tweenScroll(furthestTargetX - 500, 800, {
         yoyo: true,
         delay: 400,
         hold: 500,
@@ -91,7 +84,7 @@ export class GameScene extends Phaser.Scene {
   _startCharge() {
     this.registry.set('scrollDirection', 0);
     this.registry.set('state', STATES.CHARGE);
-    this._scroll(0, 200);
+    this._tweenScroll(0, 200);
   }
 
   _fireArrow() {
@@ -137,11 +130,11 @@ export class GameScene extends Phaser.Scene {
   _reset() {
     this.cameras.main.stopFollow();
     this.groundZone.updatePosition(0);
-    this._scroll(0, 300);
+    this._tweenScroll(0, 300);
     this.arrow.reset();
   }
 
-  _scroll(targetScrollX, duration, additionalTweenProps = {}) {
+  _tweenScroll(targetScrollX, duration, additionalTweenProps = {}) {
     const defaultTweenProps = {
       targets: this.cameras.main,
       props: {
@@ -158,6 +151,13 @@ export class GameScene extends Phaser.Scene {
     const tweenProps = Object.assign(defaultTweenProps, additionalTweenProps);
 
     this.tweens.add(tweenProps);
+  }
+
+  _immediateScroll(targetScrollX, includeCamera = true) {
+    if (includeCamera) this.cameras.main.scrollX = targetScrollX;
+    this.parallaxBackground.update(targetScrollX);
+    this.leftScrollZone.updatePosition(targetScrollX);
+    this.rightScrollZone.updatePosition(targetScrollX + 540);
   }
 
   _winLevel() {
