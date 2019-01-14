@@ -1,9 +1,9 @@
-import levels from '../levels.json';
 import * as STATES from '../game-states';
 import { Arrow } from '../entities/arrow.js';
 import { Effects } from '../effects';
 import { ParallaxBackground } from '../entities/parallax-background.js';
 import { Targets } from '../groups/targets.js';
+import { GroundZone } from '../entities/ground-zone.js';
 
 export class GameScene extends Phaser.Scene {
   constructor() {
@@ -31,10 +31,7 @@ export class GameScene extends Phaser.Scene {
 
    this.targets = new Targets(this);
 
-    this.groundZone = this.add.zone(0, 260).setSize(640, 40).setScrollFactor(0);
-    this.physics.world.enable(this.groundZone);
-    this.groundZone.body.allowGravity = false;
-    this.groundZone.body.immovable = true;
+    this.groundZone = new GroundZone(this);
 
     this.scrollingLeft = false;
     this.leftScrollZone = this.add.zone(0, 0).setSize(100, 300).setInteractive();
@@ -79,7 +76,7 @@ export class GameScene extends Phaser.Scene {
       this.rightScrollZone.x = this.cameras.main.scrollX + 540;
     }
     else if (state === STATES.FLY) {
-      this.groundZone.x = this.cameras.main.scrollX;
+      this.groundZone.updatePosition(this.cameras.main.scrollX);
       this.parallaxBackground.update(this.cameras.main.scrollX);
     }
   }
@@ -157,7 +154,7 @@ export class GameScene extends Phaser.Scene {
 
   _reset() {
     this.cameras.main.stopFollow();
-    this.groundZone.x = 0;
+    this.groundZone.updatePosition(0);
     this._scroll(0, 300);
     this.arrow.reset();
   }
