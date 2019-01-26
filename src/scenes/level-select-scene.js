@@ -8,8 +8,6 @@ export class LevelSelectScene extends Phaser.Scene {
   }
 
   create() {
-    this.events.once('shutdown', this._shutdown);
-
     this._createLevelButton(320, 100, 0);
     this._createLevelButton(320, 150, 1);
     this._createLevelButton(320, 200, 2);
@@ -23,9 +21,5 @@ export class LevelSelectScene extends Phaser.Scene {
     }).setOrigin(0.5, 0)
       .setInteractive({ cursor: 'pointer' })
       .once('pointerup', () => this.scene.start('game', { level: levels[levelIndex] }));
-  }
-
-  _shutdown() {
-    console.log('shutdown');
   }
 }
