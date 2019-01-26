@@ -40,7 +40,6 @@ export class GameScene extends Phaser.Scene {
         { key: 'balloon-5' },
         { key: 'balloon-6' },
       ],
-      // duration: 1000,
     });
 
     this.registry.set('lives', 3);
@@ -69,7 +68,8 @@ export class GameScene extends Phaser.Scene {
     this._loadLevel(level);
 
     this.physics.add.collider(this.arrow, this.targets, (arrow, target) => this._onArrowTargetCollide(arrow, target));
-    this.balloons.addOverlap(this.arrow, (arrow, balloon) => this._onArrowBalloonCollide(balloon));
+    this.balloons.addBalloonOverlap(this.arrow, (arrow, balloon) => this._onArrowBalloonCollide(balloon));
+    this.balloons.addStringOverlap(this.arrow, (arrow, balloon) => this._onArrowBalloonStringCollide(balloon));
     this.physics.add.collider(this.arrow, this.groundZone, () => this._onArrowWorldBoundsCollide());
   }
 
@@ -145,6 +145,10 @@ export class GameScene extends Phaser.Scene {
 
   _onArrowBalloonCollide(balloon) {
     balloon.pop()
+  }
+
+  _onArrowBalloonStringCollide(balloon) {
+    balloon.cutString();
   }
 
   _checkLevelOver() {

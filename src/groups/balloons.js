@@ -14,9 +14,15 @@ export class Balloons {
     });
   }
 
-  addOverlap(arrow, callback) {
+  addBalloonOverlap(arrow, callback) {
     this.balloons.forEach(balloon => {
       this.scene.physics.add.overlap(arrow, balloon.balloon, arrow => callback(arrow, balloon));
+    });
+  }
+
+  addStringOverlap(arrow, callback) {
+    this.balloons.forEach(balloon => {
+      this.scene.physics.add.overlap(arrow, balloon.string, arrow => callback(arrow, balloon));
     });
   }
 }

@@ -16,13 +16,29 @@ export class Balloon {
 
   pop() {
     this.scene.physics.world.disableBody(this.balloon.body);
+    this.scene.physics.world.disableBody(this.string.body);
 
     this.balloon.once('animationcomplete', () => {
       this.balloon.visible = false;
       this.balloon.active = false;
+
+      this.string.visible = false;
+      this.string.active = false;
     });
 
     this.balloon.play('balloon-pop');
+    this._collapseString();
+  }
+
+  cutString() {
+    this.scene.physics.world.disableBody(this.balloon.body);
+    this.scene.physics.world.disableBody(this.string.body);
+
+    this._collapseString();
+    this._floatBalloonAway();
+  }
+
+  _collapseString() {
     this.scene.tweens.add({
       targets: [this.string],
       props: {
@@ -30,6 +46,28 @@ export class Balloon {
       },
       duration: 200,
       easing: Phaser.Math.Easing.Quadratic.Out,
+    });
+  }
+
+  _floatBalloonAway() {
+    const balloonDrift = Phaser.Math.RND.pick(['+=50', '-=50']);
+
+    this.scene.tweens.add({
+      targets: [this.balloon],
+      props: {
+        y: 0 - (this.balloon.displayHeight / 2),
+      },
+      duration: 700,
+      easing: Phaser.Math.Easing.Expo.In,
+    });
+
+    this.scene.tweens.add({
+      targets: [this.balloon],
+      props: {
+        x: balloonDrift,
+      },
+      duration: 700,
+      easing: Phaser.Math.Easing.Cubic.InOut,
     });
   }
 }
