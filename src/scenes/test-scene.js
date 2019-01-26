@@ -28,7 +28,7 @@ export class TestScene extends Phaser.Scene {
       ],
     });
 
-    const balloon = new Balloon(this);
+    const balloon = new Balloon(this, 100, 100);
     balloon.x = 100;
     balloon.y = 100;
   }
