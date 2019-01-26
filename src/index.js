@@ -25,7 +25,7 @@ const gameConfig = {
       }
     }
   },
-  scene: [TestScene, LevelSelectScene, GameScene, UiScene, ResultsScene],
+  scene: [LevelSelectScene, GameScene, UiScene, ResultsScene],
 };
 
 new Phaser.Game(gameConfig);

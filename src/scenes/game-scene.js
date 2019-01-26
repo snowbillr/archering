@@ -5,6 +5,7 @@ import { ParallaxBackground } from '../entities/parallax-background.js';
 import { Targets } from '../groups/targets.js';
 import { GroundZone } from '../entities/ground-zone.js';
 import { ScrollZone } from '../entities/scroll-zone';
+import { Balloons } from '../groups/balloons';
 
 export class GameScene extends Phaser.Scene {
   constructor() {
@@ -15,12 +16,33 @@ export class GameScene extends Phaser.Scene {
     this.load.image('target', 'assets/target.png');
     this.load.image('arrow', 'assets/arrow.png');
 
+    this.load.image('balloon-1', 'assets/balloon/1.png');
+    this.load.image('balloon-2', 'assets/balloon/2.png');
+    this.load.image('balloon-3', 'assets/balloon/3.png');
+    this.load.image('balloon-4', 'assets/balloon/4.png');
+    this.load.image('balloon-5', 'assets/balloon/5.png');
+    this.load.image('balloon-6', 'assets/balloon/6.png');
+    this.load.image('balloon-string', 'assets/balloon/string.png');
+
     this.load.image('background-back', 'assets/background-back.png');
     this.load.image('background-middle', 'assets/background-middle.png');
     this.load.image('background-front', 'assets/background-front.png');
   }
 
   create({ level }) {
+    this.anims.create({
+      key: 'balloon-pop',
+      frames: [
+        { key: 'balloon-1' },
+        { key: 'balloon-2' },
+        { key: 'balloon-3' },
+        { key: 'balloon-4' },
+        { key: 'balloon-5' },
+        { key: 'balloon-6' },
+      ],
+      // duration: 1000,
+    });
+
     this.registry.set('lives', 3);
     this.registry.set('charge', 200);
     this.registry.set('scrollingDirection', 0);
@@ -32,6 +54,7 @@ export class GameScene extends Phaser.Scene {
 
     this.arrow = new Arrow(this);
     this.targets = new Targets(this);
+    this.balloons = new Balloons(this);
     this.groundZone = new GroundZone(this);
     this.leftScrollZone = new ScrollZone(this, -1);
     this.rightScrollZone = new ScrollZone(this, 1);
@@ -43,10 +66,11 @@ export class GameScene extends Phaser.Scene {
     this.input.on('pointerdown', this._startCharge, this);
     this.input.on('pointerup', this._fireArrow, this);
 
-    this.physics.add.collider(this.arrow, this.targets, (arrow, target) => this._onArrowTargetCollide(arrow, target));
-    this.physics.add.collider(this.arrow, this.groundZone, () => this._onArrowWorldBoundsCollide());
-
     this._loadLevel(level);
+
+    this.physics.add.collider(this.arrow, this.targets, (arrow, target) => this._onArrowTargetCollide(arrow, target));
+    this.balloons.addOverlap(this.arrow, (arrow, balloon) => this._onArrowBalloonCollide(balloon));
+    this.physics.add.collider(this.arrow, this.groundZone, () => this._onArrowWorldBoundsCollide());
   }
 
   update() {
@@ -63,6 +87,7 @@ export class GameScene extends Phaser.Scene {
 
   _loadLevel(level) {
     this.targets.createTargetsForLevel(level);
+    this.balloons.createBalloonsForLevel(level);
 
     const furthestTargetX = this.targets.getFurthestTargetX();
 
@@ -116,6 +141,10 @@ export class GameScene extends Phaser.Scene {
       this._checkLevelOver();
       this._reset();
     });
+  }
+
+  _onArrowBalloonCollide(balloon) {
+    balloon.pop()
   }
 
   _checkLevelOver() {

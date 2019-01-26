@@ -10,8 +10,9 @@ export class LevelSelectScene extends Phaser.Scene {
   create() {
     this.events.once('shutdown', this._shutdown);
 
-    this._createLevelButton(320, 150, 0);
-    this._createLevelButton(320, 200, 1);
+    this._createLevelButton(320, 100, 0);
+    this._createLevelButton(320, 150, 1);
+    this._createLevelButton(320, 200, 2);
   }
 
   _createLevelButton(x, y, levelIndex) {
