@@ -163,10 +163,11 @@ export class GameScene extends Phaser.Scene {
   }
 
   _checkLevelOver() {
-    if (this.registry.get('targets') === 0) {
-      this._winLevel();
-    } else if (this.registry.get('arrows') === 0) {
-      this._loseLevel();
+    const isLevelOver = this.registry.get('arrows') === 0
+      || (this.registry.get('targets') === 0 && this.registry.get('balloons') === 0);
+
+    if (isLevelOver) {
+      this._endLevel();
     }
   }
 
@@ -201,17 +202,9 @@ export class GameScene extends Phaser.Scene {
     this.groundZone.updatePosition(targetScrollX);
   }
 
-  _winLevel() {
-    this._endLevel(true);
-  }
-
-  _loseLevel() {
-    this._endLevel(false);
-  }
-
-  _endLevel(didWin) {
+  _endLevel() {
     this.scene.pause('game');
     this.scene.pause('ui');
-    this.scene.launch('results', { didWin });
+    this.scene.launch('results');
   }
 }

@@ -3,7 +3,9 @@ export class ResultsScene extends Phaser.Scene {
     super({ key: 'results' });
   }
 
-  create({ didWin }) {
+  create() {
+    const didWin = this.registry.get('targets') === 0 && this.registry.get('balloons') === 0;
+
     const text = didWin ? 'Level Completed!' : 'Level Failed';
     this.add.text(320, 50, text).setOrigin(0.5, 0);
 
