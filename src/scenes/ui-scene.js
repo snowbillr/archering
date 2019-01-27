@@ -13,11 +13,11 @@ export class UiScene extends Phaser.Scene {
   create() {
     this.events.on('shutdown', this._cleanupRegistryListeners, this);
 
-    this.registry.events.on('changedata_lives', this._updateLives, this);
+    this.registry.events.on('changedata_arrows', this._updateArrows, this);
     this.registry.events.on('changedata_charge', this._updateCharge, this);
 
-    this.livesText = this.add.text(30, 15, 'Quiver:');
-    this.livesImages = this.add.group([], {
+    this.arrowsText = this.add.text(30, 15, 'Quiver:');
+    this.arrowsImages = this.add.group([], {
       classType: Phaser.GameObjects.Image,
       key: 'arrow',
       setXY: { x: 120, stepX: 20, y: 22 },
@@ -29,17 +29,17 @@ export class UiScene extends Phaser.Scene {
     this.chargeGaugeOutline = this.add.image(30, 40, 'gauge-outline').setOrigin(0).setScale(1, 0.8);
     this.chargeGaugeFill = this.add.image(30, 40, 'gauge-fill').setOrigin(0).setScale(1, 0.8);
 
-    this._updateLives(null, this.registry.get('lives'));
+    this._updateArrows(null, this.registry.get('arrows'));
     this._updateCharge(null, this.registry.get('charge'));
   }
 
   _cleanupRegistryListeners() {
-    this.registry.events.off('changedata_lives', this._updateLives, this);
+    this.registry.events.off('changedata_arrows', this._updateArrows, this);
     this.registry.events.off('changedata_charge', this._updateCharge, this);
   }
 
-  _updateLives(parent, value) {
-    this.livesImages
+  _updateArrows(parent, value) {
+    this.arrowsImages
       .getChildren()
       .forEach((lifeImage, i) => {
         if (i < value) {

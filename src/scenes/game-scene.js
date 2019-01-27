@@ -42,7 +42,7 @@ export class GameScene extends Phaser.Scene {
       ],
     });
 
-    this.registry.set('lives', 3);
+    this.registry.set('arrows', 3);
     this.registry.set('charge', 200);
     this.registry.set('scrollingDirection', 0);
     this.registry.set('state', STATES.PANNING_TO_TARGETS);
@@ -152,12 +152,12 @@ export class GameScene extends Phaser.Scene {
   }
 
   _checkLevelOver() {
-    const nextLives = this.registry.get('lives') - 1
-    this.registry.set('lives', nextLives);
+    const nextArrows = this.registry.get('arrows') - 1
+    this.registry.set('arrows', nextArrows);
 
     if (this.targets.countActive() === 0) {
       this._winLevel();
-    } else if (this.registry.get('lives') === 0) {
+    } else if (this.registry.get('arrows') === 0) {
       this._loseLevel();
     }
   }
