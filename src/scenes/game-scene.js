@@ -110,13 +110,17 @@ export class GameScene extends Phaser.Scene {
   }
 
   _startCharge() {
+    this.tweens.killTweensOf(this.cameras.main);
+
     this.registry.set('scrollDirection', 0);
     this.registry.set('state', STATES.CHARGE);
     this._tweenScroll(0, 200);
   }
 
   _fireArrow() {
-    this.cameras.main.startFollow(this.arrow);
+    this.tweens.killTweensOf(this.cameras.main);
+
+    this.cameras.main.startFollow(this.arrow, true);
     this.registry.set('state', STATES.FLY);
     this.arrow.fire();
   }
