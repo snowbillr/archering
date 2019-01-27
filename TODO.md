@@ -1,3 +1,4 @@
 next up:
-- put lives, remaining targets, and remaining balloons in registry
-- results screen calculates score and win/loss
+- calculate score on results screen
+- autolayout of level select screen
+- do something about all the magic numbers for positioning
