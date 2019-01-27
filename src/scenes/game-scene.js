@@ -53,7 +53,7 @@ export class GameScene extends Phaser.Scene {
 
     this.arrow = new Arrow(this);
     this.targets = new Targets(this);
-    this.balloons = new Balloons(this);
+    this.balloons = new Balloons(this, level);
     this.groundZone = new GroundZone(this);
     this.leftScrollZone = new ScrollZone(this, -1);
     this.rightScrollZone = new ScrollZone(this, 1);
@@ -93,9 +93,11 @@ export class GameScene extends Phaser.Scene {
     this.balloons.createBalloonsForLevel(level);
 
     const furthestTargetX = this.targets.getFurthestTargetX();
+    const furthestBalloonX = this.balloons.getFurthestBalloonX();
+    const furthestX = Math.max(furthestTargetX, furthestBalloonX);
 
-    if (furthestTargetX > 600) {
-      this._tweenScroll(furthestTargetX - 500, 800, {
+    if (furthestX > 600) {
+      this._tweenScroll(furthestX - 500, 800, {
         yoyo: true,
         delay: 400,
         hold: 500,
