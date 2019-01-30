@@ -27,7 +27,7 @@ export class LevelSelectScene extends Phaser.Scene {
   }
 
   _createLevelButton(levelIndex) {
-    return this.add.bitmapText(50, 50, 'font', levelIndex, 28)
+    return this.add.bitmapText(50, 50, 'font', levelIndex + 1, 28)
       .setOrigin(0.5, 0)
       .setInteractive({ cursor: 'pointer' })
       .once('pointerup', () => this.scene.start('game', { level: levels[levelIndex] }));

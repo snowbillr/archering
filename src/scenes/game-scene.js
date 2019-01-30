@@ -50,7 +50,6 @@ export class GameScene extends Phaser.Scene {
     this.scene.launch('ui');
 
     this.parallaxBackground = new ParallaxBackground(this, 'background-back', 'background-middle', 'background-front');
-
     this.arrow = new Arrow(this);
     this.targets = new Targets(this);
     this.balloons = new Balloons(this, level);

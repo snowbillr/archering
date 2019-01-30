@@ -7,9 +7,9 @@ export class ResultsScene extends Phaser.Scene {
     const didWin = this.registry.get('targets') === 0 && this.registry.get('balloons') === 0;
 
     const text = didWin ? 'Level Completed!' : 'Level Failed';
-    this.add.text(320, 50, text).setOrigin(0.5, 0);
+    this.add.bitmapText(320, 50, 'font', text, 24).setOrigin(0.5, 0);
 
-    this.add.text(320, 100, 'Back to Level Selet', {
+    this.add.text(320, 100, 'Back to Level Select', {
       fill: '#000',
       backgroundColor: '#6c6',
       padding: 6,
