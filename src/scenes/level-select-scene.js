@@ -5,12 +5,10 @@ import levels from '../levels.json';
 export class LevelSelectScene extends Phaser.Scene {
   constructor() {
     super({ key: 'level-select' });
-
-    this.gridWidth = 8;
   }
 
   preload() {
-    this.load.bitmapFont('font', 'assets/fonts/font.png', 'assets/fonts/font.xml');
+
   }
 
   create() {

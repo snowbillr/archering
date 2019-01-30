@@ -16,7 +16,7 @@ export class UiScene extends Phaser.Scene {
     this.registry.events.on('changedata_arrows', this._updateArrows, this);
     this.registry.events.on('changedata_charge', this._updateCharge, this);
 
-    this.arrowsText = this.add.text(30, 15, 'Quiver:');
+    this.arrowsText = this.add.bitmapText(30, 15, 'font', 'Quiver:', 24);
     this.arrowsImages = this.add.group([], {
       classType: Phaser.GameObjects.Image,
       key: 'arrow',

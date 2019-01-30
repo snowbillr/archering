@@ -2,6 +2,8 @@ import 'phaser';
 
 import { TestScene } from './scenes/test-scene';
 
+import { PreloadScene } from './scenes/preload-scene';
+
 import { GameScene } from './scenes/game-scene';
 import { UiScene } from './scenes/ui-scene';
 
@@ -25,7 +27,7 @@ const gameConfig = {
       }
     }
   },
-  scene: [LevelSelectScene, GameScene, UiScene, ResultsScene],
+  scene: [PreloadScene, LevelSelectScene, GameScene, UiScene, ResultsScene],
 };
 
 new Phaser.Game(gameConfig);
