@@ -7,16 +7,14 @@ export class LevelSelectScene extends Phaser.Scene {
     super({ key: 'level-select' });
   }
 
-  preload() {
-
-  }
-
   create() {
+    this.add.bitmapText(320, 50, 'font', 'Level Select', 38)
+      .setOrigin(0.5);
+
     const levelButtons = [];
     for (let i = 0; i < levels.length; i++) {
       levelButtons.push(this._createLevelButton(i));
     }
-
 
     Phaser.Actions.GridAlign(levelButtons, {
       width: 8,
