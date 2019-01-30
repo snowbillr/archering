@@ -5,20 +5,34 @@ import levels from '../levels.json';
 export class LevelSelectScene extends Phaser.Scene {
   constructor() {
     super({ key: 'level-select' });
+
+    this.gridWidth = 8;
+  }
+
+  preload() {
+    this.load.bitmapFont('font', 'assets/fonts/font.png', 'assets/fonts/font.xml');
   }
 
   create() {
-    this._createLevelButton(320, 100, 0);
-    this._createLevelButton(320, 150, 1);
-    this._createLevelButton(320, 200, 2);
+    const levelButtons = [];
+    for (let i = 0; i < levels.length; i++) {
+      levelButtons.push(this._createLevelButton(i));
+    }
+
+
+    Phaser.Actions.GridAlign(levelButtons, {
+      width: 8,
+      height: -1,
+      cellWidth: 60,
+      cellHeight: 20,
+      x: 200,
+      y: 150,
+    });
   }
 
-  _createLevelButton(x, y, levelIndex) {
-    this.add.text(x, y, `Level ${levelIndex + 1}`, {
-      fill: '#000',
-      backgroundColor: '#6c6',
-      padding: 6,
-    }).setOrigin(0.5, 0)
+  _createLevelButton(levelIndex) {
+    return this.add.bitmapText(50, 50, 'font', levelIndex, 28)
+      .setOrigin(0.5, 0)
       .setInteractive({ cursor: 'pointer' })
       .once('pointerup', () => this.scene.start('game', { level: levels[levelIndex] }));
   }
