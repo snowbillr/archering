@@ -3,10 +3,10 @@ next up:
 - graphics for level select
 - graphics for results
 
-- use a 3 star system for scoring each level
+- show stars on level select screen for completed levels
+- only save stars if the level passed
+- only save stars if they are higher than the previously saved value for that level
 
-- better layout for level select screen
-
-- update phaser
+- update phaser to latest version
 
 - have a loading scene for all assets
