@@ -42,7 +42,6 @@ export class GameScene extends Phaser.Scene {
       ],
     });
 
-    this.registry.set('arrows', 3);
     this.registry.set('charge', 200);
     this.registry.set('scrollingDirection', 0);
     this.registry.set('state', STATES.PANNING_TO_TARGETS);
@@ -85,6 +84,12 @@ export class GameScene extends Phaser.Scene {
   }
 
   _loadLevel(level) {
+    this.registry.set('initialArrows', 3);
+
+    this.registry.set('initialTargets', level.targets.length);
+    this.registry.set('initialBalloons', level.balloons.length);
+
+    this.registry.set('arrows', 3);
     this.registry.set('targets', level.targets.length);
     this.registry.set('balloons', level.balloons.length);
 
