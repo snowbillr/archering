@@ -20,19 +20,19 @@ export class ResultsScene extends Phaser.Scene {
 
     const scores = this._calculateScore();
     storage.saveLevelScore(this.registry.get('levelIndex'), scores.total);
-    this._displayScores(scores);
-
-    this.add.text(320, 230, 'Back to Level Select', {
-      fill: '#000',
-      backgroundColor: '#6c6',
-      padding: 6,
-    }).setOrigin(0.5, 0)
-      .setInteractive({ cursor: 'pointer' })
-      .once('pointerup', () => {
-        this.scene.stop('game');
-        this.scene.stop('results');
-        this.scene.start('level-select');
+    this._displayScores(scores, () => {
+      this.add.text(320, 230, 'Back to Level Select', {
+        fill: '#000',
+        backgroundColor: '#6c6',
+        padding: 6,
+      }).setOrigin(0.5, 0)
+        .setInteractive({ cursor: 'pointer' })
+        .once('pointerup', () => {
+          this.scene.stop('game');
+          this.scene.stop('results');
+          this.scene.start('level-select');
       });
+    });
   }
 
   _calculateScore() {
@@ -55,7 +55,7 @@ export class ResultsScene extends Phaser.Scene {
     };
   }
 
-  _displayScores(scores) {
+  _displayScores(scores, onComplete) {
     let y = 100;
     const yStep = 30;
 
@@ -85,6 +85,6 @@ export class ResultsScene extends Phaser.Scene {
       });
     });
 
-    this.tweens.timeline({ tweens });
+    this.tweens.timeline({ tweens, onComplete });
   }
 }
