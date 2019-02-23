@@ -48,9 +48,8 @@ export class ResultsScene extends Phaser.Scene {
   }
 
   _calculateScore() {
-    const initialArrows = this.registry.get('initialArrows')
     const remainingArrows = this.registry.get('arrows');
-    const arrowScore = (initialArrows - remainingArrows) * SCORE_MULTIPLIERS.arrows;
+    const arrowScore = remainingArrows * SCORE_MULTIPLIERS.arrows;
 
     const initialTargets = this.registry.get('initialTargets');
     const remainingTargets = this.registry.get('targets');

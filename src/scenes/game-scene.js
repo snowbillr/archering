@@ -84,8 +84,6 @@ export class GameScene extends Phaser.Scene {
   }
 
   _loadLevel(level) {
-    this.registry.set('initialArrows', 3);
-
     this.registry.set('initialTargets', level.targets.length);
     this.registry.set('initialBalloons', level.balloons.length);
 
