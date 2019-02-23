@@ -95,8 +95,7 @@ export class ResultsScene extends Phaser.Scene {
     });
 
     for (let i = 0; i < scores.stars; i++) {
-      console.log('making star')
-      const star = this.add.image(250 + i * 50, y, 'star');
+      const star = this.add.image(275 + i * 40, y, 'star');
       star.alpha = 0;
       star.setDisplaySize(36, 36);
       star.setOrigin(0.5, 0);
@@ -108,7 +107,7 @@ export class ResultsScene extends Phaser.Scene {
         },
         duration: 1,
         delay: i * 200,
-      })
+      });
     }
 
     this.tweens.timeline({ tweens, onComplete });
