@@ -20,18 +20,7 @@ export class ResultsScene extends Phaser.Scene {
 
     const scores = this._calculateScore();
     storage.saveLevelScore(this.registry.get('levelIndex'), scores.total);
-
-    const targetScoreLabel = this.add.bitmapText(250, 100, 'font', 'Targets:', 24);
-    const targetScoreValue = this.add.bitmapText(250 + targetScoreLabel.width + 20, 100, 'font', scores.target, 24);
-
-    const balloonScoreLabel = this.add.bitmapText(250, 130, 'font', 'Balloons:', 24);
-    const balloonScoreValue = this.add.bitmapText(250 + balloonScoreLabel.width + 20, 130, 'font', scores.balloon, 24);
-
-    const arrowScoreLabel = this.add.bitmapText(250, 160, 'font', 'Arrows:', 24);
-    const arrowScoreValue = this.add.bitmapText(250 + arrowScoreLabel.width + 20, 160, 'font', scores.arrow, 24);
-
-    const totalScoreLabel = this.add.bitmapText(250, 190, 'font', 'Total:', 24);
-    const totalScoreValue = this.add.bitmapText(250 + totalScoreLabel.width + 20, 190, 'font', scores.total, 26);
+    this._displayScores(scores);
 
     this.add.text(320, 230, 'Back to Level Select', {
       fill: '#000',
@@ -65,5 +54,24 @@ export class ResultsScene extends Phaser.Scene {
       balloon: balloonScore,
       total: arrowScore + targetScore + balloonScore,
     };
+  }
+
+  _displayScores(scores) {
+    let y = 100;
+    const yStep = 30;
+
+    const scoreTypeOrder = ['target', 'balloon', 'arrow', 'total'];
+    const scoreTypeLabels = {
+      'target': 'Targets:',
+      'balloon': 'Balloons:',
+      'arrow': 'Arrows:',
+      'total': 'Total:',
+    };
+    for (let scoreType of scoreTypeOrder) {
+      this.add.bitmapText(250, y, 'font', scoreTypeLabels[scoreType], 24);
+      this.add.bitmapText(350, y, 'font', scores[scoreType], 24);
+
+      y += yStep;
+    }
   }
 }
