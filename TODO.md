@@ -4,9 +4,8 @@ next up:
 - graphics for results
 
 - only show scores for each entity if there were entities on the level at all
+- use a 3 star system for scoring each level
 
 - better layout for level select screen
-
-- only save best score for a level
 
 - update phaser

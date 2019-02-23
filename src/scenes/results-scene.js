@@ -50,8 +50,8 @@ export class ResultsScene extends Phaser.Scene {
 
     return {
       arrow: arrowScore,
-      target: targetScore,
-      balloon: balloonScore,
+      target: initialTargets > 0 ? targetScore : null,
+      balloon: initialBalloons > 0 ? balloonScore : null,
       total: arrowScore + targetScore + balloonScore,
     };
   }
@@ -68,19 +68,22 @@ export class ResultsScene extends Phaser.Scene {
       'total': 'Total:',
     };
 
-    const tweens = scoreTypeOrder.map(scoreType => {
+    const tweens = [];
+    scoreTypeOrder.forEach(scoreType => {
+      if (scores[scoreType] == null) { return; }
+
       this.add.bitmapText(250, y, 'font', scoreTypeLabels[scoreType], 24);
       const valueText = this.add.bitmapText(350, y, 'font', 0, 24);
       y += yStep;
 
-      return {
+      tweens.push({
         targets: [{ value: 0 }],
         props: { value: scores[scoreType] },
         duration: 600,
         onUpdate: tween => {
           valueText.setText(Phaser.Math.RoundTo(tween.getValue()));
         }
-      };
+      });
     });
 
     this.tweens.timeline({ tweens });
