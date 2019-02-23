@@ -11,17 +11,21 @@ export class ResultsScene extends Phaser.Scene {
     super({ key: 'results' });
   }
 
+  preload() {
+    this.load.image('star', 'assets/star.png');
+  }
+
   create() {
     const storage = new Storage();
     const didWin = this.registry.get('targets') === 0
 
     const resultText = didWin ? 'Level Passed!' : 'Level Failed!';
-    this.add.bitmapText(320, 50, 'font', resultText, 24).setOrigin(0.5, 0);
+    this.add.bitmapText(320, 40, 'font', resultText, 32).setOrigin(0.5, 0);
 
     const scores = this._calculateScore();
     storage.saveLevelScore(this.registry.get('levelIndex'), scores.total);
     this._displayScores(scores, () => {
-      this.add.text(320, 230, 'Back to Level Select', {
+      this.add.text(320, 260, 'Back to Level Select', {
         fill: '#000',
         backgroundColor: '#6c6',
         padding: 6,
@@ -47,16 +51,21 @@ export class ResultsScene extends Phaser.Scene {
     const remainingBalloons = this.registry.get('balloons');
     const balloonScore = (initialBalloons - remainingBalloons) * SCORE_MULTIPLIERS.balloons;
 
+    const totalScore = arrowScore + targetScore + balloonScore;
+    const maxPossibleScore = (initialTargets * SCORE_MULTIPLIERS.targets) + (initialBalloons * SCORE_MULTIPLIERS.balloons);
+    const percentageScore = totalScore / maxPossibleScore;
+
     return {
       arrow: arrowScore,
       target: initialTargets > 0 ? targetScore : null,
       balloon: initialBalloons > 0 ? balloonScore : null,
-      total: arrowScore + targetScore + balloonScore,
+      total: totalScore,
+      stars: Phaser.Math.CeilTo(Phaser.Math.FromPercent(percentageScore, 1, 4)),
     };
   }
 
   _displayScores(scores, onComplete) {
-    let y = 100;
+    let y = 80;
     const yStep = 30;
 
     const scoreTypeOrder = ['target', 'balloon', 'arrow', 'total'];
@@ -84,6 +93,23 @@ export class ResultsScene extends Phaser.Scene {
         }
       });
     });
+
+    for (let i = 0; i < scores.stars; i++) {
+      console.log('making star')
+      const star = this.add.image(250 + i * 50, y, 'star');
+      star.alpha = 0;
+      star.setDisplaySize(36, 36);
+      star.setOrigin(0.5, 0);
+
+      tweens.push({
+        targets: [star],
+        props: {
+          alpha: 1,
+        },
+        duration: 1,
+        delay: i * 200,
+      })
+    }
 
     this.tweens.timeline({ tweens, onComplete });
   }

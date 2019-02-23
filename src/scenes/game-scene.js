@@ -160,7 +160,6 @@ export class GameScene extends Phaser.Scene {
   }
 
   _onArrowBalloonCollide(balloon) {
-    this.registry.set('arrows', this.registry.get('arrows') - 1);
     this.registry.set('balloons', this.registry.get('balloons') - 1);
 
     balloon.pop()
