@@ -212,7 +212,7 @@ export class GameScene extends Phaser.Scene {
 
   _endLevel() {
     this.scene.pause('game');
-    this.scene.pause('ui');
+    this.scene.stop('ui');
     this.scene.launch('results');
   }
 }

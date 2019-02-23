@@ -30,7 +30,6 @@ export class ResultsScene extends Phaser.Scene {
       .setInteractive({ cursor: 'pointer' })
       .once('pointerup', () => {
         this.scene.stop('game');
-        this.scene.stop('ui');
         this.scene.stop('results');
         this.scene.start('level-select');
       });
