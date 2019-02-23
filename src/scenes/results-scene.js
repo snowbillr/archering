@@ -1,3 +1,5 @@
+import { Storage } from '../lib/storage';
+
 const SCORE_MULTIPLIERS = {
   targets: 100,
   balloons: 150,
@@ -10,12 +12,14 @@ export class ResultsScene extends Phaser.Scene {
   }
 
   create() {
+    const storage = new Storage();
     const didWin = this.registry.get('targets') === 0
 
     const resultText = didWin ? 'Level Passed!' : 'Level Failed!';
     this.add.bitmapText(320, 50, 'font', resultText, 24).setOrigin(0.5, 0);
 
     const scores = this._calculateScore();
+    storage.saveLevelScore(this.registry.get('levelIndex'), scores.total);
 
     const targetScoreLabel = this.add.bitmapText(250, 100, 'font', 'Targets:', 24);
     const targetScoreValue = this.add.bitmapText(250 + targetScoreLabel.width + 20, 100, 'font', scores.target, 24);

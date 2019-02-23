@@ -2,12 +2,16 @@ import Phaser from 'phaser';
 
 import levels from '../levels.json';
 
+import { Storage } from '../lib/storage';
+
 export class LevelSelectScene extends Phaser.Scene {
   constructor() {
     super({ key: 'level-select' });
   }
 
   create() {
+    this.storage = new Storage();
+
     this.add.bitmapText(320, 50, 'font', 'Level Select', 38)
       .setOrigin(0.5);
 
@@ -27,9 +31,13 @@ export class LevelSelectScene extends Phaser.Scene {
   }
 
   _createLevelButton(levelIndex) {
-    return this.add.bitmapText(50, 50, 'font', levelIndex + 1, 28)
+    const text = `${levelIndex + 1}: ${this.storage.loadLevelScore(levelIndex)}`
+    return this.add.bitmapText(50, 50, 'font', text, 28)
       .setOrigin(0.5, 0)
       .setInteractive({ cursor: 'pointer' })
-      .once('pointerup', () => this.scene.start('game', { level: levels[levelIndex] }));
+      .once('pointerup', () => {
+        this.registry.set('levelIndex', levelIndex);
+        this.scene.start('game', { level: levels[levelIndex] })
+      });
   }
 }
