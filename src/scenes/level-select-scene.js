@@ -31,7 +31,7 @@ export class LevelSelectScene extends Phaser.Scene {
   }
 
   _createLevelButton(levelIndex) {
-    const text = `${levelIndex + 1}: ${this.storage.loadLevelScore(levelIndex)}`
+    const text = `${levelIndex + 1}: ${this.storage.loadLevelStars(levelIndex)}`
     return this.add.bitmapText(50, 50, 'font', text, 28)
       .setOrigin(0.5, 0)
       .setInteractive({ cursor: 'pointer' })

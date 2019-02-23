@@ -23,7 +23,7 @@ export class ResultsScene extends Phaser.Scene {
     this.add.bitmapText(320, 40, 'font', resultText, 32).setOrigin(0.5, 0);
 
     const scores = this._calculateScore();
-    storage.saveLevelScore(this.registry.get('levelIndex'), scores.total);
+    storage.saveLevelStars(this.registry.get('levelIndex'), scores.stars);
     this._displayScores(scores, () => {
       this.add.text(320, 260, 'Back to Level Select', {
         fill: '#000',

@@ -1,21 +1,21 @@
-const LEVEL_SCORES_KEY = 'levelScores';
+const LEVEL_STARS_KEY = 'levelStars';
 
 export class Storage {
   constructor() {
-    if (this._get(LEVEL_SCORES_KEY) == null) {
-      this._set(LEVEL_SCORES_KEY, []);
+    if (this._get(LEVEL_STARS_KEY) == null) {
+      this._set(LEVEL_STARS_KEY, []);
     }
   }
 
-  saveLevelScore(levelIndex, score) {
-    this._update(LEVEL_SCORES_KEY, levelScores => {
+  saveLevelStars(levelIndex, score) {
+    this._update(LEVEL_STARS_KEY, levelScores => {
       levelScores[levelIndex] = score;
       return levelScores;
     });
   }
 
-  loadLevelScore(levelIndex) {
-    return this._get(LEVEL_SCORES_KEY)[levelIndex] || 0;
+  loadLevelStars(levelIndex) {
+    return this._get(LEVEL_STARS_KEY)[levelIndex] || 0;
   }
 
   _get(key) {
