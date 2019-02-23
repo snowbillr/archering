@@ -4,7 +4,6 @@ next up:
 - graphics for results
 
 - only show scores for each entity if there were entities on the level at all
-- tween scores one by one
 
 - better layout for level select screen
 
