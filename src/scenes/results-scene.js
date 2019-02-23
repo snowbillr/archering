@@ -68,28 +68,21 @@ export class ResultsScene extends Phaser.Scene {
       'total': 'Total:',
     };
 
-    const scoreDisplayTexts = scoreTypeOrder.map(scoreType => {
-      const texts = {
-        labelText: this.add.bitmapText(250, y, 'font', scoreTypeLabels[scoreType], 24),
-        valueText: this.add.bitmapText(350, y, 'font', 0, 24),
-        score: scores[scoreType],
-      }
-
+    const tweens = scoreTypeOrder.map(scoreType => {
+      this.add.bitmapText(250, y, 'font', scoreTypeLabels[scoreType], 24);
+      const valueText = this.add.bitmapText(350, y, 'font', 0, 24);
       y += yStep;
 
-      return texts;
-    });
-
-    const tweens = scoreDisplayTexts.map(({ labelText, valueText, score }) => {
       return {
         targets: [{ value: 0 }],
-        props: { value: score },
+        props: { value: scores[scoreType] },
         duration: 600,
         onUpdate: tween => {
           valueText.setText(Phaser.Math.RoundTo(tween.getValue()));
         }
-      }
+      };
     });
+
     this.tweens.timeline({ tweens });
   }
 }
