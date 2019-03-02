@@ -23,10 +23,6 @@ export class GameScene extends Phaser.Scene {
     this.load.image('balloon-5', 'assets/balloon/5.png');
     this.load.image('balloon-6', 'assets/balloon/6.png');
     this.load.image('balloon-string', 'assets/balloon/string.png');
-
-    this.load.image('background-back', 'assets/background-back.png');
-    this.load.image('background-middle', 'assets/background-middle.png');
-    this.load.image('background-front', 'assets/background-front.png');
   }
 
   create({ level }) {

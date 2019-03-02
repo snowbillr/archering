@@ -12,7 +12,14 @@ export class LevelSelectScene extends Phaser.Scene {
   create() {
     this.storage = new Storage();
 
-    this.add.bitmapText(320, 50, 'font', 'Level Select', 38)
+    this.add.image(0, 0, 'background-back')
+      .setDisplaySize(640, 300)
+      .setOrigin(0);
+    this.add.image(0, 0, 'background-middle')
+      .setDisplaySize(640, 300)
+      .setOrigin(0);
+
+    this.add.bitmapText(320, 50, 'font-outline', 'Level Select', 12)
       .setOrigin(0.5);
 
     const levelButtons = [];
