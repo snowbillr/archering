@@ -22,29 +22,33 @@ export class LevelSelectScene extends Phaser.Scene {
     this.add.bitmapText(320, 50, 'font-outline', 'Level Select', 12)
       .setOrigin(0.5);
 
-    const levelButtons = [];
+    const buttonXStep = 120;
     for (let i = 0; i < levels.length; i++) {
-      levelButtons.push(this._createLevelButton(i));
+      this._createLevelButton(i, 100 + (buttonXStep * i), 150);
     }
-
-    Phaser.Actions.GridAlign(levelButtons, {
-      width: 8,
-      height: -1,
-      cellWidth: 60,
-      cellHeight: 20,
-      x: 200,
-      y: 150,
-    });
   }
 
-  _createLevelButton(levelIndex) {
-    const text = `${levelIndex + 1}: ${this.storage.loadLevelStars(levelIndex)}`
-    return this.add.bitmapText(50, 50, 'font', text, 28)
+  _createLevelButton(levelIndex, x, y) {
+    const levelText = levelIndex;
+    const starCount = this.storage.loadLevelStars(levelIndex);
+
+    this.add.bitmapText(x + 28, y, 'font', levelText, 28)
       .setOrigin(0.5, 0)
+
+    const starXStep = 28;
+    for (let i = 0; i < 3; i++) {
+      const starAsset = i < starCount ? 'star' : 'star-gray';
+      this.add.image(x + (starXStep * i), y + 30, starAsset)
+        .setOrigin(0.5, 0)
+        .setDisplaySize(24, 24);
+    }
+
+    this.add.zone(x, y, 80, 54)
+      .setOrigin(0, 0)
       .setInteractive({ cursor: 'pointer' })
       .once('pointerup', () => {
         this.registry.set('levelIndex', levelIndex);
-        this.scene.start('game', { level: levels[levelIndex] })
+        this.scene.start('game', { level: levels[levelIndex] });
       });
   }
 }
