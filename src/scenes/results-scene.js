@@ -91,11 +91,12 @@ export class ResultsScene extends Phaser.Scene {
     });
 
     const starY = y + 18;
-    for (let i = 0; i < scores.stars; i++) {
+    for (let i = 0; i < 3; i++) {
       const grayStar = this.add.image(275 + i * 40, starY, 'star-gray');
       grayStar.setDisplaySize(36, 36);
       grayStar.setOrigin(0.5);
-
+    }
+    for (let i = 0; i < scores.stars; i++) {
       const star = this.add.image(275 + i * 40, starY, 'star');
       star.alpha = 0;
       star.setDisplaySize(48, 48);
