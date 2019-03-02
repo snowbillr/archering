@@ -7,6 +7,9 @@ export class PreloadScene extends Phaser.Scene {
 
   preload() {
     this.load.bitmapFont('font', 'assets/fonts/font.png', 'assets/fonts/font.xml');
+
+    this.load.image('star', 'assets/star.png');
+    this.load.image('star-gray', 'assets/star-gray.png');
   }
 
   create() {

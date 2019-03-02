@@ -10,3 +10,5 @@ next up:
 - update phaser to latest version
 
 - have a loading scene for all assets
+
+- fix bug with last star delay on results screen

@@ -11,10 +11,6 @@ export class ResultsScene extends Phaser.Scene {
     super({ key: 'results' });
   }
 
-  preload() {
-    this.load.image('star', 'assets/star.png');
-  }
-
   create() {
     const storage = new Storage();
     const didWin = this.registry.get('targets') === 0
@@ -94,19 +90,26 @@ export class ResultsScene extends Phaser.Scene {
       });
     });
 
+    const starY = y + 18;
     for (let i = 0; i < scores.stars; i++) {
-      const star = this.add.image(275 + i * 40, y, 'star');
+      const grayStar = this.add.image(275 + i * 40, starY, 'star-gray');
+      grayStar.setDisplaySize(36, 36);
+      grayStar.setOrigin(0.5);
+
+      const star = this.add.image(275 + i * 40, starY, 'star');
       star.alpha = 0;
-      star.setDisplaySize(36, 36);
-      star.setOrigin(0.5, 0);
+      star.setDisplaySize(48, 48);
+      star.setOrigin(0.5);
 
       tweens.push({
         targets: [star],
         props: {
           alpha: 1,
+          displayWidth: 36,
+          displayHeight: 36,
         },
-        duration: 1,
-        delay: i * 200,
+        duration: 100,
+        delay: 200,
       });
     }
 
