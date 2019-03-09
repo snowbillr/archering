@@ -12,10 +12,19 @@ export class LevelSelectScene extends Phaser.Scene {
   create() {
     this.storage = new Storage();
 
-    this.add.image(0, 0, 'background-back')
+    this.add.image(0, 0, 'menu-bg-0')
       .setDisplaySize(640, 300)
       .setOrigin(0);
-    this.add.image(0, 0, 'background-middle')
+    this.add.image(0, 0, 'menu-bg-1')
+      .setDisplaySize(640, 300)
+      .setOrigin(0);
+    this.add.image(0, 0, 'menu-bg-2')
+      .setDisplaySize(640, 300)
+      .setOrigin(0);
+    this.add.image(0, 0, 'menu-bg-3')
+      .setDisplaySize(640, 300)
+      .setOrigin(0);
+    this.add.image(0, 0, 'menu-bg-4')
       .setDisplaySize(640, 300)
       .setOrigin(0);
 
