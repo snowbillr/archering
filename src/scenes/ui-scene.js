@@ -3,13 +3,6 @@ export class UiScene extends Phaser.Scene {
     super({ key: 'ui' });
   }
 
-  preload() {
-    this.load.image('gauge-outline', 'assets/gauge-outline.png');
-    this.load.image('gauge-fill', 'assets/gauge-fill.png');
-
-    this.load.image('arrow', 'assets/arrow.png');
-  }
-
   create() {
     this.events.on('shutdown', this._cleanupRegistryListeners, this);
 

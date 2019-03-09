@@ -11,6 +11,7 @@ export class PreloadScene extends Phaser.Scene {
     this._loadSharedImages();
     this._loadLevelSelectImages();
     this._loadGameImages();
+    this._loadUiImages();
 
     this._loadGameSounds();
   }
@@ -29,6 +30,8 @@ export class PreloadScene extends Phaser.Scene {
   _loadSharedImages() {
     this.load.image('star', 'assets/star.png');
     this.load.image('star-gray', 'assets/star-gray.png');
+
+    this.load.image('arrow', 'assets/arrow.png');
   }
 
   _loadLevelSelectImages() {
@@ -45,7 +48,6 @@ export class PreloadScene extends Phaser.Scene {
     this.load.image('background-front', 'assets/background-front.png');
 
     this.load.image('target', 'assets/target.png');
-    this.load.image('arrow', 'assets/arrow.png');
 
     this.load.image('balloon-1', 'assets/balloon/1.png');
     this.load.image('balloon-2', 'assets/balloon/2.png');
@@ -54,6 +56,11 @@ export class PreloadScene extends Phaser.Scene {
     this.load.image('balloon-5', 'assets/balloon/5.png');
     this.load.image('balloon-6', 'assets/balloon/6.png');
     this.load.image('balloon-string', 'assets/balloon/string.png');
+  }
+
+  _loadUiImages() {
+    this.load.image('gauge-outline', 'assets/gauge-outline.png');
+    this.load.image('gauge-fill', 'assets/gauge-fill.png');
   }
 
   _loadGameSounds() {
