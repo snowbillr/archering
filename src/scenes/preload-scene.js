@@ -21,6 +21,8 @@ export class PreloadScene extends Phaser.Scene {
     this.load.image('menu-bg-2', 'assets/menu-bg-2.png');
     this.load.image('menu-bg-3', 'assets/menu-bg-3.png');
     this.load.image('menu-bg-4', 'assets/menu-bg-4.png');
+
+    this.load.audio('arrow-release', 'assets/sounds/arrow_release_medium.wav');
   }
 
   create() {

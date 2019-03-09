@@ -52,6 +52,8 @@ export class GameScene extends Phaser.Scene {
     this.leftScrollZone = new ScrollZone(this, -1);
     this.rightScrollZone = new ScrollZone(this, 1);
 
+    this.releaseSound = this.sound.add('arrow-release');
+
     this.cameras.main.setBounds(0, 0, 1500, 300);
 
     this.input.setDefaultCursor('crosshair');
@@ -120,6 +122,7 @@ export class GameScene extends Phaser.Scene {
   _fireArrow() {
     this.tweens.killTweensOf(this.cameras.main);
 
+    this.releaseSound.play();
     this.cameras.main.startFollow(this.arrow, true);
     this.registry.set('state', STATES.FLY);
     this.arrow.fire();
