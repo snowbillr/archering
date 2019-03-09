@@ -1,6 +1,8 @@
 import Phaser from 'phaser';
 import * as STATES from '../game-states';
 
+const MAX_CHARGE = 700;
+
 export class Arrow extends Phaser.Physics.Arcade.Sprite {
   constructor(scene) {
     super(scene, 0, 0, 'arrow');
@@ -9,7 +11,11 @@ export class Arrow extends Phaser.Physics.Arcade.Sprite {
     scene.sys.updateList.add(this);
     scene.physics.world.enableBody(this);
 
-    this.MAX_CHARGE = 700;
+    this.releaseSounds = {
+      low: scene.sound.add('arrow-release-low'),
+      medium: scene.sound.add('arrow-release-medium'),
+      high: scene.sound.add('arrow-release-high'),
+    };
 
     this.setScale(0.75);
     this.body.collideWorldBounds = true;
@@ -32,7 +38,7 @@ export class Arrow extends Phaser.Physics.Arcade.Sprite {
 
     if (state === STATES.CHARGE) {
       const chargeAmount = this.scene.registry.get('charge');
-      const newCharge = Phaser.Math.Clamp(chargeAmount + 5, 200, this.MAX_CHARGE);
+      const newCharge = Phaser.Math.Clamp(chargeAmount + 5, 200, MAX_CHARGE);
       this.scene.registry.set('charge', newCharge);
     }
   }
@@ -43,6 +49,15 @@ export class Arrow extends Phaser.Physics.Arcade.Sprite {
   }
 
   fire() {
+    const chargePercent = this.scene.registry.get('charge') / MAX_CHARGE;
+    if (chargePercent < 0.33) {
+      this.releaseSounds.low.play();
+    } else if (chargePercent < 0.66) {
+      this.releaseSounds.medium.play();
+    } else {
+      this.releaseSounds.high.play();
+    }
+
     this.body.allowGravity = true;
     this.scene.physics.velocityFromRotation(this.rotation, this.scene.registry.get('charge'), this.body.velocity)
   }

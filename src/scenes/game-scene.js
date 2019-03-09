@@ -52,12 +52,6 @@ export class GameScene extends Phaser.Scene {
     this.leftScrollZone = new ScrollZone(this, -1);
     this.rightScrollZone = new ScrollZone(this, 1);
 
-    this.releaseSounds = {
-      low: this.sound.add('arrow-release-low'),
-      medium: this.sound.add('arrow-release-medium'),
-      high: this.sound.add('arrow-release-high'),
-    };
-
     this.cameras.main.setBounds(0, 0, 1500, 300);
 
     this.input.setDefaultCursor('crosshair');
@@ -125,15 +119,6 @@ export class GameScene extends Phaser.Scene {
 
   _fireArrow() {
     this.tweens.killTweensOf(this.cameras.main);
-
-    const chargePercent = this.registry.get('charge') / this.arrow.MAX_CHARGE;
-    if (chargePercent < 0.33) {
-      this.releaseSounds.low.play();
-    } else if (chargePercent < 0.66) {
-      this.releaseSounds.medium.play();
-    } else {
-      this.releaseSounds.high.play();
-    }
 
     this.cameras.main.startFollow(this.arrow, true);
     this.registry.set('state', STATES.FLY);
