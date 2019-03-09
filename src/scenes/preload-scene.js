@@ -25,6 +25,8 @@ export class PreloadScene extends Phaser.Scene {
     this.load.audio('arrow-release-low', 'assets/sounds/arrow_release_low.wav');
     this.load.audio('arrow-release-medium', 'assets/sounds/arrow_release_medium.wav');
     this.load.audio('arrow-release-high', 'assets/sounds/arrow_release_high.wav');
+
+    this.load.audio('balloon-pop', 'assets/sounds/balloon_pop.wav');
   }
 
   create() {

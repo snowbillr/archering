@@ -12,11 +12,15 @@ export class Balloon {
     this.string.displayHeight = 265 - (balloonY + this.balloon.displayHeight / 2);
     this.string.displayWidth = 5;
     this.string.body.allowGravity = false;
+
+    this.popSound = scene.sound.add('balloon-pop');
   }
 
   pop() {
     this.scene.physics.world.disableBody(this.balloon.body);
     this.scene.physics.world.disableBody(this.string.body);
+
+    this.popSound.play();
 
     this.balloon.once('animationcomplete', () => {
       this.balloon.visible = false;
