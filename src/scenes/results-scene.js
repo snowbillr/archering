@@ -12,14 +12,15 @@ export class ResultsScene extends Phaser.Scene {
   }
 
   create() {
-    const storage = new Storage();
     const didWin = this.registry.get('targets') === 0
 
     const resultText = didWin ? 'Level Passed!' : 'Level Failed!';
     this.add.bitmapText(320, 40, 'font', resultText, 32).setOrigin(0.5, 0);
 
     const scores = this._calculateScore();
-    storage.saveLevelStars(this.registry.get('levelIndex'), scores.stars);
+
+    this._saveScore(scores);
+
     this._displayScores(scores, () => {
       this.add.text(320, 260, 'Back to Level Select', {
         fill: '#000',
@@ -58,6 +59,17 @@ export class ResultsScene extends Phaser.Scene {
       total: totalScore,
       stars: Phaser.Math.CeilTo(Phaser.Math.FromPercent(percentageScore, 1, 4)),
     };
+  }
+
+  _saveScore(scores) {
+    const storage = new Storage();
+
+    const levelIndex = this.registry.get('levelIndex');
+    const existingStars = storage.loadLevelStars(levelIndex);
+
+    if (scores.stars > existingStars) {
+      storage.saveLevelStars(levelIndex, scores.stars);
+    }
   }
 
   _displayScores(scores, onComplete) {
