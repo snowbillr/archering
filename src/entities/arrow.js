@@ -4,9 +4,12 @@ import * as STATES from '../game-states';
 export class Arrow extends Phaser.Physics.Arcade.Sprite {
   constructor(scene) {
     super(scene, 0, 0, 'arrow');
+
     scene.sys.displayList.add(this);
     scene.sys.updateList.add(this);
     scene.physics.world.enableBody(this);
+
+    this.MAX_CHARGE = 700;
 
     this.setScale(0.75);
     this.body.collideWorldBounds = true;
@@ -29,7 +32,7 @@ export class Arrow extends Phaser.Physics.Arcade.Sprite {
 
     if (state === STATES.CHARGE) {
       const chargeAmount = this.scene.registry.get('charge');
-      const newCharge = Phaser.Math.Clamp(chargeAmount + 5, 200, 700);
+      const newCharge = Phaser.Math.Clamp(chargeAmount + 5, 200, this.MAX_CHARGE);
       this.scene.registry.set('charge', newCharge);
     }
   }
