@@ -1,9 +1,9 @@
 import { Storage } from '../lib/storage';
 
 const SCORE_MULTIPLIERS = {
-  targets: 100,
-  balloons: 150,
-  arrows: 200,
+  targets: 150,
+  balloons: 200,
+  arrows: 100,
 };
 
 export class ResultsScene extends Phaser.Scene {
