@@ -13,8 +13,8 @@ export class UiScene extends Phaser.Scene {
   create() {
     this.events.on('shutdown', this._cleanupRegistryListeners, this);
 
-    this.registry.events.on('changedata_arrows', this._updateArrows, this);
-    this.registry.events.on('changedata_charge', this._updateCharge, this);
+    this.registry.events.on('changedata-arrows', this._updateArrows, this);
+    this.registry.events.on('changedata-charge', this._updateCharge, this);
 
     this.arrowsText = this.add.bitmapText(30, 15, 'font', 'Quiver:', 24);
     this.arrowsImages = this.add.group([], {
@@ -34,8 +34,8 @@ export class UiScene extends Phaser.Scene {
   }
 
   _cleanupRegistryListeners() {
-    this.registry.events.off('changedata_arrows', this._updateArrows, this);
-    this.registry.events.off('changedata_charge', this._updateCharge, this);
+    this.registry.events.off('changedata-arrows', this._updateArrows, this);
+    this.registry.events.off('changedata-charge', this._updateCharge, this);
   }
 
   _updateArrows(parent, value) {
