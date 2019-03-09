@@ -12,32 +12,7 @@ export class GameScene extends Phaser.Scene {
     super({ key: 'game' })
   }
 
-  preload() {
-    this.load.image('target', 'assets/target.png');
-    this.load.image('arrow', 'assets/arrow.png');
-
-    this.load.image('balloon-1', 'assets/balloon/1.png');
-    this.load.image('balloon-2', 'assets/balloon/2.png');
-    this.load.image('balloon-3', 'assets/balloon/3.png');
-    this.load.image('balloon-4', 'assets/balloon/4.png');
-    this.load.image('balloon-5', 'assets/balloon/5.png');
-    this.load.image('balloon-6', 'assets/balloon/6.png');
-    this.load.image('balloon-string', 'assets/balloon/string.png');
-  }
-
   create({ level }) {
-    this.anims.create({
-      key: 'balloon-pop',
-      frames: [
-        { key: 'balloon-1' },
-        { key: 'balloon-2' },
-        { key: 'balloon-3' },
-        { key: 'balloon-4' },
-        { key: 'balloon-5' },
-        { key: 'balloon-6' },
-      ],
-    });
-
     this.registry.set('charge', 200);
     this.registry.set('scrollingDirection', 0);
     this.registry.set('state', STATES.PANNING_TO_TARGETS);

@@ -15,6 +15,12 @@ export class PreloadScene extends Phaser.Scene {
     this._loadGameSounds();
   }
 
+  create() {
+    this._createGameAnimations();
+
+    this.scene.start('level-select')
+  }
+
   _loadFonts() {
     this.load.bitmapFont('font', 'assets/fonts/font.png', 'assets/fonts/font.xml');
     this.load.bitmapFont('font-outline', 'assets/fonts/font-outline.png', 'assets/fonts/font-outline.xml');
@@ -37,6 +43,17 @@ export class PreloadScene extends Phaser.Scene {
     this.load.image('background-back', 'assets/background-back.png');
     this.load.image('background-middle', 'assets/background-middle.png');
     this.load.image('background-front', 'assets/background-front.png');
+
+    this.load.image('target', 'assets/target.png');
+    this.load.image('arrow', 'assets/arrow.png');
+
+    this.load.image('balloon-1', 'assets/balloon/1.png');
+    this.load.image('balloon-2', 'assets/balloon/2.png');
+    this.load.image('balloon-3', 'assets/balloon/3.png');
+    this.load.image('balloon-4', 'assets/balloon/4.png');
+    this.load.image('balloon-5', 'assets/balloon/5.png');
+    this.load.image('balloon-6', 'assets/balloon/6.png');
+    this.load.image('balloon-string', 'assets/balloon/string.png');
   }
 
   _loadGameSounds() {
@@ -47,7 +64,17 @@ export class PreloadScene extends Phaser.Scene {
     this.load.audio('balloon-pop', 'assets/sounds/balloon_pop.wav');
   }
 
-  create() {
-    this.scene.start('level-select')
+  _createGameAnimations() {
+    this.anims.create({
+      key: 'balloon-pop',
+      frames: [
+        { key: 'balloon-1' },
+        { key: 'balloon-2' },
+        { key: 'balloon-3' },
+        { key: 'balloon-4' },
+        { key: 'balloon-5' },
+        { key: 'balloon-6' },
+      ],
+    });
   }
 }
