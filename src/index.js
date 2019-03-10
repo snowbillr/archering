@@ -1,5 +1,7 @@
 import 'phaser';
 
+import { config } from './config';
+
 import { TestScene } from './scenes/test-scene';
 
 import { PreloadScene } from './scenes/preload-scene';
@@ -12,16 +14,16 @@ import { LevelSelectScene } from './scenes/level-select-scene';
 import { ResultsScene } from './scenes/results-scene';
 
 const gameConfig = {
-  width: 640,
-  height: 300,
+  width: config.dimensions.viewport.width,
+  height: config.dimensions.viewport.height,
   pixelArt: true,
   physics: {
     default: 'arcade',
     arcade: {
       x: 0,
       y: 0,
-      width: 1500,
-      height: 300,
+      width: config.dimensions.world.width,
+      height: config.dimensions.world.height,
       gravity: {
         y: 400,
       }

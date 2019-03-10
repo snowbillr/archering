@@ -1,5 +1,7 @@
 import Phaser from 'phaser';
 
+import { config } from '../config';
+
 import levels from '../levels.json';
 
 import { Storage } from '../lib/storage';
@@ -12,21 +14,11 @@ export class LevelSelectScene extends Phaser.Scene {
   create() {
     this.storage = new Storage();
 
-    this.add.image(0, 0, 'menu-bg-0')
-      .setDisplaySize(640, 300)
-      .setOrigin(0);
-    this.add.image(0, 0, 'menu-bg-1')
-      .setDisplaySize(640, 300)
-      .setOrigin(0);
-    this.add.image(0, 0, 'menu-bg-2')
-      .setDisplaySize(640, 300)
-      .setOrigin(0);
-    this.add.image(0, 0, 'menu-bg-3')
-      .setDisplaySize(640, 300)
-      .setOrigin(0);
-    this.add.image(0, 0, 'menu-bg-4')
-      .setDisplaySize(640, 300)
-      .setOrigin(0);
+    this._createBackgroundImage('menu-bg-0');
+    this._createBackgroundImage('menu-bg-1');
+    this._createBackgroundImage('menu-bg-2');
+    this._createBackgroundImage('menu-bg-3');
+    this._createBackgroundImage('menu-bg-4');
 
     this.add.bitmapText(320, 50, 'font-outline', 'Level Select', 12)
       .setOrigin(0.5);
@@ -35,6 +27,12 @@ export class LevelSelectScene extends Phaser.Scene {
     for (let i = 0; i < levels.length; i++) {
       this._createLevelButton(i, 100 + (buttonXStep * i), 150);
     }
+  }
+
+  _createBackgroundImage(key) {
+    this.add.image(0, 0, key)
+      .setDisplaySize(config.dimensions.viewport.width, config.dimensions.viewport.height)
+      .setOrigin(0);
   }
 
   _createLevelButton(levelIndex, x, y) {
