@@ -38,7 +38,7 @@ export class GameScene extends Phaser.Scene {
     this.physics.add.collider(this.arrow, this.targets, (arrow, target) => this._onArrowTargetCollide(arrow, target));
     this.balloons.addBalloonOverlap(this.arrow, (arrow, balloon) => this._onArrowBalloonCollide(balloon));
     this.balloons.addStringOverlap(this.arrow, (arrow, balloon) => this._onArrowBalloonStringCollide(balloon));
-    this.physics.add.collider(this.arrow, this.groundZone, () => this._onArrowWorldBoundsCollide());
+    this.physics.add.collider(this.arrow, this.groundZone, () => this._onArrowGroundCollide());
 
     this.scene.launch('ui');
   }
@@ -101,7 +101,7 @@ export class GameScene extends Phaser.Scene {
     this.arrow.fire();
   }
 
-  _onArrowWorldBoundsCollide() {
+  _onArrowGroundCollide() {
     this.registry.set('arrows', this.registry.get('arrows') - 1);
     this.registry.set('state', STATES.HIT);
 
