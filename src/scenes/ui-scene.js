@@ -1,6 +1,7 @@
 import { config } from '../config';
 
 const arrowConfig = config.layouts.game.arrow;
+const uiConfig = config.layouts.ui;
 
 export class UiScene extends Phaser.Scene {
   constructor() {
@@ -13,18 +14,18 @@ export class UiScene extends Phaser.Scene {
     this.registry.events.on('changedata-arrows', this._updateArrows, this);
     this.registry.events.on('changedata-charge', this._updateCharge, this);
 
-    this.arrowsText = this.add.bitmapText(30, 15, 'font', 'Quiver:', 24);
+    this.arrowsText = this.add.bitmapText(uiConfig.quiverLabel.x, uiConfig.quiverLabel.y, 'font', 'Quiver:', uiConfig.quiverLabel.size);
     this.arrowsImages = this.add.group([], {
       classType: Phaser.GameObjects.Image,
       key: 'arrow',
-      setXY: { x: 120, stepX: 20, y: 22 },
-      setRotation: { value: -45 },
+      setXY: { x: uiConfig.arrows.x, stepX: uiConfig.arrows.xStep, y: uiConfig.arrows.y },
+      setRotation: { value: uiConfig.arrows.rotation },
       setScale: { x: 0.30, y: 0.30 },
-      repeat: 2,
+      repeat: this.registry.get('arrows') - 1,
     });
 
-    this.chargeGaugeOutline = this.add.image(30, 40, 'gauge-outline').setOrigin(0).setScale(1, 0.8);
-    this.chargeGaugeFill = this.add.image(30, 40, 'gauge-fill').setOrigin(0).setScale(1, 0.8);
+    this.chargeGaugeOutline = this.add.image(uiConfig.chargeGauge.x, uiConfig.chargeGauge.y, 'gauge-outline').setOrigin(0).setScale(1, 0.8);
+    this.chargeGaugeFill = this.add.image(uiConfig.chargeGauge.x, uiConfig.chargeGauge.y, 'gauge-fill').setOrigin(0).setScale(1, 0.8);
 
     this._updateArrows(null, this.registry.get('arrows'));
     this._updateCharge(null, this.registry.get('charge'));

@@ -65,6 +65,23 @@ export const config = {
         width: 36,
         height: 36,
       }
+    },
+    ui: {
+      quiverLabel: {
+        x: 30,
+        y: 15,
+        size: 24,
+      },
+      arrows: {
+        x: 120,
+        xStep: 20,
+        y: 22,
+        rotation: -45,
+      },
+      chargeGauge: {
+        x: 30,
+        y: 40,
+      }
     }
   }
 }

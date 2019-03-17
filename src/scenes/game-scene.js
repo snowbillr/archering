@@ -18,8 +18,6 @@ export class GameScene extends Phaser.Scene {
     this.registry.set('scrollingDirection', 0);
     this.registry.set('state', STATES.PANNING_TO_TARGETS);
 
-    this.scene.launch('ui');
-
     this.parallaxBackground = new ParallaxBackground(this, 'background-back', 'background-middle', 'background-front');
     this.arrow = new Arrow(this);
     this.targets = new Targets(this);
@@ -41,6 +39,8 @@ export class GameScene extends Phaser.Scene {
     this.balloons.addBalloonOverlap(this.arrow, (arrow, balloon) => this._onArrowBalloonCollide(balloon));
     this.balloons.addStringOverlap(this.arrow, (arrow, balloon) => this._onArrowBalloonStringCollide(balloon));
     this.physics.add.collider(this.arrow, this.groundZone, () => this._onArrowWorldBoundsCollide());
+
+    this.scene.launch('ui');
   }
 
   update() {
