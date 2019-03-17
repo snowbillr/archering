@@ -1,6 +1,6 @@
 webpackJsonp([0],{
 
-/***/ 1151:
+/***/ 1388:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13,7 +13,7 @@ exports.TestScene = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _balloon = __webpack_require__(467);
+var _balloon = __webpack_require__(503);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -60,7 +60,7 @@ var TestScene = exports.TestScene = function (_Phaser$Scene) {
 
 /***/ }),
 
-/***/ 1152:
+/***/ 1389:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -73,7 +73,7 @@ exports.PreloadScene = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _phaser = __webpack_require__(73);
+var _phaser = __webpack_require__(79);
 
 var _phaser2 = _interopRequireDefault(_phaser);
 
@@ -97,12 +97,84 @@ var PreloadScene = exports.PreloadScene = function (_Phaser$Scene) {
   _createClass(PreloadScene, [{
     key: 'preload',
     value: function preload() {
-      this.load.bitmapFont('font', 'assets/fonts/font.png', 'assets/fonts/font.xml');
+      this._loadFonts();
+
+      this._loadSharedImages();
+      this._loadLevelSelectImages();
+      this._loadGameImages();
+      this._loadUiImages();
+
+      this._loadGameSounds();
     }
   }, {
     key: 'create',
     value: function create() {
+      this._createGameAnimations();
+
       this.scene.start('level-select');
+    }
+  }, {
+    key: '_loadFonts',
+    value: function _loadFonts() {
+      this.load.bitmapFont('font', 'assets/fonts/font.png', 'assets/fonts/font.xml');
+      this.load.bitmapFont('font-outline', 'assets/fonts/font-outline.png', 'assets/fonts/font-outline.xml');
+    }
+  }, {
+    key: '_loadSharedImages',
+    value: function _loadSharedImages() {
+      this.load.image('star', 'assets/star.png');
+      this.load.image('star-gray', 'assets/star-gray.png');
+
+      this.load.image('arrow', 'assets/arrow.png');
+    }
+  }, {
+    key: '_loadLevelSelectImages',
+    value: function _loadLevelSelectImages() {
+      this.load.image('menu-bg-0', 'assets/menu-bg-0.png');
+      this.load.image('menu-bg-1', 'assets/menu-bg-1.png');
+      this.load.image('menu-bg-2', 'assets/menu-bg-2.png');
+      this.load.image('menu-bg-3', 'assets/menu-bg-3.png');
+      this.load.image('menu-bg-4', 'assets/menu-bg-4.png');
+    }
+  }, {
+    key: '_loadGameImages',
+    value: function _loadGameImages() {
+      this.load.image('background-back', 'assets/background-back.png');
+      this.load.image('background-middle', 'assets/background-middle.png');
+      this.load.image('background-front', 'assets/background-front.png');
+
+      this.load.image('target', 'assets/target.png');
+
+      this.load.image('balloon-1', 'assets/balloon/1.png');
+      this.load.image('balloon-2', 'assets/balloon/2.png');
+      this.load.image('balloon-3', 'assets/balloon/3.png');
+      this.load.image('balloon-4', 'assets/balloon/4.png');
+      this.load.image('balloon-5', 'assets/balloon/5.png');
+      this.load.image('balloon-6', 'assets/balloon/6.png');
+      this.load.image('balloon-string', 'assets/balloon/string.png');
+    }
+  }, {
+    key: '_loadUiImages',
+    value: function _loadUiImages() {
+      this.load.image('gauge-outline', 'assets/gauge-outline.png');
+      this.load.image('gauge-fill', 'assets/gauge-fill.png');
+    }
+  }, {
+    key: '_loadGameSounds',
+    value: function _loadGameSounds() {
+      this.load.audio('arrow-release-low', 'assets/sounds/arrow_release_low.wav');
+      this.load.audio('arrow-release-medium', 'assets/sounds/arrow_release_medium.wav');
+      this.load.audio('arrow-release-high', 'assets/sounds/arrow_release_high.wav');
+
+      this.load.audio('balloon-pop', 'assets/sounds/balloon_pop.wav');
+    }
+  }, {
+    key: '_createGameAnimations',
+    value: function _createGameAnimations() {
+      this.anims.create({
+        key: 'balloon-pop',
+        frames: [{ key: 'balloon-1' }, { key: 'balloon-2' }, { key: 'balloon-3' }, { key: 'balloon-4' }, { key: 'balloon-5' }, { key: 'balloon-6' }]
+      });
     }
   }]);
 
@@ -111,7 +183,7 @@ var PreloadScene = exports.PreloadScene = function (_Phaser$Scene) {
 
 /***/ }),
 
-/***/ 1153:
+/***/ 1390:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -124,23 +196,25 @@ exports.GameScene = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _gameStates = __webpack_require__(221);
+var _gameStates = __webpack_require__(239);
 
 var STATES = _interopRequireWildcard(_gameStates);
 
-var _arrow = __webpack_require__(1154);
+var _arrow = __webpack_require__(1391);
 
-var _effects = __webpack_require__(1155);
+var _effects = __webpack_require__(1392);
 
-var _parallaxBackground = __webpack_require__(1157);
+var _parallaxBackground = __webpack_require__(1394);
 
-var _targets = __webpack_require__(1158);
+var _targets = __webpack_require__(1395);
 
-var _groundZone = __webpack_require__(1159);
+var _groundZone = __webpack_require__(1396);
 
-var _scrollZone = __webpack_require__(1160);
+var _scrollZone = __webpack_require__(1397);
 
-var _balloons = __webpack_require__(1161);
+var _balloons = __webpack_require__(1398);
+
+var _config = __webpack_require__(38);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -160,40 +234,15 @@ var GameScene = exports.GameScene = function (_Phaser$Scene) {
   }
 
   _createClass(GameScene, [{
-    key: 'preload',
-    value: function preload() {
-      this.load.image('target', 'assets/target.png');
-      this.load.image('arrow', 'assets/arrow.png');
-
-      this.load.image('balloon-1', 'assets/balloon/1.png');
-      this.load.image('balloon-2', 'assets/balloon/2.png');
-      this.load.image('balloon-3', 'assets/balloon/3.png');
-      this.load.image('balloon-4', 'assets/balloon/4.png');
-      this.load.image('balloon-5', 'assets/balloon/5.png');
-      this.load.image('balloon-6', 'assets/balloon/6.png');
-      this.load.image('balloon-string', 'assets/balloon/string.png');
-
-      this.load.image('background-back', 'assets/background-back.png');
-      this.load.image('background-middle', 'assets/background-middle.png');
-      this.load.image('background-front', 'assets/background-front.png');
-    }
-  }, {
     key: 'create',
     value: function create(_ref) {
       var _this2 = this;
 
       var level = _ref.level;
 
-      this.anims.create({
-        key: 'balloon-pop',
-        frames: [{ key: 'balloon-1' }, { key: 'balloon-2' }, { key: 'balloon-3' }, { key: 'balloon-4' }, { key: 'balloon-5' }, { key: 'balloon-6' }]
-      });
-
-      this.registry.set('charge', 200);
+      this.registry.set('charge', _config.config.entities.game.arrow.minCharge);
       this.registry.set('scrollingDirection', 0);
       this.registry.set('state', STATES.PANNING_TO_TARGETS);
-
-      this.scene.launch('ui');
 
       this.parallaxBackground = new _parallaxBackground.ParallaxBackground(this, 'background-back', 'background-middle', 'background-front');
       this.arrow = new _arrow.Arrow(this);
@@ -203,7 +252,7 @@ var GameScene = exports.GameScene = function (_Phaser$Scene) {
       this.leftScrollZone = new _scrollZone.ScrollZone(this, -1);
       this.rightScrollZone = new _scrollZone.ScrollZone(this, 1);
 
-      this.cameras.main.setBounds(0, 0, 1500, 300);
+      this.cameras.main.setBounds(0, 0, _config.config.dimensions.world.width, _config.config.dimensions.world.height);
 
       this.input.setDefaultCursor('crosshair');
 
@@ -224,6 +273,8 @@ var GameScene = exports.GameScene = function (_Phaser$Scene) {
       this.physics.add.collider(this.arrow, this.groundZone, function () {
         return _this2._onArrowWorldBoundsCollide();
       });
+
+      this.scene.launch('ui');
     }
   }, {
     key: 'update',
@@ -383,7 +434,7 @@ var GameScene = exports.GameScene = function (_Phaser$Scene) {
       if (includeCamera) this.cameras.main.scrollX = targetScrollX;
       this.parallaxBackground.update(targetScrollX);
       this.leftScrollZone.updatePosition(targetScrollX);
-      this.rightScrollZone.updatePosition(targetScrollX + 540);
+      this.rightScrollZone.updatePosition(targetScrollX + _config.config.layouts.game.scrollZones.rightX);
       this.groundZone.updatePosition(targetScrollX);
     }
   }, {
@@ -400,7 +451,7 @@ var GameScene = exports.GameScene = function (_Phaser$Scene) {
 
 /***/ }),
 
-/***/ 1154:
+/***/ 1391:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -413,13 +464,15 @@ exports.Arrow = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _phaser = __webpack_require__(73);
+var _phaser = __webpack_require__(79);
 
 var _phaser2 = _interopRequireDefault(_phaser);
 
-var _gameStates = __webpack_require__(221);
+var _gameStates = __webpack_require__(239);
 
 var STATES = _interopRequireWildcard(_gameStates);
+
+var _config = __webpack_require__(38);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -430,6 +483,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var arrowLayoutConfig = _config.config.layouts.game.arrow;
+var arrowConfig = _config.config.entities.game.arrow;
 
 var Arrow = exports.Arrow = function (_Phaser$Physics$Arcad) {
   _inherits(Arrow, _Phaser$Physics$Arcad);
@@ -442,6 +498,12 @@ var Arrow = exports.Arrow = function (_Phaser$Physics$Arcad) {
     scene.sys.displayList.add(_this);
     scene.sys.updateList.add(_this);
     scene.physics.world.enableBody(_this);
+
+    _this.releaseSounds = {
+      low: scene.sound.add('arrow-release-low'),
+      medium: scene.sound.add('arrow-release-medium'),
+      high: scene.sound.add('arrow-release-high')
+    };
 
     _this.setScale(0.75);
     _this.body.collideWorldBounds = true;
@@ -467,7 +529,7 @@ var Arrow = exports.Arrow = function (_Phaser$Physics$Arcad) {
 
       if (state === STATES.CHARGE) {
         var chargeAmount = this.scene.registry.get('charge');
-        var newCharge = _phaser2.default.Math.Clamp(chargeAmount + 5, 200, 700);
+        var newCharge = _phaser2.default.Math.Clamp(chargeAmount + 5, arrowConfig.minCharge, arrowConfig.maxCharge);
         this.scene.registry.set('charge', newCharge);
       }
     }
@@ -480,18 +542,27 @@ var Arrow = exports.Arrow = function (_Phaser$Physics$Arcad) {
   }, {
     key: 'fire',
     value: function fire() {
+      var chargePercent = (this.scene.registry.get('charge') - arrowConfig.minCharge) / (arrowConfig.maxCharge - arrowConfig.minCharge);
+      if (chargePercent < 0.33) {
+        this.releaseSounds.low.play();
+      } else if (chargePercent < 0.66) {
+        this.releaseSounds.medium.play();
+      } else {
+        this.releaseSounds.high.play();
+      }
+
       this.body.allowGravity = true;
       this.scene.physics.velocityFromRotation(this.rotation, this.scene.registry.get('charge'), this.body.velocity);
     }
   }, {
     key: 'reset',
     value: function reset() {
-      this.scene.registry.set('charge', 200);
+      this.scene.registry.set('charge', arrowConfig.minCharge);
 
       this.body.enable = true;
 
-      this.x = 50;
-      this.y = 240;
+      this.x = arrowLayoutConfig.x;
+      this.y = arrowLayoutConfig.y;
 
       this.alpha = 1;
 
@@ -512,7 +583,7 @@ var Arrow = exports.Arrow = function (_Phaser$Physics$Arcad) {
 
 /***/ }),
 
-/***/ 1155:
+/***/ 1392:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -523,7 +594,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Effects = undefined;
 
-var _flashOut = __webpack_require__(1156);
+var _flashOut = __webpack_require__(1393);
 
 var Effects = exports.Effects = {
   flashOut: _flashOut.flashOut
@@ -531,7 +602,7 @@ var Effects = exports.Effects = {
 
 /***/ }),
 
-/***/ 1156:
+/***/ 1393:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -572,7 +643,7 @@ function flashOut(gameObjects, callback) {
 
 /***/ }),
 
-/***/ 1157:
+/***/ 1394:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -585,9 +656,11 @@ exports.ParallaxBackground = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _phaser = __webpack_require__(73);
+var _phaser = __webpack_require__(79);
 
 var _phaser2 = _interopRequireDefault(_phaser);
+
+var _config = __webpack_require__(38);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -599,17 +672,17 @@ var ParallaxBackground = exports.ParallaxBackground = function () {
 
     this.scene = scene;
 
-    this.backgroundBack = scene.add.tileSprite(0, 0, 640, 300, backKey);
+    this.backgroundBack = scene.add.tileSprite(0, 0, _config.config.dimensions.viewport.width, _config.config.dimensions.viewport.height, backKey);
     this.backgroundBack.setOrigin(0, 0);
     this.backgroundBack.setTileScale(1, 1.35);
     this.backgroundBack.setScrollFactor(0);
 
-    this.backgroundMiddle = scene.add.tileSprite(0, 0, 640, 300, middleKey);
+    this.backgroundMiddle = scene.add.tileSprite(0, 0, _config.config.dimensions.viewport.width, _config.config.dimensions.viewport.height, middleKey);
     this.backgroundMiddle.setOrigin(0, 0);
     this.backgroundMiddle.setTileScale(1, 1.35);
     this.backgroundMiddle.setScrollFactor(0);
 
-    this.backgroundFront = scene.add.tileSprite(0, 0, 640, 300, frontKey);
+    this.backgroundFront = scene.add.tileSprite(0, 0, _config.config.dimensions.viewport.width, _config.config.dimensions.viewport.height, frontKey);
     this.backgroundFront.setOrigin(0, 0);
     this.backgroundFront.setTileScale(1, 1.35);
     this.backgroundFront.setScrollFactor(0);
@@ -629,7 +702,7 @@ var ParallaxBackground = exports.ParallaxBackground = function () {
 
 /***/ }),
 
-/***/ 1158:
+/***/ 1395:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -638,8 +711,11 @@ var ParallaxBackground = exports.ParallaxBackground = function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.Targets = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _config = __webpack_require__(38);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -677,7 +753,7 @@ var Targets = exports.Targets = function (_Phaser$Physics$Arcad) {
         target.active = true;
 
         target.x = coordinates.x;
-        target.y = coordinates.y;
+        target.y = _config.config.layouts.game.targets.y;
       });
     }
   }, {
@@ -704,7 +780,7 @@ var Targets = exports.Targets = function (_Phaser$Physics$Arcad) {
 
 /***/ }),
 
-/***/ 1159:
+/***/ 1396:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -713,8 +789,11 @@ var Targets = exports.Targets = function (_Phaser$Physics$Arcad) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.GroundZone = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _config = __webpack_require__(38);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -728,11 +807,11 @@ var GroundZone = exports.GroundZone = function (_Phaser$GameObjects$Z) {
   function GroundZone(scene) {
     _classCallCheck(this, GroundZone);
 
-    var _this = _possibleConstructorReturn(this, (GroundZone.__proto__ || Object.getPrototypeOf(GroundZone)).call(this, scene, 0, 260));
+    var _this = _possibleConstructorReturn(this, (GroundZone.__proto__ || Object.getPrototypeOf(GroundZone)).call(this, scene, _config.config.layouts.game.groundZone.x, _config.config.layouts.game.groundZone.y));
 
     scene.add.existing(_this);
 
-    _this.setSize(640, 40);
+    _this.setSize(_config.config.layouts.game.groundZone.width, _config.config.layouts.game.groundZone.height);
     _this.setScrollFactor(0);
 
     scene.physics.world.enable(_this);
@@ -742,7 +821,7 @@ var GroundZone = exports.GroundZone = function (_Phaser$GameObjects$Z) {
   }
 
   _createClass(GroundZone, [{
-    key: "updatePosition",
+    key: 'updatePosition',
     value: function updatePosition(x) {
       this.x = x;
     }
@@ -753,7 +832,7 @@ var GroundZone = exports.GroundZone = function (_Phaser$GameObjects$Z) {
 
 /***/ }),
 
-/***/ 1160:
+/***/ 1397:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -766,13 +845,17 @@ exports.ScrollZone = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _gameStates = __webpack_require__(221);
+var _gameStates = __webpack_require__(239);
 
 var STATES = _interopRequireWildcard(_gameStates);
+
+var _config = __webpack_require__(38);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var scrollZonesConfig = _config.config.layouts.game.scrollZones;
 
 var ScrollZone = exports.ScrollZone = function () {
   function ScrollZone(scene, scrollingDirection) {
@@ -785,10 +868,10 @@ var ScrollZone = exports.ScrollZone = function () {
 
     if (scrollingDirection === -1) {
       // left
-      this.zone = scene.add.zone(0, 0).setSize(100, 300).setInteractive({ cursor: 'w-resize' });
+      this.zone = scene.add.zone(scrollZonesConfig.leftX, scrollZonesConfig.y).setSize(scrollZonesConfig.width, scrollZonesConfig.height).setInteractive({ cursor: 'w-resize' });
     } else {
       // right
-      this.zone = scene.add.zone(540, 0).setSize(100, 300).setInteractive({ cursor: 'e-resize' });
+      this.zone = scene.add.zone(scrollZonesConfig.rightX, scrollZonesConfig.y).setSize(scrollZonesConfig.width, scrollZonesConfig.height).setInteractive({ cursor: 'e-resize' });
     }
 
     this.zone.on('pointerover', function () {
@@ -820,7 +903,7 @@ var ScrollZone = exports.ScrollZone = function () {
 
 /***/ }),
 
-/***/ 1161:
+/***/ 1398:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -833,7 +916,7 @@ exports.Balloons = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _balloon = __webpack_require__(467);
+var _balloon = __webpack_require__(503);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -899,7 +982,7 @@ var Balloons = exports.Balloons = function () {
 
 /***/ }),
 
-/***/ 1162:
+/***/ 1399:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -908,14 +991,20 @@ var Balloons = exports.Balloons = function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.UiScene = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _config = __webpack_require__(38);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var arrowConfig = _config.config.entities.game.arrow;
+var uiConfig = _config.config.layouts.ui;
 
 var UiScene = exports.UiScene = function (_Phaser$Scene) {
   _inherits(UiScene, _Phaser$Scene);
@@ -927,33 +1016,25 @@ var UiScene = exports.UiScene = function (_Phaser$Scene) {
   }
 
   _createClass(UiScene, [{
-    key: 'preload',
-    value: function preload() {
-      this.load.image('gauge-outline', 'assets/gauge-outline.png');
-      this.load.image('gauge-fill', 'assets/gauge-fill.png');
-
-      this.load.image('arrow', 'assets/arrow.png');
-    }
-  }, {
     key: 'create',
     value: function create() {
       this.events.on('shutdown', this._cleanupRegistryListeners, this);
 
-      this.registry.events.on('changedata_arrows', this._updateArrows, this);
-      this.registry.events.on('changedata_charge', this._updateCharge, this);
+      this.registry.events.on('changedata-arrows', this._updateArrows, this);
+      this.registry.events.on('changedata-charge', this._updateCharge, this);
 
-      this.arrowsText = this.add.bitmapText(30, 15, 'font', 'Quiver:', 24);
+      this.arrowsText = this.add.bitmapText(uiConfig.quiverLabel.x, uiConfig.quiverLabel.y, 'font', 'Quiver:', uiConfig.quiverLabel.size);
       this.arrowsImages = this.add.group([], {
         classType: Phaser.GameObjects.Image,
         key: 'arrow',
-        setXY: { x: 120, stepX: 20, y: 22 },
-        setRotation: { value: -45 },
+        setXY: { x: uiConfig.arrows.x, stepX: uiConfig.arrows.xStep, y: uiConfig.arrows.y },
+        setRotation: { value: uiConfig.arrows.rotation },
         setScale: { x: 0.30, y: 0.30 },
-        repeat: 2
+        repeat: this.registry.get('arrows') - 1
       });
 
-      this.chargeGaugeOutline = this.add.image(30, 40, 'gauge-outline').setOrigin(0).setScale(1, 0.8);
-      this.chargeGaugeFill = this.add.image(30, 40, 'gauge-fill').setOrigin(0).setScale(1, 0.8);
+      this.chargeGaugeOutline = this.add.image(uiConfig.chargeGauge.x, uiConfig.chargeGauge.y, 'gauge-outline').setOrigin(0).setScale(1, 0.8);
+      this.chargeGaugeFill = this.add.image(uiConfig.chargeGauge.x, uiConfig.chargeGauge.y, 'gauge-fill').setOrigin(0).setScale(1, 0.8);
 
       this._updateArrows(null, this.registry.get('arrows'));
       this._updateCharge(null, this.registry.get('charge'));
@@ -961,8 +1042,8 @@ var UiScene = exports.UiScene = function (_Phaser$Scene) {
   }, {
     key: '_cleanupRegistryListeners',
     value: function _cleanupRegistryListeners() {
-      this.registry.events.off('changedata_arrows', this._updateArrows, this);
-      this.registry.events.off('changedata_charge', this._updateCharge, this);
+      this.registry.events.off('changedata-arrows', this._updateArrows, this);
+      this.registry.events.off('changedata-charge', this._updateCharge, this);
     }
   }, {
     key: '_updateArrows',
@@ -978,9 +1059,9 @@ var UiScene = exports.UiScene = function (_Phaser$Scene) {
   }, {
     key: '_updateCharge',
     value: function _updateCharge(parent, value) {
-      var baseCharge = 200;
-      var maxCharge = 700;
-      var chargePercent = (value - baseCharge) / (maxCharge - baseCharge);
+      var minCharge = arrowConfig.minCharge;
+      var maxCharge = arrowConfig.maxCharge;
+      var chargePercent = (value - minCharge) / (maxCharge - minCharge);
 
       this.chargeGaugeFill.scaleX = chargePercent;
     }
@@ -991,7 +1072,7 @@ var UiScene = exports.UiScene = function (_Phaser$Scene) {
 
 /***/ }),
 
-/***/ 1163:
+/***/ 1400:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1004,15 +1085,17 @@ exports.LevelSelectScene = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _phaser = __webpack_require__(73);
+var _phaser = __webpack_require__(79);
 
 var _phaser2 = _interopRequireDefault(_phaser);
 
-var _levels = __webpack_require__(1164);
+var _config = __webpack_require__(38);
+
+var _levels = __webpack_require__(1401);
 
 var _levels2 = _interopRequireDefault(_levels);
 
-var _storage = __webpack_require__(468);
+var _storage = __webpack_require__(504);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1036,29 +1119,41 @@ var LevelSelectScene = exports.LevelSelectScene = function (_Phaser$Scene) {
     value: function create() {
       this.storage = new _storage.Storage();
 
-      this.add.bitmapText(320, 50, 'font', 'Level Select', 38).setOrigin(0.5);
+      this._createBackgroundImage('menu-bg-0');
+      this._createBackgroundImage('menu-bg-1');
+      this._createBackgroundImage('menu-bg-2');
+      this._createBackgroundImage('menu-bg-3');
+      this._createBackgroundImage('menu-bg-4');
 
-      var levelButtons = [];
+      this.add.bitmapText(320, 50, 'font-outline', 'Level Select', 12).setOrigin(0.5);
+
+      var buttonXStep = 120;
       for (var i = 0; i < _levels2.default.length; i++) {
-        levelButtons.push(this._createLevelButton(i));
+        this._createLevelButton(i, 100 + buttonXStep * i, 150);
       }
-
-      _phaser2.default.Actions.GridAlign(levelButtons, {
-        width: 8,
-        height: -1,
-        cellWidth: 60,
-        cellHeight: 20,
-        x: 200,
-        y: 150
-      });
+    }
+  }, {
+    key: '_createBackgroundImage',
+    value: function _createBackgroundImage(key) {
+      this.add.image(0, 0, key).setDisplaySize(_config.config.dimensions.viewport.width, _config.config.dimensions.viewport.height).setOrigin(0);
     }
   }, {
     key: '_createLevelButton',
-    value: function _createLevelButton(levelIndex) {
+    value: function _createLevelButton(levelIndex, x, y) {
       var _this2 = this;
 
-      var text = levelIndex + 1 + ': ' + this.storage.loadLevelStars(levelIndex);
-      return this.add.bitmapText(50, 50, 'font', text, 28).setOrigin(0.5, 0).setInteractive({ cursor: 'pointer' }).once('pointerup', function () {
+      var levelText = levelIndex;
+      var starCount = this.storage.loadLevelStars(levelIndex);
+
+      this.add.bitmapText(x + 28, y, 'font', levelText, 28).setOrigin(0.5, 0);
+
+      var starXStep = 28;
+      for (var i = 0; i < 3; i++) {
+        var starAsset = i < starCount ? 'star' : 'star-gray';
+        this.add.image(x + starXStep * i, y + 30, starAsset).setOrigin(0.5, 0).setDisplaySize(24, 24);
+      }
+
+      this.add.zone(x, y, 80, 54).setOrigin(0, 0).setInteractive({ cursor: 'pointer' }).once('pointerup', function () {
         _this2.registry.set('levelIndex', levelIndex);
         _this2.scene.start('game', { level: _levels2.default[levelIndex] });
       });
@@ -1070,14 +1165,14 @@ var LevelSelectScene = exports.LevelSelectScene = function (_Phaser$Scene) {
 
 /***/ }),
 
-/***/ 1164:
+/***/ 1401:
 /***/ (function(module, exports) {
 
-module.exports = [{"targets":[{"x":500,"y":230},{"x":600,"y":230},{"x":900,"y":230}],"balloons":[]},{"targets":[{"x":450,"y":230},{"x":550,"y":230}],"balloons":[]},{"targets":[{"x":400,"y":230}],"balloons":[{"x":200,"y":150},{"x":700,"y":150}]},{"targets":[{"x":200,"y":230}],"balloons":[]}]
+module.exports = [{"targets":[{"x":500},{"x":600},{"x":900}],"balloons":[]},{"targets":[{"x":450},{"x":550}],"balloons":[]},{"targets":[{"x":400}],"balloons":[{"x":200,"y":150},{"x":700,"y":150}]},{"targets":[{"x":200}],"balloons":[]}]
 
 /***/ }),
 
-/***/ 1165:
+/***/ 1402:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1090,7 +1185,9 @@ exports.ResultsScene = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _storage = __webpack_require__(468);
+var _storage = __webpack_require__(504);
+
+var _config = __webpack_require__(38);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1098,10 +1195,11 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var resultsConfig = _config.config.layouts.results;
 var SCORE_MULTIPLIERS = {
-  targets: 100,
-  balloons: 150,
-  arrows: 200
+  targets: 150,
+  balloons: 200,
+  arrows: 100
 };
 
 var ResultsScene = exports.ResultsScene = function (_Phaser$Scene) {
@@ -1114,25 +1212,21 @@ var ResultsScene = exports.ResultsScene = function (_Phaser$Scene) {
   }
 
   _createClass(ResultsScene, [{
-    key: 'preload',
-    value: function preload() {
-      this.load.image('star', 'assets/star.png');
-    }
-  }, {
     key: 'create',
     value: function create() {
       var _this2 = this;
 
-      var storage = new _storage.Storage();
       var didWin = this.registry.get('targets') === 0;
 
-      var resultText = didWin ? 'Level Passed!' : 'Level Failed!';
-      this.add.bitmapText(320, 40, 'font', resultText, 32).setOrigin(0.5, 0);
+      var titleText = didWin ? 'Level Passed!' : 'Level Failed!';
+      this.add.bitmapText(resultsConfig.title.x, resultsConfig.title.y, 'font', titleText, resultsConfig.title.size).setOrigin(0.5, 0);
 
       var scores = this._calculateScore();
-      storage.saveLevelStars(this.registry.get('levelIndex'), scores.stars);
+
+      this._saveScore(scores);
+
       this._displayScores(scores, function () {
-        _this2.add.text(320, 260, 'Back to Level Select', {
+        _this2.add.text(resultsConfig.levelSelectButton.x, resultsConfig.levelSelectButton.y, 'Back to Level Select', {
           fill: '#000',
           backgroundColor: '#6c6',
           padding: 6
@@ -1170,12 +1264,24 @@ var ResultsScene = exports.ResultsScene = function (_Phaser$Scene) {
       };
     }
   }, {
+    key: '_saveScore',
+    value: function _saveScore(scores) {
+      var storage = new _storage.Storage();
+
+      var levelIndex = this.registry.get('levelIndex');
+      var existingStars = storage.loadLevelStars(levelIndex);
+
+      if (scores.stars > existingStars) {
+        storage.saveLevelStars(levelIndex, scores.stars);
+      }
+    }
+  }, {
     key: '_displayScores',
     value: function _displayScores(scores, onComplete) {
       var _this3 = this;
 
-      var y = 80;
-      var yStep = 30;
+      var y = resultsConfig.scores.y;
+      var yStep = resultsConfig.scores.yStep;
 
       var scoreTypeOrder = ['target', 'balloon', 'arrow', 'total'];
       var scoreTypeLabels = {
@@ -1191,8 +1297,8 @@ var ResultsScene = exports.ResultsScene = function (_Phaser$Scene) {
           return;
         }
 
-        _this3.add.bitmapText(250, y, 'font', scoreTypeLabels[scoreType], 24);
-        var valueText = _this3.add.bitmapText(350, y, 'font', 0, 24);
+        _this3.add.bitmapText(resultsConfig.scores.labelX, y, 'font', scoreTypeLabels[scoreType], resultsConfig.scores.size);
+        var valueText = _this3.add.bitmapText(resultsConfig.scores.valueX, y, 'font', 0, resultsConfig.scores.size);
         y += yStep;
 
         tweens.push({
@@ -1205,19 +1311,29 @@ var ResultsScene = exports.ResultsScene = function (_Phaser$Scene) {
         });
       });
 
-      for (var i = 0; i < scores.stars; i++) {
-        var star = this.add.image(275 + i * 40, y, 'star');
+      var starY = y + resultsConfig.stars.yTopMargin;
+      for (var i = 0; i < 3; i++) {
+        var starX = resultsConfig.stars.x + i * resultsConfig.stars.xStep;
+        var grayStar = this.add.image(starX, starY, 'star-gray');
+        grayStar.setDisplaySize(resultsConfig.stars.width, resultsConfig.stars.height);
+        grayStar.setOrigin(0.5);
+      }
+      for (var _i = 0; _i < scores.stars; _i++) {
+        var _starX = resultsConfig.stars.x + _i * resultsConfig.stars.xStep;
+        var star = this.add.image(_starX, starY, 'star');
         star.alpha = 0;
-        star.setDisplaySize(36, 36);
-        star.setOrigin(0.5, 0);
+        star.setDisplaySize(resultsConfig.stars.width * 2, resultsConfig.stars.height * 2);
+        star.setOrigin(0.5);
 
         tweens.push({
           targets: [star],
           props: {
-            alpha: 1
+            alpha: 1,
+            displayWidth: resultsConfig.stars.width,
+            displayHeight: resultsConfig.stars.height
           },
-          duration: 1,
-          delay: i * 200
+          duration: 100,
+          delay: 200
         });
       }
 
@@ -1230,14 +1346,14 @@ var ResultsScene = exports.ResultsScene = function (_Phaser$Scene) {
 
 /***/ }),
 
-/***/ 221:
+/***/ 239:
 /***/ (function(module, exports) {
 
 module.exports = {"PANNING_TO_TARGETS":0,"REST":1,"CHARGE":2,"FLY":3,"HIT":4}
 
 /***/ }),
 
-/***/ 467:
+/***/ 38:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1246,10 +1362,120 @@ module.exports = {"PANNING_TO_TARGETS":0,"REST":1,"CHARGE":2,"FLY":3,"HIT":4}
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+var viewportWidth = 640;
+var viewportHeight = 300;
+
+var config = exports.config = {
+  dimensions: {
+    viewport: {
+      width: viewportWidth,
+      height: viewportHeight
+    },
+    world: {
+      width: 1500,
+      height: viewportHeight
+    }
+  },
+  layouts: {
+    game: {
+      arrow: {
+        x: 50,
+        y: 240
+      },
+      targets: { y: 230 },
+      balloons: {
+        string: {
+          bottomY: 260,
+          width: 5
+        }
+      },
+      groundZone: {
+        x: 0,
+        y: 260,
+        width: viewportWidth,
+        height: 40
+      },
+      scrollZones: {
+        width: 100,
+        height: viewportHeight,
+        leftX: 0,
+        rightX: 540,
+        y: 0
+      }
+    },
+    results: {
+      title: {
+        x: 320,
+        y: 40,
+        size: 32
+      },
+      levelSelectButton: {
+        x: 320,
+        y: 260
+      },
+      scores: {
+        y: 80,
+        yStep: 30,
+        labelX: 250,
+        valueX: 350,
+        size: 24
+      },
+      stars: {
+        yTopMargin: 18,
+        x: 275,
+        xStep: 40,
+        width: 36,
+        height: 36
+      }
+    },
+    ui: {
+      quiverLabel: {
+        x: 30,
+        y: 15,
+        size: 24
+      },
+      arrows: {
+        x: 120,
+        xStep: 20,
+        y: 22,
+        rotation: -45
+      },
+      chargeGauge: {
+        x: 30,
+        y: 40
+      }
+    }
+  },
+  entities: {
+    game: {
+      arrow: {
+        minCharge: 200,
+        maxCharge: 700
+      }
+    }
+  }
+};
+
+/***/ }),
+
+/***/ 503:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Balloon = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _config = __webpack_require__(38);
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var balloonStringConfig = _config.config.layouts.game.balloons.string;
 
 var Balloon = exports.Balloon = function () {
   function Balloon(scene, balloonX, balloonY) {
@@ -1262,11 +1488,13 @@ var Balloon = exports.Balloon = function () {
     this.balloon.setScale(0.1);
     this.balloon.body.allowGravity = false;
 
-    this.string = scene.physics.add.sprite(balloonX, 265, 'balloon-string');
+    this.string = scene.physics.add.sprite(balloonX, balloonStringConfig.bottomY, 'balloon-string');
     this.string.setOrigin(0.5, 1);
-    this.string.displayHeight = 265 - (balloonY + this.balloon.displayHeight / 2);
-    this.string.displayWidth = 5;
+    this.string.displayHeight = balloonStringConfig.bottomY - (balloonY + this.balloon.displayHeight / 2);
+    this.string.displayWidth = balloonStringConfig.width;
     this.string.body.allowGravity = false;
+
+    this.popSound = scene.sound.add('balloon-pop');
   }
 
   _createClass(Balloon, [{
@@ -1276,6 +1504,8 @@ var Balloon = exports.Balloon = function () {
 
       this.scene.physics.world.disableBody(this.balloon.body);
       this.scene.physics.world.disableBody(this.string.body);
+
+      this.popSound.play();
 
       this.balloon.once('animationcomplete', function () {
         _this.balloon.visible = false;
@@ -1339,7 +1569,7 @@ var Balloon = exports.Balloon = function () {
 
 /***/ }),
 
-/***/ 468:
+/***/ 504:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1403,37 +1633,39 @@ window.Storage = new Storage();
 
 /***/ }),
 
-/***/ 469:
+/***/ 505:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(73);
+__webpack_require__(79);
 
-var _testScene = __webpack_require__(1151);
+var _config = __webpack_require__(38);
 
-var _preloadScene = __webpack_require__(1152);
+var _testScene = __webpack_require__(1388);
 
-var _gameScene = __webpack_require__(1153);
+var _preloadScene = __webpack_require__(1389);
 
-var _uiScene = __webpack_require__(1162);
+var _gameScene = __webpack_require__(1390);
 
-var _levelSelectScene = __webpack_require__(1163);
+var _uiScene = __webpack_require__(1399);
 
-var _resultsScene = __webpack_require__(1165);
+var _levelSelectScene = __webpack_require__(1400);
+
+var _resultsScene = __webpack_require__(1402);
 
 var gameConfig = {
-  width: 640,
-  height: 300,
+  width: _config.config.dimensions.viewport.width,
+  height: _config.config.dimensions.viewport.height,
   pixelArt: true,
   physics: {
     default: 'arcade',
     arcade: {
       x: 0,
       y: 0,
-      width: 1500,
-      height: 300,
+      width: _config.config.dimensions.world.width,
+      height: _config.config.dimensions.world.height,
       gravity: {
         y: 400
       }
@@ -1446,4 +1678,4 @@ new Phaser.Game(gameConfig);
 
 /***/ })
 
-},[469]);
+},[505]);
