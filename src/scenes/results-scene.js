@@ -14,7 +14,7 @@ export class ResultsScene extends Phaser.Scene {
   }
 
   create() {
-    const didWin = this.registry.get('targets') === 0
+    const didWin = this.registry.get('remainingTargets') === 0
 
     const titleText = didWin ? 'Level Passed!' : 'Level Failed!';
     this.add.bitmapText(resultsConfig.title.x, resultsConfig.title.y, 'font', titleText, resultsConfig.title.size)
@@ -44,12 +44,12 @@ export class ResultsScene extends Phaser.Scene {
     const arrowScore = remainingArrows * SCORE_MULTIPLIERS.arrows;
 
     const initialTargets = this.registry.get('initialTargets');
-    const remainingTargets = this.registry.get('targets');
+    const remainingTargets = this.registry.get('remainingTargets');
     const targetScore = (initialTargets - remainingTargets) * SCORE_MULTIPLIERS.targets;
 
     const initialBalloons = this.registry.get('initialBalloons');
-    const remainingBalloons = this.registry.get('balloons');
-    const balloonScore = (initialBalloons - remainingBalloons) * SCORE_MULTIPLIERS.balloons;
+    const poppedBalloons = this.registry.get('poppedBalloons');
+    const balloonScore = poppedBalloons * SCORE_MULTIPLIERS.balloons;
 
     const totalScore = arrowScore + targetScore + balloonScore;
     const maxPossibleScore = (initialTargets * SCORE_MULTIPLIERS.targets) + (initialBalloons * SCORE_MULTIPLIERS.balloons);

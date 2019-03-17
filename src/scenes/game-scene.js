@@ -60,8 +60,9 @@ export class GameScene extends Phaser.Scene {
     this.registry.set('initialBalloons', level.balloons.length);
 
     this.registry.set('arrows', 3);
-    this.registry.set('targets', level.targets.length);
-    this.registry.set('balloons', level.balloons.length);
+    this.registry.set('remainingTargets', level.targets.length);
+    this.registry.set('remainingBalloons', level.balloons.length);
+    this.registry.set('poppedBalloons', 0);
 
     this.targets.createTargetsForLevel(level);
     this.balloons.createBalloonsForLevel(level);
@@ -117,7 +118,7 @@ export class GameScene extends Phaser.Scene {
 
   _onArrowTargetCollide(arrow, target) {
     this.registry.set('arrows', this.registry.get('arrows') - 1);
-    this.registry.set('targets', this.registry.get('targets') - 1);
+    this.registry.set('remainingTargets', this.registry.get('remainingTargets') - 1);
     this.registry.set('state', STATES.HIT);
 
     this.arrow.onHit();
@@ -132,18 +133,21 @@ export class GameScene extends Phaser.Scene {
   }
 
   _onArrowBalloonCollide(balloon) {
-    this.registry.set('balloons', this.registry.get('balloons') - 1);
+    this.registry.set('remainingBalloons', this.registry.get('remainingBalloons') - 1);
+    this.registry.set('poppedBalloons', this.registry.get('poppedBalloons') + 1);
 
     balloon.pop()
   }
 
   _onArrowBalloonStringCollide(balloon) {
+    this.registry.set('remainingBalloons', this.registry.get('remainingBalloons') - 1);
+
     balloon.cutString();
   }
 
   _checkLevelOver() {
     const isLevelOver = this.registry.get('arrows') === 0
-      || (this.registry.get('targets') === 0 && this.registry.get('balloons') === 0);
+      || (this.registry.get('remainingTargets') === 0 && this.registry.get('remainingBalloons') === 0);
 
     if (isLevelOver) {
       this._endLevel();

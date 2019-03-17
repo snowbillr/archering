@@ -5,5 +5,5 @@ next up:
 
 bugs:
 - click zones on level select screen aren't quite accurate
-- level doesn't end when balloons have their strings cut
+- shouldn't calculate score when the level is failed (didn't get all the targets)
 
