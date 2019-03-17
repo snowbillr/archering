@@ -271,7 +271,7 @@ var GameScene = exports.GameScene = function (_Phaser$Scene) {
         return _this2._onArrowBalloonStringCollide(balloon);
       });
       this.physics.add.collider(this.arrow, this.groundZone, function () {
-        return _this2._onArrowWorldBoundsCollide();
+        return _this2._onArrowGroundCollide();
       });
 
       this.scene.launch('ui');
@@ -298,8 +298,9 @@ var GameScene = exports.GameScene = function (_Phaser$Scene) {
       this.registry.set('initialBalloons', level.balloons.length);
 
       this.registry.set('arrows', 3);
-      this.registry.set('targets', level.targets.length);
-      this.registry.set('balloons', level.balloons.length);
+      this.registry.set('remainingTargets', level.targets.length);
+      this.registry.set('remainingBalloons', level.balloons.length);
+      this.registry.set('poppedBalloons', 0);
 
       this.targets.createTargetsForLevel(level);
       this.balloons.createBalloonsForLevel(level);
@@ -341,8 +342,8 @@ var GameScene = exports.GameScene = function (_Phaser$Scene) {
       this.arrow.fire();
     }
   }, {
-    key: '_onArrowWorldBoundsCollide',
-    value: function _onArrowWorldBoundsCollide() {
+    key: '_onArrowGroundCollide',
+    value: function _onArrowGroundCollide() {
       var _this4 = this;
 
       this.registry.set('arrows', this.registry.get('arrows') - 1);
@@ -363,7 +364,7 @@ var GameScene = exports.GameScene = function (_Phaser$Scene) {
       var _this5 = this;
 
       this.registry.set('arrows', this.registry.get('arrows') - 1);
-      this.registry.set('targets', this.registry.get('targets') - 1);
+      this.registry.set('remainingTargets', this.registry.get('remainingTargets') - 1);
       this.registry.set('state', STATES.HIT);
 
       this.arrow.onHit();
@@ -379,19 +380,22 @@ var GameScene = exports.GameScene = function (_Phaser$Scene) {
   }, {
     key: '_onArrowBalloonCollide',
     value: function _onArrowBalloonCollide(balloon) {
-      this.registry.set('balloons', this.registry.get('balloons') - 1);
+      this.registry.set('remainingBalloons', this.registry.get('remainingBalloons') - 1);
+      this.registry.set('poppedBalloons', this.registry.get('poppedBalloons') + 1);
 
       balloon.pop();
     }
   }, {
     key: '_onArrowBalloonStringCollide',
     value: function _onArrowBalloonStringCollide(balloon) {
+      this.registry.set('remainingBalloons', this.registry.get('remainingBalloons') - 1);
+
       balloon.cutString();
     }
   }, {
     key: '_checkLevelOver',
     value: function _checkLevelOver() {
-      var isLevelOver = this.registry.get('arrows') === 0 || this.registry.get('targets') === 0 && this.registry.get('balloons') === 0;
+      var isLevelOver = this.registry.get('arrows') === 0 || this.registry.get('remainingTargets') === 0 && this.registry.get('remainingBalloons') === 0;
 
       if (isLevelOver) {
         this._endLevel();
@@ -1216,25 +1220,36 @@ var ResultsScene = exports.ResultsScene = function (_Phaser$Scene) {
     value: function create() {
       var _this2 = this;
 
-      var didWin = this.registry.get('targets') === 0;
+      var didWin = this.registry.get('remainingTargets') === 0;
 
       var titleText = didWin ? 'Level Passed!' : 'Level Failed!';
       this.add.bitmapText(resultsConfig.title.x, resultsConfig.title.y, 'font', titleText, resultsConfig.title.size).setOrigin(0.5, 0);
 
-      var scores = this._calculateScore();
+      if (didWin) {
+        var scores = this._calculateScore();
 
-      this._saveScore(scores);
+        this._saveScore(scores);
 
-      this._displayScores(scores, function () {
-        _this2.add.text(resultsConfig.levelSelectButton.x, resultsConfig.levelSelectButton.y, 'Back to Level Select', {
-          fill: '#000',
-          backgroundColor: '#6c6',
-          padding: 6
-        }).setOrigin(0.5, 0).setInteractive({ cursor: 'pointer' }).once('pointerup', function () {
-          _this2.scene.stop('game');
-          _this2.scene.stop('results');
-          _this2.scene.start('level-select');
+        this._displayScores(scores, function () {
+          _this2._showReturnToLevelSelectButton();
         });
+      } else {
+        this._showReturnToLevelSelectButton();
+      }
+    }
+  }, {
+    key: '_showReturnToLevelSelectButton',
+    value: function _showReturnToLevelSelectButton() {
+      var _this3 = this;
+
+      this.add.text(resultsConfig.levelSelectButton.x, resultsConfig.levelSelectButton.y, 'Back to Level Select', {
+        fill: '#000',
+        backgroundColor: '#6c6',
+        padding: 6
+      }).setOrigin(0.5, 0).setInteractive({ cursor: 'pointer' }).once('pointerup', function () {
+        _this3.scene.stop('game');
+        _this3.scene.stop('results');
+        _this3.scene.start('level-select');
       });
     }
   }, {
@@ -1244,12 +1259,12 @@ var ResultsScene = exports.ResultsScene = function (_Phaser$Scene) {
       var arrowScore = remainingArrows * SCORE_MULTIPLIERS.arrows;
 
       var initialTargets = this.registry.get('initialTargets');
-      var remainingTargets = this.registry.get('targets');
+      var remainingTargets = this.registry.get('remainingTargets');
       var targetScore = (initialTargets - remainingTargets) * SCORE_MULTIPLIERS.targets;
 
       var initialBalloons = this.registry.get('initialBalloons');
-      var remainingBalloons = this.registry.get('balloons');
-      var balloonScore = (initialBalloons - remainingBalloons) * SCORE_MULTIPLIERS.balloons;
+      var poppedBalloons = this.registry.get('poppedBalloons');
+      var balloonScore = poppedBalloons * SCORE_MULTIPLIERS.balloons;
 
       var totalScore = arrowScore + targetScore + balloonScore;
       var maxPossibleScore = initialTargets * SCORE_MULTIPLIERS.targets + initialBalloons * SCORE_MULTIPLIERS.balloons;
@@ -1278,7 +1293,7 @@ var ResultsScene = exports.ResultsScene = function (_Phaser$Scene) {
   }, {
     key: '_displayScores',
     value: function _displayScores(scores, onComplete) {
-      var _this3 = this;
+      var _this4 = this;
 
       var y = resultsConfig.scores.y;
       var yStep = resultsConfig.scores.yStep;
@@ -1293,18 +1308,19 @@ var ResultsScene = exports.ResultsScene = function (_Phaser$Scene) {
 
       var tweens = [];
       scoreTypeOrder.forEach(function (scoreType) {
+        console.log('adding ui for ' + scoreType + ': ' + scores[scoreType]);
         if (scores[scoreType] == null) {
           return;
         }
 
-        _this3.add.bitmapText(resultsConfig.scores.labelX, y, 'font', scoreTypeLabels[scoreType], resultsConfig.scores.size);
-        var valueText = _this3.add.bitmapText(resultsConfig.scores.valueX, y, 'font', 0, resultsConfig.scores.size);
+        _this4.add.bitmapText(resultsConfig.scores.labelX, y, 'font', scoreTypeLabels[scoreType], resultsConfig.scores.size);
+        var valueText = _this4.add.bitmapText(resultsConfig.scores.valueX, y, 'font', 0, resultsConfig.scores.size);
         y += yStep;
 
         tweens.push({
           targets: [{ value: 0 }],
           props: { value: scores[scoreType] },
-          duration: 600,
+          duration: scores[scoreType] > 0 ? 600 : 1,
           onUpdate: function onUpdate(tween) {
             valueText.setText(Phaser.Math.RoundTo(tween.getValue()));
           }
@@ -1332,7 +1348,7 @@ var ResultsScene = exports.ResultsScene = function (_Phaser$Scene) {
             displayWidth: resultsConfig.stars.width,
             displayHeight: resultsConfig.stars.height
           },
-          duration: 100,
+          duration: 150,
           delay: 200
         });
       }
@@ -1668,7 +1684,8 @@ var gameConfig = {
       height: _config.config.dimensions.world.height,
       gravity: {
         y: 400
-      }
+      },
+      checkCollision: { up: false, down: true, left: true, right: true }
     }
   },
   scene: [_preloadScene.PreloadScene, _levelSelectScene.LevelSelectScene, _gameScene.GameScene, _uiScene.UiScene, _resultsScene.ResultsScene]
