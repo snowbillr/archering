@@ -1,6 +1,4 @@
 next up:
-- do something about all the magic numbers for positioning
-
 - level builder
 
 - arrow can fly off top of screen
