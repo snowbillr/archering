@@ -1,7 +1,8 @@
 import Phaser from 'phaser';
 import * as STATES from '../game-states';
+import { config } from '../config';
 
-const MAX_CHARGE = 700;
+const arrowConfig = config.layouts.game.arrow;
 
 export class Arrow extends Phaser.Physics.Arcade.Sprite {
   constructor(scene) {
@@ -38,7 +39,7 @@ export class Arrow extends Phaser.Physics.Arcade.Sprite {
 
     if (state === STATES.CHARGE) {
       const chargeAmount = this.scene.registry.get('charge');
-      const newCharge = Phaser.Math.Clamp(chargeAmount + 5, 200, MAX_CHARGE);
+      const newCharge = Phaser.Math.Clamp(chargeAmount + 5, arrowConfig.minCharge, arrowConfig.maxCharge);
       this.scene.registry.set('charge', newCharge);
     }
   }
@@ -49,7 +50,7 @@ export class Arrow extends Phaser.Physics.Arcade.Sprite {
   }
 
   fire() {
-    const chargePercent = this.scene.registry.get('charge') / MAX_CHARGE;
+    const chargePercent = this.scene.registry.get('charge') / arrowConfig.maxCharge;
     if (chargePercent < 0.33) {
       this.releaseSounds.low.play();
     } else if (chargePercent < 0.66) {
@@ -63,12 +64,12 @@ export class Arrow extends Phaser.Physics.Arcade.Sprite {
   }
 
   reset() {
-    this.scene.registry.set('charge', 200);
+    this.scene.registry.set('charge', arrowConfig.minCharge);
 
     this.body.enable = true;
 
-    this.x = 50;
-    this.y = 240;
+    this.x = arrowConfig.x;
+    this.y = arrowConfig.y;
 
     this.alpha = 1;
 

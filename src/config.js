@@ -13,6 +13,12 @@ export const config = {
   },
   layouts: {
     game: {
+      arrow: {
+        x: 50,
+        y: 240,
+        minCharge: 200,
+        maxCharge: 700,
+      },
       targets: { y: 230 },
       groundZone: {
         x: 0,

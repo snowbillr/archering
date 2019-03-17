@@ -1,3 +1,7 @@
+import { config } from '../config';
+
+const arrowConfig = config.layouts.game.arrow;
+
 export class UiScene extends Phaser.Scene {
   constructor() {
     super({ key: 'ui' });
@@ -44,9 +48,9 @@ export class UiScene extends Phaser.Scene {
   }
 
   _updateCharge(parent, value) {
-    const baseCharge = 200;
-    const maxCharge = 700;
-    const chargePercent = (value - baseCharge) / (maxCharge - baseCharge);
+    const minCharge = arrowConfig.minCharge;
+    const maxCharge = arrowConfig.maxCharge;
+    const chargePercent = (value - minCharge) / (maxCharge - minCharge);
 
     this.chargeGaugeFill.scaleX = chargePercent;
   }
