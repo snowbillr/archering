@@ -89,6 +89,7 @@ export class ResultsScene extends Phaser.Scene {
 
     const tweens = [];
     scoreTypeOrder.forEach(scoreType => {
+      console.log(`adding ui for ${scoreType}: ${scores[scoreType]}`)
       if (scores[scoreType] == null) { return; }
 
       this.add.bitmapText(resultsConfig.scores.labelX, y, 'font', scoreTypeLabels[scoreType], resultsConfig.scores.size);
@@ -98,7 +99,7 @@ export class ResultsScene extends Phaser.Scene {
       tweens.push({
         targets: [{ value: 0 }],
         props: { value: scores[scoreType] },
-        duration: 600,
+        duration: scores[scoreType] > 0 ? 600 : 1,
         onUpdate: tween => {
           valueText.setText(Phaser.Math.RoundTo(tween.getValue()));
         }
@@ -126,7 +127,7 @@ export class ResultsScene extends Phaser.Scene {
           displayWidth: resultsConfig.stars.width,
           displayHeight: resultsConfig.stars.height,
         },
-        duration: 100,
+        duration: 150,
         delay: 200,
       });
     }
