@@ -20,6 +20,12 @@ export const config = {
         maxCharge: 700,
       },
       targets: { y: 230 },
+      balloons: {
+        string: {
+          bottomY: 260,
+          width: 5,
+        }
+      },
       groundZone: {
         x: 0,
         y: 260,

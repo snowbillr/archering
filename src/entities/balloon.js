@@ -1,3 +1,6 @@
+import { config } from '../config';
+const balloonStringConfig = config.layouts.game.balloons.string;
+
 export class Balloon {
   constructor(scene, balloonX, balloonY) {
     this.scene = scene;
@@ -7,10 +10,10 @@ export class Balloon {
     this.balloon.setScale(0.1);
     this.balloon.body.allowGravity = false;
 
-    this.string = scene.physics.add.sprite(balloonX, 265, 'balloon-string');
+    this.string = scene.physics.add.sprite(balloonX, balloonStringConfig.bottomY, 'balloon-string');
     this.string.setOrigin(0.5, 1);
-    this.string.displayHeight = 265 - (balloonY + this.balloon.displayHeight / 2);
-    this.string.displayWidth = 5;
+    this.string.displayHeight = balloonStringConfig.bottomY - (balloonY + this.balloon.displayHeight / 2);
+    this.string.displayWidth = balloonStringConfig.width;
     this.string.body.allowGravity = false;
 
     this.popSound = scene.sound.add('balloon-pop');
