@@ -2,7 +2,8 @@ import Phaser from 'phaser';
 import * as STATES from '../game-states';
 import { config } from '../config';
 
-const arrowConfig = config.layouts.game.arrow;
+const arrowLayoutConfig = config.layouts.game.arrow;
+const arrowConfig = config.entities.game.arrow;
 
 export class Arrow extends Phaser.Physics.Arcade.Sprite {
   constructor(scene) {
@@ -68,8 +69,8 @@ export class Arrow extends Phaser.Physics.Arcade.Sprite {
 
     this.body.enable = true;
 
-    this.x = arrowConfig.x;
-    this.y = arrowConfig.y;
+    this.x = arrowLayoutConfig.x;
+    this.y = arrowLayoutConfig.y;
 
     this.alpha = 1;
 

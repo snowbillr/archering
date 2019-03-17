@@ -14,7 +14,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   create({ level }) {
-    this.registry.set('charge', config.layouts.game.arrow.minCharge);
+    this.registry.set('charge', config.entities.game.arrow.minCharge);
     this.registry.set('scrollingDirection', 0);
     this.registry.set('state', STATES.PANNING_TO_TARGETS);
 

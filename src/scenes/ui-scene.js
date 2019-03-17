@@ -1,6 +1,6 @@
 import { config } from '../config';
 
-const arrowConfig = config.layouts.game.arrow;
+const arrowConfig = config.entities.game.arrow;
 const uiConfig = config.layouts.ui;
 
 export class UiScene extends Phaser.Scene {

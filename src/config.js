@@ -17,8 +17,6 @@ export const config = {
       arrow: {
         x: 50,
         y: 240,
-        minCharge: 200,
-        maxCharge: 700,
       },
       targets: { y: 230 },
       balloons: {
@@ -81,6 +79,14 @@ export const config = {
       chargeGauge: {
         x: 30,
         y: 40,
+      }
+    }
+  },
+  entities: {
+    game: {
+      arrow: {
+        minCharge: 200,
+        maxCharge: 700,
       }
     }
   }
