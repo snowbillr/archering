@@ -20,22 +20,30 @@ export class ResultsScene extends Phaser.Scene {
     this.add.bitmapText(resultsConfig.title.x, resultsConfig.title.y, 'font', titleText, resultsConfig.title.size)
       .setOrigin(0.5, 0);
 
-    const scores = this._calculateScore();
+    if (didWin) {
+      const scores = this._calculateScore();
 
-    this._saveScore(scores);
+      this._saveScore(scores);
 
-    this._displayScores(scores, () => {
-      this.add.text(resultsConfig.levelSelectButton.x, resultsConfig.levelSelectButton.y, 'Back to Level Select', {
-        fill: '#000',
-        backgroundColor: '#6c6',
-        padding: 6,
-      }).setOrigin(0.5, 0)
-        .setInteractive({ cursor: 'pointer' })
-        .once('pointerup', () => {
-          this.scene.stop('game');
-          this.scene.stop('results');
-          this.scene.start('level-select');
+      this._displayScores(scores, () => {
+        this._showReturnToLevelSelectButton();
       });
+    } else {
+      this._showReturnToLevelSelectButton();
+    }
+  }
+
+  _showReturnToLevelSelectButton() {
+    this.add.text(resultsConfig.levelSelectButton.x, resultsConfig.levelSelectButton.y, 'Back to Level Select', {
+      fill: '#000',
+      backgroundColor: '#6c6',
+      padding: 6,
+    }).setOrigin(0.5, 0)
+      .setInteractive({ cursor: 'pointer' })
+      .once('pointerup', () => {
+        this.scene.stop('game');
+        this.scene.stop('results');
+        this.scene.start('level-select');
     });
   }
 
