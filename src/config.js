@@ -1,14 +1,15 @@
 const viewportWidth = 640;
+const viewportHeight = 300;
 
 export const config = {
   dimensions: {
     viewport: {
       width: viewportWidth,
-      height: 300,
+      height: viewportHeight,
     },
     world: {
       width: 1500,
-      height: 300,
+      height: viewportHeight,
     }
   },
   layouts: {
@@ -32,6 +33,13 @@ export const config = {
         width: viewportWidth,
         height: 40,
       },
+      scrollZones: {
+        width: 100,
+        height: viewportHeight,
+        leftX: 0,
+        rightX: 540,
+        y: 0,
+      }
     }
   }
 }

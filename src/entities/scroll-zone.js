@@ -1,4 +1,7 @@
 import * as STATES from '../game-states';
+import { config } from '../config';
+
+const scrollZonesConfig = config.layouts.game.scrollZones;
 
 export class ScrollZone {
   constructor(scene, scrollingDirection) {
@@ -6,12 +9,12 @@ export class ScrollZone {
     this.scrollingDirection = scrollingDirection;
 
     if (scrollingDirection === -1) { // left
-      this.zone = scene.add.zone(0, 0)
-        .setSize(100, 300)
+      this.zone = scene.add.zone(scrollZonesConfig.leftX, scrollZonesConfig.y)
+        .setSize(scrollZonesConfig.width, scrollZonesConfig.height)
         .setInteractive({ cursor: 'w-resize' });
     } else { // right
-      this.zone = scene.add.zone(540, 0)
-        .setSize(100, 300)
+      this.zone = scene.add.zone(scrollZonesConfig.rightX, scrollZonesConfig.y)
+        .setSize(scrollZonesConfig.width, scrollZonesConfig.height)
         .setInteractive({ cursor: 'e-resize' });
     }
 
