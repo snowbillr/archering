@@ -6,6 +6,7 @@ import { Targets } from '../groups/targets.js';
 import { GroundZone } from '../entities/ground-zone.js';
 import { ScrollZone } from '../entities/scroll-zone';
 import { Balloons } from '../groups/balloons';
+import { config } from '../config';
 
 export class GameScene extends Phaser.Scene {
   constructor() {
@@ -13,7 +14,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   create({ level }) {
-    this.registry.set('charge', 200);
+    this.registry.set('charge', config.layouts.game.arrow.minCharge);
     this.registry.set('scrollingDirection', 0);
     this.registry.set('state', STATES.PANNING_TO_TARGETS);
 
@@ -27,7 +28,7 @@ export class GameScene extends Phaser.Scene {
     this.leftScrollZone = new ScrollZone(this, -1);
     this.rightScrollZone = new ScrollZone(this, 1);
 
-    this.cameras.main.setBounds(0, 0, 1500, 300);
+    this.cameras.main.setBounds(0, 0, config.dimensions.world.width, config.dimensions.world.height);
 
     this.input.setDefaultCursor('crosshair');
 
@@ -176,7 +177,7 @@ export class GameScene extends Phaser.Scene {
     if (includeCamera) this.cameras.main.scrollX = targetScrollX;
     this.parallaxBackground.update(targetScrollX);
     this.leftScrollZone.updatePosition(targetScrollX);
-    this.rightScrollZone.updatePosition(targetScrollX + 540);
+    this.rightScrollZone.updatePosition(targetScrollX + config.layouts.game.scrollZones.rightX);
     this.groundZone.updatePosition(targetScrollX);
   }
 

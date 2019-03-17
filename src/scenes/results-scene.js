@@ -1,5 +1,7 @@
 import { Storage } from '../lib/storage';
+import { config } from '../config';
 
+const resultsConfig = config.layouts.results;
 const SCORE_MULTIPLIERS = {
   targets: 150,
   balloons: 200,
@@ -14,15 +16,16 @@ export class ResultsScene extends Phaser.Scene {
   create() {
     const didWin = this.registry.get('targets') === 0
 
-    const resultText = didWin ? 'Level Passed!' : 'Level Failed!';
-    this.add.bitmapText(320, 40, 'font', resultText, 32).setOrigin(0.5, 0);
+    const titleText = didWin ? 'Level Passed!' : 'Level Failed!';
+    this.add.bitmapText(resultsConfig.title.x, resultsConfig.title.y, 'font', titleText, resultsConfig.title.size)
+      .setOrigin(0.5, 0);
 
     const scores = this._calculateScore();
 
     this._saveScore(scores);
 
     this._displayScores(scores, () => {
-      this.add.text(320, 260, 'Back to Level Select', {
+      this.add.text(resultsConfig.levelSelectButton.x, resultsConfig.levelSelectButton.y, 'Back to Level Select', {
         fill: '#000',
         backgroundColor: '#6c6',
         padding: 6,
@@ -73,8 +76,8 @@ export class ResultsScene extends Phaser.Scene {
   }
 
   _displayScores(scores, onComplete) {
-    let y = 80;
-    const yStep = 30;
+    let y = resultsConfig.scores.y;
+    const yStep = resultsConfig.scores.yStep;
 
     const scoreTypeOrder = ['target', 'balloon', 'arrow', 'total'];
     const scoreTypeLabels = {
@@ -88,8 +91,8 @@ export class ResultsScene extends Phaser.Scene {
     scoreTypeOrder.forEach(scoreType => {
       if (scores[scoreType] == null) { return; }
 
-      this.add.bitmapText(250, y, 'font', scoreTypeLabels[scoreType], 24);
-      const valueText = this.add.bitmapText(350, y, 'font', 0, 24);
+      this.add.bitmapText(resultsConfig.scores.labelX, y, 'font', scoreTypeLabels[scoreType], resultsConfig.scores.size);
+      const valueText = this.add.bitmapText(resultsConfig.scores.valueX, y, 'font', 0, resultsConfig.scores.size);
       y += yStep;
 
       tweens.push({
@@ -102,24 +105,26 @@ export class ResultsScene extends Phaser.Scene {
       });
     });
 
-    const starY = y + 18;
+    const starY = y + resultsConfig.stars.yTopMargin;
     for (let i = 0; i < 3; i++) {
-      const grayStar = this.add.image(275 + i * 40, starY, 'star-gray');
-      grayStar.setDisplaySize(36, 36);
+      const starX = resultsConfig.stars.x + (i * resultsConfig.stars.xStep);
+      const grayStar = this.add.image(starX, starY, 'star-gray');
+      grayStar.setDisplaySize(resultsConfig.stars.width, resultsConfig.stars.height);
       grayStar.setOrigin(0.5);
     }
     for (let i = 0; i < scores.stars; i++) {
-      const star = this.add.image(275 + i * 40, starY, 'star');
+      const starX = resultsConfig.stars.x + (i * resultsConfig.stars.xStep);
+      const star = this.add.image(starX, starY, 'star');
       star.alpha = 0;
-      star.setDisplaySize(48, 48);
+      star.setDisplaySize(resultsConfig.stars.width * 2, resultsConfig.stars.height * 2);
       star.setOrigin(0.5);
 
       tweens.push({
         targets: [star],
         props: {
           alpha: 1,
-          displayWidth: 36,
-          displayHeight: 36,
+          displayWidth: resultsConfig.stars.width,
+          displayHeight: resultsConfig.stars.height,
         },
         duration: 100,
         delay: 200,
