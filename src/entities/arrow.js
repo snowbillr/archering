@@ -5,24 +5,21 @@ import { config } from '../config';
 const arrowLayoutConfig = config.layouts.game.arrow;
 const arrowConfig = config.entities.game.arrow;
 
-export class Arrow extends Phaser.Physics.Arcade.Sprite {
+export class Arrow {
   constructor(scene) {
-    super(scene, 0, 0, 'arrow');
-
-    scene.sys.displayList.add(this);
-    scene.sys.updateList.add(this);
-    scene.physics.world.enableBody(this);
+    this.scene = scene;
+    this.sprite = this.scene.physics.add.sprite(0, 0, 'arrow');
 
     this.releaseSounds = {
-      low: scene.sound.add('arrow-release-low'),
-      medium: scene.sound.add('arrow-release-medium'),
-      high: scene.sound.add('arrow-release-high'),
+      low: this.scene.sound.add('arrow-release-low'),
+      medium: this.scene.sound.add('arrow-release-medium'),
+      high: this.scene.sound.add('arrow-release-high'),
     };
 
-    this.setScale(0.75);
-    this.body.collideWorldBounds = true;
-    this.body.onWorldBounds = true;
-    this.body.allowGravity = false;
+    this.sprite.setScale(0.75);
+    this.sprite.body.collideWorldBounds = true;
+    this.sprite.body.onWorldBounds = true;
+    this.sprite.body.allowGravity = false;
 
     this.reset();
   }
@@ -31,7 +28,7 @@ export class Arrow extends Phaser.Physics.Arcade.Sprite {
     const state = this.scene.registry.get('state');
 
     if (state === STATES.FLY) {
-      this.rotation = Phaser.Math.Angle.BetweenPoints(Phaser.Math.Vector2.ZERO, this.body.velocity);
+      this.sprite.rotation = Phaser.Math.Angle.BetweenPoints(Phaser.Math.Vector2.ZERO, this.sprite.body.velocity);
     }
 
     if (state === STATES.REST || state === STATES.CHARGE) {
@@ -45,9 +42,17 @@ export class Arrow extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
+  getSprite() {
+    return this.sprite;
+  }
+
+  getHitbox() {
+    return this.sprite;
+  }
+
   angleToPointer() {
-    const angle = Phaser.Math.Angle.BetweenPoints(this, this.scene.input.activePointer);
-    this.rotation = angle;
+    const angle = Phaser.Math.Angle.BetweenPoints(this.sprite, this.scene.input.activePointer);
+    this.sprite.rotation = angle;
   }
 
   fire() {
@@ -60,27 +65,27 @@ export class Arrow extends Phaser.Physics.Arcade.Sprite {
       this.releaseSounds.high.play();
     }
 
-    this.body.allowGravity = true;
-    this.scene.physics.velocityFromRotation(this.rotation, this.scene.registry.get('charge'), this.body.velocity)
+    this.sprite.body.allowGravity = true;
+    this.scene.physics.velocityFromRotation(this.sprite.rotation, this.scene.registry.get('charge'), this.sprite.body.velocity)
   }
 
   reset() {
     this.scene.registry.set('charge', arrowConfig.minCharge);
 
-    this.body.enable = true;
+    this.sprite.body.enable = true;
 
-    this.x = arrowLayoutConfig.x;
-    this.y = arrowLayoutConfig.y;
+    this.sprite.x = arrowLayoutConfig.x;
+    this.sprite.y = arrowLayoutConfig.y;
 
-    this.alpha = 1;
+    this.sprite.alpha = 1;
 
-    this.body.enable = true;
-    this.body.allowGravity = false;
-    this.body.velocity.x = 0;
-    this.body.velocity.y = 0;
+    this.sprite.body.enable = true;
+    this.sprite.body.allowGravity = false;
+    this.sprite.body.velocity.x = 0;
+    this.sprite.body.velocity.y = 0;
   }
 
   onHit() {
-    this.body.enable = false;
+    this.sprite.body.enable = false;
   }
 }

@@ -35,10 +35,10 @@ export class GameScene extends Phaser.Scene {
 
     this._loadLevel(level);
 
-    this.physics.add.collider(this.arrow, this.targets, (arrow, target) => this._onArrowTargetCollide(arrow, target));
-    this.balloons.addBalloonOverlap(this.arrow, (arrow, balloon) => this._onArrowBalloonCollide(balloon));
-    this.balloons.addStringOverlap(this.arrow, (arrow, balloon) => this._onArrowBalloonStringCollide(balloon));
-    this.physics.add.collider(this.arrow, this.groundZone, () => this._onArrowGroundCollide());
+    this.physics.add.collider(this.arrow.getHitbox(), this.targets, (arrow, target) => this._onArrowTargetCollide(arrow, target));
+    this.balloons.addBalloonOverlap(this.arrow.getHitbox(), (arrow, balloon) => this._onArrowBalloonCollide(balloon));
+    this.balloons.addStringOverlap(this.arrow.getHitbox(), (arrow, balloon) => this._onArrowBalloonStringCollide(balloon));
+    this.physics.add.collider(this.arrow.getHitbox(), this.groundZone, () => this._onArrowGroundCollide());
 
     this.scene.launch('ui');
   }
@@ -97,7 +97,7 @@ export class GameScene extends Phaser.Scene {
   _fireArrow() {
     this.tweens.killTweensOf(this.cameras.main);
 
-    this.cameras.main.startFollow(this.arrow, true);
+    this.cameras.main.startFollow(this.arrow.getSprite(), true);
     this.registry.set('state', STATES.FLY);
     this.arrow.fire();
   }
@@ -108,7 +108,7 @@ export class GameScene extends Phaser.Scene {
 
     this.arrow.onHit();
 
-    Effects.flashOut([this.arrow], () => {
+    Effects.flashOut([this.arrow.getSprite()], () => {
       this.registry.set('state', STATES.REST);
 
       this._checkLevelOver();
@@ -124,7 +124,7 @@ export class GameScene extends Phaser.Scene {
     this.arrow.onHit();
     this.targets.onTargetHit(target);
 
-    Effects.flashOut([arrow, target], () => {
+    Effects.flashOut([this.arrow.getSprite(), target], () => {
       this.registry.set('state', STATES.REST);
 
       this._checkLevelOver();

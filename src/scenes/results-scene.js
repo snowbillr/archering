@@ -97,7 +97,6 @@ export class ResultsScene extends Phaser.Scene {
 
     const tweens = [];
     scoreTypeOrder.forEach(scoreType => {
-      console.log(`adding ui for ${scoreType}: ${scores[scoreType]}`)
       if (scores[scoreType] == null) { return; }
 
       this.add.bitmapText(resultsConfig.scores.labelX, y, 'font', scoreTypeLabels[scoreType], resultsConfig.scores.size);
