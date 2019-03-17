@@ -1,3 +1,5 @@
+import { config } from '../config';
+
 export class Targets extends Phaser.Physics.Arcade.Group {
   constructor(scene) {
     super(scene.physics.world, scene, {
@@ -19,7 +21,8 @@ export class Targets extends Phaser.Physics.Arcade.Group {
       target.active = true;
 
       target.x = coordinates.x;
-      target.y = coordinates.y;
+      // target.y = coordinates.y;
+      target.y = config.layouts.game.targets.y;
     });
   }
 
