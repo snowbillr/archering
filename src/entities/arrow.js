@@ -50,7 +50,7 @@ export class Arrow extends Phaser.Physics.Arcade.Sprite {
   }
 
   fire() {
-    const chargePercent = this.scene.registry.get('charge') / arrowConfig.maxCharge;
+    const chargePercent = (this.scene.registry.get('charge') - arrowConfig.minCharge) / (arrowConfig.maxCharge - arrowConfig.minCharge);
     if (chargePercent < 0.33) {
       this.releaseSounds.low.play();
     } else if (chargePercent < 0.66) {
