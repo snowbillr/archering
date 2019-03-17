@@ -1,7 +1,6 @@
 next up:
 - level builder
 
-- arrow can fly off top of screen
 - store charge percent as a value between 0 and 1
 
 - hitbox for arrow

@@ -26,7 +26,8 @@ const gameConfig = {
       height: config.dimensions.world.height,
       gravity: {
         y: 400,
-      }
+      },
+      checkCollision: { up: false, down: true, left: true, right: true },
     }
   },
   scene: [PreloadScene, LevelSelectScene, GameScene, UiScene, ResultsScene],
