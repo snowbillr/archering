@@ -58,14 +58,12 @@ export class Arrow {
   }
 
   syncHitbox() {
-    const angle = this.sprite.rotation;
-    const magnitude = 24;
+    const hitboxXOffset = 24;
+    const hitboxYOffset = 0;
 
-    const x = Math.cos(angle) * magnitude;
-    const y = Math.sin(angle) * magnitude;
-
-    this.hitbox.x = this.sprite.x + x;
-    this.hitbox.y = this.sprite.y + y;
+    this.hitbox.x = this.sprite.x + hitboxXOffset;
+    this.hitbox.y = this.sprite.y + hitboxYOffset;
+    Phaser.Math.RotateAround(this.hitbox, this.sprite.x, this.sprite.y, this.sprite.rotation);
   }
 
   fire() {
