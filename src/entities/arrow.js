@@ -48,12 +48,19 @@ export class Arrow {
   }
 
   getHitbox() {
-    return this.hitbox;
+    return this.sprite;
   }
 
   angleToPointer() {
-    const angle = Phaser.Math.Angle.BetweenPoints(this.sprite, this.scene.input.activePointer);
-    this.sprite.rotation = angle;
+    const angleInRadians = Phaser.Math.Angle.BetweenPoints(this.sprite, this.scene.input.activePointer);
+    this.sprite.rotation = angleInRadians;
+
+    const magnitude = 24;
+    const x = Math.cos(angleInRadians) * magnitude;
+    const y = Math.sin(angleInRadians) * magnitude;
+
+    this.hitbox.x = this.sprite.x + x;
+    this.hitbox.y = this.sprite.y + y;
   }
 
   fire() {
@@ -80,7 +87,7 @@ export class Arrow {
 
     this.sprite.x = arrowLayoutConfig.x;
     this.sprite.y = arrowLayoutConfig.y;
-    this.hitbox.x = arrowLayoutConfig.x + 36;
+    this.hitbox.x = arrowLayoutConfig.x + 18;
     this.hitbox.y = arrowLayoutConfig.y;
 
     this.sprite.alpha = 1;
