@@ -261,16 +261,16 @@ var GameScene = exports.GameScene = function (_Phaser$Scene) {
 
       this._loadLevel(level);
 
-      this.physics.add.collider(this.arrow, this.targets, function (arrow, target) {
+      this.physics.add.collider(this.arrow.getHitbox(), this.targets, function (arrow, target) {
         return _this2._onArrowTargetCollide(arrow, target);
       });
-      this.balloons.addBalloonOverlap(this.arrow, function (arrow, balloon) {
+      this.balloons.addBalloonOverlap(this.arrow.getHitbox(), function (arrow, balloon) {
         return _this2._onArrowBalloonCollide(balloon);
       });
-      this.balloons.addStringOverlap(this.arrow, function (arrow, balloon) {
+      this.balloons.addStringOverlap(this.arrow.getHitbox(), function (arrow, balloon) {
         return _this2._onArrowBalloonStringCollide(balloon);
       });
-      this.physics.add.collider(this.arrow, this.groundZone, function () {
+      this.physics.add.collider(this.arrow.getHitbox(), this.groundZone, function () {
         return _this2._onArrowGroundCollide();
       });
 
@@ -337,7 +337,7 @@ var GameScene = exports.GameScene = function (_Phaser$Scene) {
     value: function _fireArrow() {
       this.tweens.killTweensOf(this.cameras.main);
 
-      this.cameras.main.startFollow(this.arrow, true);
+      this.cameras.main.startFollow(this.arrow.getSprite(), true);
       this.registry.set('state', STATES.FLY);
       this.arrow.fire();
     }
@@ -351,7 +351,7 @@ var GameScene = exports.GameScene = function (_Phaser$Scene) {
 
       this.arrow.onHit();
 
-      _effects.Effects.flashOut([this.arrow], function () {
+      _effects.Effects.flashOut([this.arrow.getSprite()], function () {
         _this4.registry.set('state', STATES.REST);
 
         _this4._checkLevelOver();
@@ -370,7 +370,7 @@ var GameScene = exports.GameScene = function (_Phaser$Scene) {
       this.arrow.onHit();
       this.targets.onTargetHit(target);
 
-      _effects.Effects.flashOut([arrow, target], function () {
+      _effects.Effects.flashOut([this.arrow.getSprite(), target], function () {
         _this5.registry.set('state', STATES.REST);
 
         _this5._checkLevelOver();
@@ -484,38 +484,28 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
 var arrowLayoutConfig = _config.config.layouts.game.arrow;
 var arrowConfig = _config.config.entities.game.arrow;
 
-var Arrow = exports.Arrow = function (_Phaser$Physics$Arcad) {
-  _inherits(Arrow, _Phaser$Physics$Arcad);
-
+var Arrow = exports.Arrow = function () {
   function Arrow(scene) {
     _classCallCheck(this, Arrow);
 
-    var _this = _possibleConstructorReturn(this, (Arrow.__proto__ || Object.getPrototypeOf(Arrow)).call(this, scene, 0, 0, 'arrow'));
+    this.scene = scene;
 
-    scene.sys.displayList.add(_this);
-    scene.sys.updateList.add(_this);
-    scene.physics.world.enableBody(_this);
+    this.sprite = this.scene.physics.add.sprite(0, 0, 'arrow');
+    this.sprite.setDisplaySize(48, 12);
 
-    _this.releaseSounds = {
-      low: scene.sound.add('arrow-release-low'),
-      medium: scene.sound.add('arrow-release-medium'),
-      high: scene.sound.add('arrow-release-high')
+    this.hitbox = this.scene.add.zone(0, 0, 12, 12);
+    this.scene.physics.add.existing(this.hitbox);
+
+    this.releaseSounds = {
+      low: this.scene.sound.add('arrow-release-low'),
+      medium: this.scene.sound.add('arrow-release-medium'),
+      high: this.scene.sound.add('arrow-release-high')
     };
 
-    _this.setScale(0.75);
-    _this.body.collideWorldBounds = true;
-    _this.body.onWorldBounds = true;
-    _this.body.allowGravity = false;
-
-    _this.reset();
-    return _this;
+    this.reset();
   }
 
   _createClass(Arrow, [{
@@ -524,11 +514,13 @@ var Arrow = exports.Arrow = function (_Phaser$Physics$Arcad) {
       var state = this.scene.registry.get('state');
 
       if (state === STATES.FLY) {
-        this.rotation = _phaser2.default.Math.Angle.BetweenPoints(_phaser2.default.Math.Vector2.ZERO, this.body.velocity);
+        this.sprite.rotation = _phaser2.default.Math.Angle.BetweenPoints(_phaser2.default.Math.Vector2.ZERO, this.sprite.body.velocity);
+        this.syncHitbox();
       }
 
       if (state === STATES.REST || state === STATES.CHARGE) {
         this.angleToPointer();
+        this.syncHitbox();
       }
 
       if (state === STATES.CHARGE) {
@@ -538,10 +530,32 @@ var Arrow = exports.Arrow = function (_Phaser$Physics$Arcad) {
       }
     }
   }, {
+    key: 'getSprite',
+    value: function getSprite() {
+      return this.sprite;
+    }
+  }, {
+    key: 'getHitbox',
+    value: function getHitbox() {
+      return this.hitbox;
+    }
+  }, {
     key: 'angleToPointer',
     value: function angleToPointer() {
-      var angle = _phaser2.default.Math.Angle.BetweenPoints(this, this.scene.input.activePointer);
-      this.rotation = angle;
+      var angle = _phaser2.default.Math.Angle.BetweenPoints(this.sprite, this.scene.input.activePointer);
+      this.sprite.rotation = angle;
+    }
+  }, {
+    key: 'syncHitbox',
+    value: function syncHitbox() {
+      var angle = this.sprite.rotation;
+      var magnitude = 24;
+
+      var x = Math.cos(angle) * magnitude;
+      var y = Math.sin(angle) * magnitude;
+
+      this.hitbox.x = this.sprite.x + x;
+      this.hitbox.y = this.sprite.y + y;
     }
   }, {
     key: 'fire',
@@ -555,35 +569,41 @@ var Arrow = exports.Arrow = function (_Phaser$Physics$Arcad) {
         this.releaseSounds.high.play();
       }
 
-      this.body.allowGravity = true;
-      this.scene.physics.velocityFromRotation(this.rotation, this.scene.registry.get('charge'), this.body.velocity);
+      this.hitbox.body.enable = true;
+      this.sprite.body.allowGravity = true;
+      this.scene.physics.velocityFromRotation(this.sprite.rotation, this.scene.registry.get('charge'), this.sprite.body.velocity);
     }
   }, {
     key: 'reset',
     value: function reset() {
       this.scene.registry.set('charge', arrowConfig.minCharge);
 
-      this.body.enable = true;
+      this.sprite.body.enable = true;
+      this.hitbox.body.enable = false;
 
-      this.x = arrowLayoutConfig.x;
-      this.y = arrowLayoutConfig.y;
+      this.sprite.x = arrowLayoutConfig.x;
+      this.sprite.y = arrowLayoutConfig.y;
 
-      this.alpha = 1;
+      this.sprite.alpha = 1;
 
-      this.body.enable = true;
-      this.body.allowGravity = false;
-      this.body.velocity.x = 0;
-      this.body.velocity.y = 0;
+      this.sprite.body.allowGravity = false;
+      this.sprite.body.velocity.x = 0;
+      this.sprite.body.velocity.y = 0;
+
+      this.hitbox.body.allowGravity = false;
+
+      this.syncHitbox();
     }
   }, {
     key: 'onHit',
     value: function onHit() {
-      this.body.enable = false;
+      this.sprite.body.enable = false;
+      this.hitbox.body.enable = false;
     }
   }]);
 
   return Arrow;
-}(_phaser2.default.Physics.Arcade.Sprite);
+}();
 
 /***/ }),
 
@@ -1308,7 +1328,6 @@ var ResultsScene = exports.ResultsScene = function (_Phaser$Scene) {
 
       var tweens = [];
       scoreTypeOrder.forEach(function (scoreType) {
-        console.log('adding ui for ' + scoreType + ': ' + scores[scoreType]);
         if (scores[scoreType] == null) {
           return;
         }
