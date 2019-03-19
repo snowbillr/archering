@@ -29,12 +29,12 @@ export class Arrow {
 
     if (state === STATES.FLY) {
       this.sprite.rotation = Phaser.Math.Angle.BetweenPoints(Phaser.Math.Vector2.ZERO, this.sprite.body.velocity);
-      this.syncHitbox();
+      this._syncHitbox();
     }
 
     if (state === STATES.REST || state === STATES.CHARGE) {
-      this.angleToPointer();
-      this.syncHitbox();
+      this._angleToPointer();
+      this._syncHitbox();
     }
 
     if (state === STATES.CHARGE) {
@@ -50,20 +50,6 @@ export class Arrow {
 
   getHitbox() {
     return this.hitbox;
-  }
-
-  angleToPointer() {
-    const angle = Phaser.Math.Angle.BetweenPoints(this.sprite, this.scene.input.activePointer);
-    this.sprite.rotation = angle;
-  }
-
-  syncHitbox() {
-    const hitboxXOffset = 24;
-    const hitboxYOffset = 0;
-
-    this.hitbox.x = this.sprite.x + hitboxXOffset;
-    this.hitbox.y = this.sprite.y + hitboxYOffset;
-    Phaser.Math.RotateAround(this.hitbox, this.sprite.x, this.sprite.y, this.sprite.rotation);
   }
 
   fire() {
@@ -98,11 +84,25 @@ export class Arrow {
 
     this.hitbox.body.allowGravity = false;
 
-    this.syncHitbox();
+    this._syncHitbox();
   }
 
   onHit() {
     this.sprite.body.enable = false;
     this.hitbox.body.enable = false;
+  }
+
+  _angleToPointer() {
+    const angle = Phaser.Math.Angle.BetweenPoints(this.sprite, this.scene.input.activePointer);
+    this.sprite.rotation = angle;
+  }
+
+  _syncHitbox() {
+    const hitboxXOffset = 24;
+    const hitboxYOffset = 0;
+
+    this.hitbox.x = this.sprite.x + hitboxXOffset;
+    this.hitbox.y = this.sprite.y + hitboxYOffset;
+    Phaser.Math.RotateAround(this.hitbox, this.sprite.x, this.sprite.y, this.sprite.rotation);
   }
 }
