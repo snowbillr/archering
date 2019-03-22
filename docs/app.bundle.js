@@ -208,11 +208,11 @@ var _parallaxBackground = __webpack_require__(1394);
 
 var _targets = __webpack_require__(1395);
 
-var _groundZone = __webpack_require__(1396);
+var _groundZone = __webpack_require__(1397);
 
-var _scrollZone = __webpack_require__(1397);
+var _scrollZone = __webpack_require__(1398);
 
-var _balloons = __webpack_require__(1398);
+var _balloons = __webpack_require__(1399);
 
 var _config = __webpack_require__(38);
 
@@ -261,7 +261,7 @@ var GameScene = exports.GameScene = function (_Phaser$Scene) {
 
       this._loadLevel(level);
 
-      this.physics.add.collider(this.arrow.getHitbox(), this.targets, function (arrow, target) {
+      this.physics.add.collider(this.arrow.getHitbox(), this.targets.getHitboxes(), function (arrow, target) {
         return _this2._onArrowTargetCollide(arrow, target);
       });
       this.balloons.addBalloonOverlap(this.arrow.getHitbox(), function (arrow, balloon) {
@@ -368,9 +368,9 @@ var GameScene = exports.GameScene = function (_Phaser$Scene) {
       this.registry.set('state', STATES.HIT);
 
       this.arrow.onHit();
-      this.targets.onTargetHit(target);
+      target.hitboxParent.onHit();
 
-      _effects.Effects.flashOut([this.arrow.getSprite(), target], function () {
+      _effects.Effects.flashOut([this.arrow.getSprite(), target.hitboxParent.getSprite()], function () {
         _this5.registry.set('state', STATES.REST);
 
         _this5._checkLevelOver();
@@ -515,12 +515,12 @@ var Arrow = exports.Arrow = function () {
 
       if (state === STATES.FLY) {
         this.sprite.rotation = _phaser2.default.Math.Angle.BetweenPoints(_phaser2.default.Math.Vector2.ZERO, this.sprite.body.velocity);
-        this.syncHitbox();
+        this._syncHitbox();
       }
 
       if (state === STATES.REST || state === STATES.CHARGE) {
-        this.angleToPointer();
-        this.syncHitbox();
+        this._angleToPointer();
+        this._syncHitbox();
       }
 
       if (state === STATES.CHARGE) {
@@ -538,24 +538,6 @@ var Arrow = exports.Arrow = function () {
     key: 'getHitbox',
     value: function getHitbox() {
       return this.hitbox;
-    }
-  }, {
-    key: 'angleToPointer',
-    value: function angleToPointer() {
-      var angle = _phaser2.default.Math.Angle.BetweenPoints(this.sprite, this.scene.input.activePointer);
-      this.sprite.rotation = angle;
-    }
-  }, {
-    key: 'syncHitbox',
-    value: function syncHitbox() {
-      var angle = this.sprite.rotation;
-      var magnitude = 24;
-
-      var x = Math.cos(angle) * magnitude;
-      var y = Math.sin(angle) * magnitude;
-
-      this.hitbox.x = this.sprite.x + x;
-      this.hitbox.y = this.sprite.y + y;
     }
   }, {
     key: 'fire',
@@ -592,13 +574,29 @@ var Arrow = exports.Arrow = function () {
 
       this.hitbox.body.allowGravity = false;
 
-      this.syncHitbox();
+      this._syncHitbox();
     }
   }, {
     key: 'onHit',
     value: function onHit() {
       this.sprite.body.enable = false;
       this.hitbox.body.enable = false;
+    }
+  }, {
+    key: '_angleToPointer',
+    value: function _angleToPointer() {
+      var angle = _phaser2.default.Math.Angle.BetweenPoints(this.sprite, this.scene.input.activePointer);
+      this.sprite.rotation = angle;
+    }
+  }, {
+    key: '_syncHitbox',
+    value: function _syncHitbox() {
+      var hitboxXOffset = 24;
+      var hitboxYOffset = 0;
+
+      this.hitbox.x = this.sprite.x + hitboxXOffset;
+      this.hitbox.y = this.sprite.y + hitboxYOffset;
+      _phaser2.default.Math.RotateAround(this.hitbox, this.sprite.x, this.sprite.y, this.sprite.rotation);
     }
   }]);
 
@@ -741,70 +739,107 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _config = __webpack_require__(38);
 
+var _target = __webpack_require__(1396);
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Targets = exports.Targets = function (_Phaser$Physics$Arcad) {
-  _inherits(Targets, _Phaser$Physics$Arcad);
-
+var Targets = exports.Targets = function () {
   function Targets(scene) {
     _classCallCheck(this, Targets);
 
-    var _this = _possibleConstructorReturn(this, (Targets.__proto__ || Object.getPrototypeOf(Targets)).call(this, scene.physics.world, scene, {
-      defaultKey: 'target',
-      allowGravity: false,
-      immovable: true,
-      classType: Phaser.Physics.Arcade.Image
-    }));
-
-    scene.sys.updateList.add(_this);
-    return _this;
+    this.scene = scene;
+    this.targets = [];
   }
 
   _createClass(Targets, [{
+    key: 'getHitboxes',
+    value: function getHitboxes() {
+      return this.targets.map(function (target) {
+        return target.getHitbox();
+      });
+    }
+  }, {
     key: 'createTargetsForLevel',
     value: function createTargetsForLevel(level) {
-      var _this2 = this;
+      var _this = this;
 
       level.targets.forEach(function (coordinates) {
-        var target = _this2.get();
-        _this2.scene.physics.world.enableBody(target);
+        var target = new _target.Target(_this.scene, coordinates.x, _config.config.layouts.game.targets.y);
 
-        target.alpha = 1;
-        target.active = true;
-
-        target.x = coordinates.x;
-        target.y = _config.config.layouts.game.targets.y;
+        _this.targets.push(target);
       });
     }
   }, {
     key: 'getFurthestTargetX',
     value: function getFurthestTargetX() {
-      return this.getChildren().reduce(function (furthestX, target) {
-        if (target.x > furthestX) {
-          return target.x;
+      return this.targets.reduce(function (furthestX, target) {
+        if (target.getSprite().x > furthestX) {
+          return target.getSprite().x;
         } else {
           return furthestX;
         }
       }, 0);
     }
-  }, {
-    key: 'onTargetHit',
-    value: function onTargetHit(target) {
-      this.scene.physics.world.disableBody(target.body);
-      target.active = false;
-    }
   }]);
 
   return Targets;
-}(Phaser.Physics.Arcade.Group);
+}();
 
 /***/ }),
 
 /***/ 1396:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Target = exports.Target = function () {
+  function Target(scene, x, y) {
+    _classCallCheck(this, Target);
+
+    this.scene = scene;
+
+    this.sprite = scene.add.sprite(x, y, 'target');
+
+    this.hitbox = this.scene.add.zone(x - 3, y - 12, 12, 42);
+    this.scene.physics.add.existing(this.hitbox);
+    this.hitbox.body.allowGravity = false;
+    this.hitbox.body.immovable = true;
+
+    this.hitbox.hitboxParent = this;
+  }
+
+  _createClass(Target, [{
+    key: 'getSprite',
+    value: function getSprite() {
+      return this.sprite;
+    }
+  }, {
+    key: 'getHitbox',
+    value: function getHitbox() {
+      return this.hitbox;
+    }
+  }, {
+    key: 'onHit',
+    value: function onHit() {
+      this.getHitbox().body.enable = false;
+    }
+  }]);
+
+  return Target;
+}();
+
+/***/ }),
+
+/***/ 1397:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -856,7 +891,7 @@ var GroundZone = exports.GroundZone = function (_Phaser$GameObjects$Z) {
 
 /***/ }),
 
-/***/ 1397:
+/***/ 1398:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -927,7 +962,7 @@ var ScrollZone = exports.ScrollZone = function () {
 
 /***/ }),
 
-/***/ 1398:
+/***/ 1399:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1006,7 +1041,7 @@ var Balloons = exports.Balloons = function () {
 
 /***/ }),
 
-/***/ 1399:
+/***/ 1400:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1096,7 +1131,7 @@ var UiScene = exports.UiScene = function (_Phaser$Scene) {
 
 /***/ }),
 
-/***/ 1400:
+/***/ 1401:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1115,7 +1150,7 @@ var _phaser2 = _interopRequireDefault(_phaser);
 
 var _config = __webpack_require__(38);
 
-var _levels = __webpack_require__(1401);
+var _levels = __webpack_require__(1402);
 
 var _levels2 = _interopRequireDefault(_levels);
 
@@ -1189,14 +1224,14 @@ var LevelSelectScene = exports.LevelSelectScene = function (_Phaser$Scene) {
 
 /***/ }),
 
-/***/ 1401:
+/***/ 1402:
 /***/ (function(module, exports) {
 
-module.exports = [{"targets":[{"x":500},{"x":600},{"x":900}],"balloons":[]},{"targets":[{"x":450},{"x":550}],"balloons":[]},{"targets":[{"x":400}],"balloons":[{"x":200,"y":150},{"x":700,"y":150}]},{"targets":[{"x":200}],"balloons":[]}]
+module.exports = [{"targets":[{"x":500},{"x":600},{"x":900}],"balloons":[]},{"targets":[{"x":250},{"x":350}],"balloons":[]},{"targets":[{"x":400}],"balloons":[{"x":200,"y":150},{"x":700,"y":150}]},{"targets":[{"x":200}],"balloons":[]}]
 
 /***/ }),
 
-/***/ 1402:
+/***/ 1403:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1684,11 +1719,11 @@ var _preloadScene = __webpack_require__(1389);
 
 var _gameScene = __webpack_require__(1390);
 
-var _uiScene = __webpack_require__(1399);
+var _uiScene = __webpack_require__(1400);
 
-var _levelSelectScene = __webpack_require__(1400);
+var _levelSelectScene = __webpack_require__(1401);
 
-var _resultsScene = __webpack_require__(1402);
+var _resultsScene = __webpack_require__(1403);
 
 var gameConfig = {
   width: _config.config.dimensions.viewport.width,
@@ -1697,6 +1732,7 @@ var gameConfig = {
   physics: {
     default: 'arcade',
     arcade: {
+      debug: true,
       x: 0,
       y: 0,
       width: _config.config.dimensions.world.width,
