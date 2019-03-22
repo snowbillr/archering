@@ -35,7 +35,7 @@ export class GameScene extends Phaser.Scene {
 
     this._loadLevel(level);
 
-    this.physics.add.collider(this.arrow.getHitbox(), this.targets, (arrow, target) => this._onArrowTargetCollide(arrow, target));
+    this.physics.add.collider(this.arrow.getHitbox(), this.targets.getHitboxes(), (arrow, target) => this._onArrowTargetCollide(arrow, target));
     this.balloons.addBalloonOverlap(this.arrow.getHitbox(), (arrow, balloon) => this._onArrowBalloonCollide(balloon));
     this.balloons.addStringOverlap(this.arrow.getHitbox(), (arrow, balloon) => this._onArrowBalloonStringCollide(balloon));
     this.physics.add.collider(this.arrow.getHitbox(), this.groundZone, () => this._onArrowGroundCollide());
@@ -122,9 +122,9 @@ export class GameScene extends Phaser.Scene {
     this.registry.set('state', STATES.HIT);
 
     this.arrow.onHit();
-    this.targets.onTargetHit(target);
+    target.hitboxParent.onHit();
 
-    Effects.flashOut([this.arrow.getSprite(), target], () => {
+    Effects.flashOut([this.arrow.getSprite(), target.hitboxParent.getSprite()], () => {
       this.registry.set('state', STATES.REST);
 
       this._checkLevelOver();

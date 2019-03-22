@@ -1,42 +1,31 @@
 import { config } from '../config';
+import { Target } from '../entities/target';
 
-export class Targets extends Phaser.Physics.Arcade.Group {
+export class Targets {
   constructor(scene) {
-    super(scene.physics.world, scene, {
-      defaultKey: 'target',
-      allowGravity: false,
-      immovable: true,
-      classType: Phaser.Physics.Arcade.Image,
-    });
+    this.scene = scene;
+    this.targets = [];
+  }
 
-    scene.sys.updateList.add(this);
+  getHitboxes() {
+    return this.targets.map(target => target.getHitbox());
   }
 
   createTargetsForLevel(level) {
     level.targets.forEach(coordinates => {
-      const target = this.get();
-      this.scene.physics.world.enableBody(target);
+      const target = new Target(this.scene, coordinates.x, config.layouts.game.targets.y)
 
-      target.alpha = 1;
-      target.active = true;
-
-      target.x = coordinates.x;
-      target.y = config.layouts.game.targets.y;
+      this.targets.push(target);
     });
   }
 
   getFurthestTargetX() {
-    return this.getChildren().reduce((furthestX, target) => {
-      if (target.x > furthestX) {
-        return target.x;
+    return this.targets.reduce((furthestX, target) => {
+      if (target.getSprite().x > furthestX) {
+        return target.getSprite().x;
       } else {
         return furthestX;
       }
     }, 0);
-  }
-
-  onTargetHit(target) {
-    this.scene.physics.world.disableBody(target.body);
-    target.active = false;
   }
 }
