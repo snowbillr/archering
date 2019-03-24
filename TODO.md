@@ -2,6 +2,9 @@ next up:
 - level builder
 - restart button for a level
 - bullseye bonus (use a hitbox!)
+- hitbox plugin
+  - circle shape
+  - take scale into account
 
 clean up:
 - hitbox plugin
