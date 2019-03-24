@@ -57,11 +57,10 @@ export class ArcadeHitboxPlugin extends Phaser.Plugins.ScenePlugin {
     });
 
     this.hitboxes.splice(0, this.hitboxes.length);
-    this.hitboxes = [];
   }
 
   _destroy() {
     this._shutdown();
-    this.hitboxes = null;
+    delete this.hitboxes;
   }
 }
