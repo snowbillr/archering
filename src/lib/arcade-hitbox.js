@@ -12,7 +12,6 @@ export class ArcadeHitboxPlugin extends Phaser.Plugins.ScenePlugin {
   /*
     Takes a HitboxConfig object
     {
-      sprite: Phaser.GameObjects.Sprite,
       parent?: any,
       xOffset: number,
       yOffset: number,
@@ -20,15 +19,15 @@ export class ArcadeHitboxPlugin extends Phaser.Plugins.ScenePlugin {
       height: number,
     }
    */
-  addHitbox(hitboxConfig) {
-    const { sprite, xOffset, yOffset, width, height } = hitboxConfig;
+  add(sprite, hitboxConfig) {
+    const { xOffset, yOffset, width, height } = hitboxConfig;
     const hitbox = this.scene.add.zone(sprite.x + xOffset, sprite.y + yOffset, width, height);
     this.scene.physics.add.existing(hitbox);
 
-    const parent = hitboxConfig.parent || hitboxConfig.sprite;
+    const parent = hitboxConfig.parent || sprite;
     this._augmentParent(parent, hitbox);
 
-    this.hitboxes.push(Object.assign({}, hitboxConfig, { hitbox }));
+    this.hitboxes.push(Object.assign({}, hitboxConfig, { parent, sprite, hitbox }));
   }
 
   _update() {

@@ -4,8 +4,7 @@ export class Target {
 
     this.sprite = scene.add.sprite(x, y, 'target');
 
-    this.scene.arcadeHitbox.addHitbox({
-      sprite: this.sprite,
+    this.scene.arcadeHitbox.add(this.sprite, {
       parent: this,
       xOffset: -3,
       yOffset: -12,
