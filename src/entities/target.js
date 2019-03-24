@@ -16,6 +16,13 @@ export class Target {
     this.hitbox.body.immovable = true;
   }
 
+  reset() {
+    console.log('resetting')
+
+    this.hitbox.body.enable = true;
+    this.sprite.alpha = 1;
+  }
+
   getSprite() {
     return this.sprite;
   }

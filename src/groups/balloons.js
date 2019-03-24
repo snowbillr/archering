@@ -1,24 +1,23 @@
 import { Balloon } from '../entities/balloon';
 
 export class Balloons {
-  constructor(scene, level) {
+  constructor(scene) {
     this.scene = scene;
-    this.level = level;
     this.balloons = [];
   }
 
-  createBalloonsForLevel() {
-    if (!this.level.balloons) { return; }
+  createBalloonsForLevel(levelConfig) {
+    if (!levelConfig.balloons) { return; }
 
-    this.level.balloons.forEach(balloon => {
+    levelConfig.balloons.forEach(balloon => {
       this.balloons.push(new Balloon(this.scene, balloon.x, balloon.y));
     });
   }
 
   getFurthestBalloonX() {
-    return this.level.balloons.reduce((furthestX, balloon) => {
-      if (balloon.x > furthestX) {
-        return balloon.x;
+    return this.balloons.reduce((furthestX, balloon) => {
+      if (balloon.balloon.x > furthestX) {
+        return balloon.balloon.x;
       } else {
         return furthestX;
       }

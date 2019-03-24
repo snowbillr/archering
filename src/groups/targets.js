@@ -11,12 +11,20 @@ export class Targets {
     return this.targets.map(target => target.getHitbox());
   }
 
-  createTargetsForLevel(level) {
-    level.targets.forEach(coordinates => {
+  createTargetsForLevel(levelConfig) {
+    levelConfig.targets.forEach(coordinates => {
       const target = new Target(this.scene, coordinates.x, config.layouts.game.targets.y)
 
       this.targets.push(target);
     });
+  }
+
+  resetTargetsForLevel(levelConfig) {
+    // levelConfig.targets.forEach((coordinates, i) => {
+      // const target = this.targets[i];
+      // target.reset();
+    // });
+    this.targets.forEach(target => target.reset());
   }
 
   getFurthestTargetX() {

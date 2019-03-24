@@ -33,10 +33,10 @@ export const config = {
       },
       scrollZones: {
         width: 100,
-        height: viewportHeight,
+        height: viewportHeight - 60,
         leftX: 0,
         rightX: 540,
-        y: 0,
+        y: 60,
       }
     },
     results: {
@@ -79,6 +79,10 @@ export const config = {
       chargeGauge: {
         x: 30,
         y: 40,
+      },
+      restartButton: {
+        x: 600,
+        y: 15,
       }
     }
   },

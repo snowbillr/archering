@@ -1,5 +1,7 @@
 import { config } from '../config';
 
+import { RestartLevelButton } from '../entities/restart-button';
+
 const arrowConfig = config.entities.game.arrow;
 const uiConfig = config.layouts.ui;
 
@@ -13,6 +15,8 @@ export class UiScene extends Phaser.Scene {
 
     this.registry.events.on('changedata-arrows', this._updateArrows, this);
     this.registry.events.on('changedata-charge', this._updateCharge, this);
+
+    this.restartButton = new RestartLevelButton(this);
 
     this.arrowsText = this.add.bitmapText(uiConfig.quiverLabel.x, uiConfig.quiverLabel.y, 'font', 'Quiver:', uiConfig.quiverLabel.size);
     this.arrowsImages = this.add.group([], {

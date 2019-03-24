@@ -1,21 +1,23 @@
 import * as STATES from '../game-states';
-import { Arrow } from '../entities/arrow.js';
 import { Effects } from '../effects';
+
+import { Arrow } from '../entities/arrow.js';
 import { ParallaxBackground } from '../entities/parallax-background.js';
 import { Targets } from '../groups/targets.js';
 import { GroundZone } from '../entities/ground-zone.js';
 import { ScrollZone } from '../entities/scroll-zone';
 import { Balloons } from '../groups/balloons';
+
 import { config } from '../config';
 
-import { ArcadeHitboxPlugin } from '../lib/arcade-hitbox';
-
-export class GameScene extends Phaser.Scene {
+export class LevelScene extends Phaser.Scene {
   constructor() {
-    super({ key: 'game' })
+    super({ key: 'level' })
   }
 
-  create({ level }) {
+  create({ levelConfig }) {
+    this.levelConfig = levelConfig;
+
     this.registry.set('charge', config.entities.game.arrow.minCharge);
     this.registry.set('scrollingDirection', 0);
     this.registry.set('state', STATES.PANNING_TO_TARGETS);
@@ -23,7 +25,7 @@ export class GameScene extends Phaser.Scene {
     this.parallaxBackground = new ParallaxBackground(this, 'background-back', 'background-middle', 'background-front');
     this.arrow = new Arrow(this);
     this.targets = new Targets(this);
-    this.balloons = new Balloons(this, level);
+    this.balloons = new Balloons(this);
     this.groundZone = new GroundZone(this);
     this.leftScrollZone = new ScrollZone(this, -1);
     this.rightScrollZone = new ScrollZone(this, 1);
@@ -35,7 +37,7 @@ export class GameScene extends Phaser.Scene {
     this.input.on('pointerdown', this._startCharge, this);
     this.input.on('pointerup', this._fireArrow, this);
 
-    this._loadLevel(level);
+    this._loadLevel();
 
     this.physics.add.collider(this.arrow.getHitbox(), this.targets.getHitboxes(), (arrow, target) => this._onArrowTargetCollide(arrow, target));
     this.balloons.addBalloonOverlap(this.arrow.getHitbox(), (arrow, balloon) => this._onArrowBalloonCollide(balloon));
@@ -57,17 +59,39 @@ export class GameScene extends Phaser.Scene {
     }
   }
 
-  _loadLevel(level) {
-    this.registry.set('initialTargets', level.targets.length);
-    this.registry.set('initialBalloons', level.balloons.length);
+  restartLevel() {
+    this._immediateScroll(0, true);
+
+    this.registry.set('initialTargets', this.levelConfig.targets.length);
+    this.registry.set('initialBalloons', this.levelConfig.balloons.length);
 
     this.registry.set('arrows', 3);
-    this.registry.set('remainingTargets', level.targets.length);
-    this.registry.set('remainingBalloons', level.balloons.length);
+    this.registry.set('remainingTargets', this.levelConfig.targets.length);
+    this.registry.set('remainingBalloons', this.levelConfig.balloons.length);
     this.registry.set('poppedBalloons', 0);
 
-    this.targets.createTargetsForLevel(level);
-    this.balloons.createBalloonsForLevel(level);
+    this.targets.resetTargetsForLevel(this.levelConfig);
+    // this.balloons.resetBalloonsForLevel(this.levelConfig);
+    this._introPan();
+  }
+
+  _loadLevel() {
+    this.registry.set('initialTargets', this.levelConfig.targets.length);
+    this.registry.set('initialBalloons', this.levelConfig.balloons.length);
+
+    this.registry.set('arrows', 3);
+    this.registry.set('remainingTargets', this.levelConfig.targets.length);
+    this.registry.set('remainingBalloons', this.levelConfig.balloons.length);
+    this.registry.set('poppedBalloons', 0);
+
+    this.targets.createTargetsForLevel(this.levelConfig);
+    this.balloons.createBalloonsForLevel(this.levelConfig);
+
+    this._introPan();
+  }
+
+  _introPan() {
+    this.registry.set('state', STATES.PANNING_TO_TARGETS);
 
     const furthestTargetX = this.targets.getFurthestTargetX();
     const furthestBalloonX = this.balloons.getFurthestBalloonX();
@@ -188,7 +212,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   _endLevel() {
-    this.scene.pause('game');
+    this.scene.pause('level');
     this.scene.stop('ui');
     this.scene.launch('results');
   }
