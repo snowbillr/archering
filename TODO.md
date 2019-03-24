@@ -1,9 +1,9 @@
 next up:
 - level builder
-- hitboxes for all sprites
-  - balloon
 
 clean up:
+- what should the hitbox plugin return from `addHitbox`?
+- how should hitboxes be accessed?
 
 bugs:
 - click zones on level select screen aren't quite accurate
