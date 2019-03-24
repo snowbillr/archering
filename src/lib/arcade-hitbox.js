@@ -4,9 +4,9 @@ export class ArcadeHitboxPlugin extends Phaser.Plugins.ScenePlugin {
 
     this.hitboxes = [];
 
-    this.scene.events.on('update', () => this.update());
-    this.scene.events.on('shutdown', () => this.shutdown());
-    this.scene.events.on('destroy', () => this.destroy());
+    this.scene.events.on('update', () => this._update());
+    this.scene.events.on('shutdown', () => this._shutdown());
+    this.scene.events.on('destroy', () => this._destroy());
   }
 
   /*
@@ -26,16 +26,28 @@ export class ArcadeHitboxPlugin extends Phaser.Plugins.ScenePlugin {
     this.scene.physics.add.existing(hitbox);
 
     const parent = hitboxConfig.parent || hitboxConfig.sprite;
-    this._extendParent(parent, hitbox);
+    this._augmentParent(parent, hitbox);
 
     this.hitboxes.push(Object.assign({}, hitboxConfig, { hitbox }));
   }
 
-  update() {
+  _update() {
     this.hitboxes.forEach(this._syncHitbox);
   }
 
-  shutdown() {
+  _augmentParent(parent, hitbox) {
+    parent.hitbox = hitbox;
+    hitbox.hitboxParent = parent;
+  }
+
+  _syncHitbox(hitboxConfig) {
+    hitboxConfig.hitbox.x = hitboxConfig.sprite.x + hitboxConfig.xOffset;
+    hitboxConfig.hitbox.y = hitboxConfig.sprite.y + hitboxConfig.yOffset;
+
+    Phaser.Math.RotateAround(hitboxConfig.hitbox, hitboxConfig.sprite.x, hitboxConfig.sprite.y, hitboxConfig.sprite.rotation);
+  }
+
+  _shutdown() {
     this.hitboxes.forEach(hitboxConfig => {
       this.scene.physics.world.disableBody(hitboxConfig.hitbox.body);
 
@@ -48,20 +60,8 @@ export class ArcadeHitboxPlugin extends Phaser.Plugins.ScenePlugin {
     this.hitboxes = [];
   }
 
-  destroy() {
-    this.shutdown();
+  _destroy() {
+    this._shutdown();
     this.hitboxes = null;
-  }
-
-  _extendParent(parent, hitbox) {
-    parent.hitbox = hitbox;
-    hitbox.hitboxParent = parent;
-  }
-
-  _syncHitbox(hitboxConfig) {
-    hitboxConfig.hitbox.x = hitboxConfig.sprite.x + hitboxConfig.xOffset;
-    hitboxConfig.hitbox.y = hitboxConfig.sprite.y + hitboxConfig.yOffset;
-
-    Phaser.Math.RotateAround(hitboxConfig.hitbox, hitboxConfig.sprite.x, hitboxConfig.sprite.y, hitboxConfig.sprite.rotation);
   }
 }

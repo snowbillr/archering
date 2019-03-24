@@ -1,9 +1,13 @@
 next up:
 - level builder
+- restart button for a level
+- bullseye bonus (use a hitbox!)
 
 clean up:
-- what should the hitbox plugin return from `addHitbox`?
-- how should hitboxes be accessed?
+- hitbox plugin
+  - what should the hitbox plugin return from `addHitbox`?
+  - how should hitboxes be accessed from outside the parent/sprite?
+  - what happens if a parent has multiple hitboxes?
 
 bugs:
 - click zones on level select screen aren't quite accurate
