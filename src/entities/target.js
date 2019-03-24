@@ -4,8 +4,7 @@ export class Target {
 
     this.sprite = scene.add.sprite(x, y, 'target');
 
-    // const arcadeHitboxPlugin = new ArcadeHitboxPlugin(scene);
-    this.scene.arcadeHitboxPlugin.addHitbox({
+    this.scene.arcadeHitbox.addHitbox({
       sprite: this.sprite,
       parent: this,
       xOffset: -3,
@@ -14,12 +13,8 @@ export class Target {
       height: 42,
     });
 
-    // this.hitbox = this.scene.add.zone(x - 3, y - 12, 12, 42);
-    // this.scene.physics.add.existing(this.hitbox);
     this.hitbox.body.allowGravity = false;
     this.hitbox.body.immovable = true;
-
-    // this.hitbox.hitboxParent = this;
   }
 
   getSprite() {

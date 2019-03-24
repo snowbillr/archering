@@ -1,8 +1,12 @@
-export class ArcadeHitboxPlugin {
-  constructor(scene) {
-    this.scene = scene;
+export class ArcadeHitboxPlugin extends Phaser.Plugins.ScenePlugin {
+  constructor(scene, pluginManager) {
+    super(scene, pluginManager);
 
     this.hitboxes = [];
+
+    this.scene.events.on('update', () => this.update());
+    this.scene.events.on('shutdown', () => this.shutdown());
+    this.scene.events.on('destroy', () => this.destroy());
   }
 
   /*
@@ -29,6 +33,24 @@ export class ArcadeHitboxPlugin {
 
   update() {
     this.hitboxes.forEach(this._syncHitbox);
+  }
+
+  shutdown() {
+    this.hitboxes.forEach(hitboxConfig => {
+      this.scene.physics.world.disableBody(hitboxConfig.hitbox.body);
+
+      const parent = hitboxConfig.parent || hitboxConfig.sprite;
+      delete parent.hitbox;
+      delete hitboxConfig.hitbox.hitboxParent;
+    });
+
+    this.hitboxes.splice(0, this.hitboxes.length);
+    this.hitboxes = [];
+  }
+
+  destroy() {
+    this.shutdown();
+    this.hitboxes = null;
   }
 
   _extendParent(parent, hitbox) {

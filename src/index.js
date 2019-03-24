@@ -2,6 +2,8 @@ import 'phaser';
 
 import { config } from './config';
 
+import { ArcadeHitboxPlugin } from './lib/arcade-hitbox';
+
 import { TestScene } from './scenes/test-scene';
 
 import { PreloadScene } from './scenes/preload-scene';
@@ -30,6 +32,14 @@ const gameConfig = {
       },
       checkCollision: { up: false, down: true, left: true, right: true },
     }
+  },
+  plugins: {
+    scene: [
+      {
+        key: 'arcadeHitboxPlugin',
+        plugin: ArcadeHitboxPlugin,
+        mapping: 'arcadeHitbox' }
+    ]
   },
   scene: [PreloadScene, LevelSelectScene, GameScene, UiScene, ResultsScene],
 };
