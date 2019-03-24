@@ -49,6 +49,7 @@ export class GameScene extends Phaser.Scene {
 
   update() {
     this.arcadeHitboxPlugin.update();
+
     this.arrow.update();
 
     const state = this.registry.get('state');

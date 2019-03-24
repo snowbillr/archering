@@ -12,8 +12,14 @@ export class Arrow {
     this.sprite = this.scene.physics.add.sprite(0, 0, 'arrow');
     this.sprite.setDisplaySize(48, 12);
 
-    this.hitbox = this.scene.add.zone(0, 0, 12, 12);
-    this.scene.physics.add.existing(this.hitbox);
+    this.scene.arcadeHitboxPlugin.addHitbox({
+      sprite: this.sprite,
+      parent: this,
+      xOffset: 24,
+      yOffset: 0,
+      width: 12,
+      height: 12,
+    });
 
     this.releaseSounds = {
       low: this.scene.sound.add('arrow-release-low'),
@@ -29,12 +35,10 @@ export class Arrow {
 
     if (state === STATES.FLY) {
       this.sprite.rotation = Phaser.Math.Angle.BetweenPoints(Phaser.Math.Vector2.ZERO, this.sprite.body.velocity);
-      this._syncHitbox();
     }
 
     if (state === STATES.REST || state === STATES.CHARGE) {
       this._angleToPointer();
-      this._syncHitbox();
     }
 
     if (state === STATES.CHARGE) {
@@ -83,8 +87,6 @@ export class Arrow {
     this.sprite.body.velocity.y = 0;
 
     this.hitbox.body.allowGravity = false;
-
-    this._syncHitbox();
   }
 
   onHit() {
@@ -95,14 +97,5 @@ export class Arrow {
   _angleToPointer() {
     const angle = Phaser.Math.Angle.BetweenPoints(this.sprite, this.scene.input.activePointer);
     this.sprite.rotation = angle;
-  }
-
-  _syncHitbox() {
-    const hitboxXOffset = 24;
-    const hitboxYOffset = 0;
-
-    this.hitbox.x = this.sprite.x + hitboxXOffset;
-    this.hitbox.y = this.sprite.y + hitboxYOffset;
-    Phaser.Math.RotateAround(this.hitbox, this.sprite.x, this.sprite.y, this.sprite.rotation);
   }
 }
