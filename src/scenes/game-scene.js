@@ -8,12 +8,16 @@ import { ScrollZone } from '../entities/scroll-zone';
 import { Balloons } from '../groups/balloons';
 import { config } from '../config';
 
+import { ArcadeHitboxPlugin } from '../lib/arcade-hitbox';
+
 export class GameScene extends Phaser.Scene {
   constructor() {
     super({ key: 'game' })
   }
 
   create({ level }) {
+    this.arcadeHitboxPlugin = new ArcadeHitboxPlugin(this);
+
     this.registry.set('charge', config.entities.game.arrow.minCharge);
     this.registry.set('scrollingDirection', 0);
     this.registry.set('state', STATES.PANNING_TO_TARGETS);
@@ -44,6 +48,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   update() {
+    this.arcadeHitboxPlugin.update();
     this.arrow.update();
 
     const state = this.registry.get('state');
