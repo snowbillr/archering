@@ -11,7 +11,6 @@ clean up:
   - how should hitboxes be accessed from outside the parent/sprite?
   - what happens if a parent has multiple hitboxes?
 - config object `game` -> `level`
-- `game-states.json` -> `level-states.json`
 
 bugs:
 - click zones on level select screen aren't quite accurate

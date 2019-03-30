@@ -1,4 +1,4 @@
-import * as STATES from '../game-states';
+import * as STATES from '../level-states';
 import { config } from '../config';
 
 const scrollZonesConfig = config.layouts.game.scrollZones;

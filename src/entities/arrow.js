@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import * as STATES from '../game-states';
+import * as STATES from '../level-states';
 import { config } from '../config';
 
 const arrowLayoutConfig = config.layouts.game.arrow;
