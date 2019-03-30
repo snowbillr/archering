@@ -5,8 +5,7 @@ next up:
   - take scale into account
 - tutorial
 - hud update
-  - targets remaining
-  - balloons remaining
+  - background/graphics
 
 clean up:
 - destroy or reuse notify texts
