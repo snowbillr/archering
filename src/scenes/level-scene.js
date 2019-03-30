@@ -63,6 +63,21 @@ export class LevelScene extends Phaser.Scene {
   restartLevel() {
     this._immediateScroll(0, true);
 
+    this._resetRegistry();
+
+    this._introPan();
+  }
+
+  _loadLevel() {
+    this._resetRegistry();
+
+    this.targets.createTargetsForLevel(this.levelConfig);
+    this.balloons.createBalloonsForLevel(this.levelConfig);
+
+    this._introPan();
+  }
+
+  _resetRegistry() {
     this.registry.set('initialTargets', this.levelConfig.targets.length);
     this.registry.set('initialBalloons', this.levelConfig.balloons.length);
 
@@ -73,23 +88,6 @@ export class LevelScene extends Phaser.Scene {
 
     this.targets.resetTargetsForLevel(this.levelConfig);
     this.balloons.resetBalloonsForLevel(this.levelConfig);
-
-    this._introPan();
-  }
-
-  _loadLevel() {
-    this.registry.set('initialTargets', this.levelConfig.targets.length);
-    this.registry.set('initialBalloons', this.levelConfig.balloons.length);
-
-    this.registry.set('arrows', 3);
-    this.registry.set('remainingTargets', this.levelConfig.targets.length);
-    this.registry.set('remainingBalloons', this.levelConfig.balloons.length);
-    this.registry.set('poppedBalloons', 0);
-
-    this.targets.createTargetsForLevel(this.levelConfig);
-    this.balloons.createBalloonsForLevel(this.levelConfig);
-
-    this._introPan();
   }
 
   _introPan() {

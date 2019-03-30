@@ -6,7 +6,7 @@ next up:
 - tutorial
 
 clean up:
-- DRY up registry initial set and reset in level
+- destroy or reuse notify texts
 
 bugs:
 - click zones on level select screen aren't quite accurate
