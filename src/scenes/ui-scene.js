@@ -2,7 +2,7 @@ import { config } from '../config';
 
 import { RestartLevelButton } from '../entities/restart-button';
 
-const arrowConfig = config.entities.game.arrow;
+const arrowConfig = config.entities.level.arrow;
 const uiConfig = config.layouts.ui;
 
 export class UiScene extends Phaser.Scene {

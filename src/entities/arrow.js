@@ -2,8 +2,8 @@ import Phaser from 'phaser';
 import * as STATES from '../level-states';
 import { config } from '../config';
 
-const arrowLayoutConfig = config.layouts.game.arrow;
-const arrowConfig = config.entities.game.arrow;
+const arrowLayoutConfig = config.layouts.level.arrow;
+const arrowConfig = config.entities.level.arrow;
 
 export class Arrow {
   constructor(scene) {

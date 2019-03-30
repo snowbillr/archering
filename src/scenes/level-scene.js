@@ -18,7 +18,7 @@ export class LevelScene extends Phaser.Scene {
   create({ levelConfig }) {
     this.levelConfig = levelConfig;
 
-    this.registry.set('charge', config.entities.game.arrow.minCharge);
+    this.registry.set('charge', config.entities.level.arrow.minCharge);
     this.registry.set('scrollingDirection', 0);
     this.registry.set('state', STATES.PANNING_TO_TARGETS);
 
@@ -212,7 +212,7 @@ export class LevelScene extends Phaser.Scene {
     if (includeCamera) this.cameras.main.scrollX = targetScrollX;
     this.parallaxBackground.update(targetScrollX);
     this.leftScrollZone.updatePosition(targetScrollX);
-    this.rightScrollZone.updatePosition(targetScrollX + config.layouts.game.scrollZones.rightX);
+    this.rightScrollZone.updatePosition(targetScrollX + config.layouts.level.scrollZones.rightX);
     this.groundZone.updatePosition(targetScrollX);
   }
 

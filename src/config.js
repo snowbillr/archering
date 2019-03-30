@@ -13,7 +13,7 @@ export const config = {
     }
   },
   layouts: {
-    game: {
+    level: {
       arrow: {
         x: 50,
         y: 240,
@@ -87,7 +87,7 @@ export const config = {
     }
   },
   entities: {
-    game: {
+    level: {
       arrow: {
         minCharge: 200,
         maxCharge: 700,

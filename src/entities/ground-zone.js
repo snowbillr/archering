@@ -2,11 +2,11 @@ import { config } from '../config';
 
 export class GroundZone extends Phaser.GameObjects.Zone {
   constructor(scene) {
-    super(scene, config.layouts.game.groundZone.x, config.layouts.game.groundZone.y);
+    super(scene, config.layouts.level.groundZone.x, config.layouts.level.groundZone.y);
 
     scene.add.existing(this);
 
-    this.setSize(config.layouts.game.groundZone.width, config.layouts.game.groundZone.height);
+    this.setSize(config.layouts.level.groundZone.width, config.layouts.level.groundZone.height);
     this.setScrollFactor(0);
 
     scene.physics.world.enable(this);

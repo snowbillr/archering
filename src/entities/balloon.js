@@ -1,5 +1,5 @@
 import { config } from '../config';
-const balloonStringConfig = config.layouts.game.balloons.string;
+const balloonStringConfig = config.layouts.level.balloons.string;
 
 export class Balloon {
   constructor(scene, balloonX, balloonY) {

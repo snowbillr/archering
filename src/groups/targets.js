@@ -13,7 +13,7 @@ export class Targets {
 
   createTargetsForLevel(levelConfig) {
     levelConfig.targets.forEach(coordinates => {
-      const target = new Target(this.scene, coordinates.x, config.layouts.game.targets.y)
+      const target = new Target(this.scene, coordinates.x, config.layouts.level.targets.y)
 
       this.targets.push(target);
     });

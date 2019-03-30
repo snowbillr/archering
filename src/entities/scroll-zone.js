@@ -1,7 +1,7 @@
 import * as STATES from '../level-states';
 import { config } from '../config';
 
-const scrollZonesConfig = config.layouts.game.scrollZones;
+const scrollZonesConfig = config.layouts.level.scrollZones;
 
 export class ScrollZone {
   constructor(scene, scrollingDirection) {

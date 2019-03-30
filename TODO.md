@@ -10,7 +10,6 @@ clean up:
   - what should the hitbox plugin return from `addHitbox`?
   - how should hitboxes be accessed from outside the parent/sprite?
   - what happens if a parent has multiple hitboxes?
-- config object `game` -> `level`
 
 bugs:
 - click zones on level select screen aren't quite accurate
