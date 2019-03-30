@@ -9,6 +9,135 @@ webpackJsonp([0],{
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ArcadeHitboxPlugin = exports.ArcadeHitboxPlugin = function (_Phaser$Plugins$Scene) {
+  _inherits(ArcadeHitboxPlugin, _Phaser$Plugins$Scene);
+
+  function ArcadeHitboxPlugin(scene, pluginManager) {
+    _classCallCheck(this, ArcadeHitboxPlugin);
+
+    var _this = _possibleConstructorReturn(this, (ArcadeHitboxPlugin.__proto__ || Object.getPrototypeOf(ArcadeHitboxPlugin)).call(this, scene, pluginManager));
+
+    _this.hitboxes = [];
+
+    _this.scene.events.on('update', function () {
+      return _this._update();
+    });
+    _this.scene.events.on('shutdown', function () {
+      return _this._shutdown();
+    });
+    _this.scene.events.on('destroy', function () {
+      return _this._destroy();
+    });
+    return _this;
+  }
+
+  /*
+    Takes a HitboxConfig object
+    {
+      parent?: any,
+      onCreate?: hitbox => void,
+      xOffset: number,
+      yOffset: number,
+      width: number,
+      height: number,
+    }
+   */
+
+
+  _createClass(ArcadeHitboxPlugin, [{
+    key: 'add',
+    value: function add(sprite, hitboxConfig) {
+      var xOffset = hitboxConfig.xOffset,
+          yOffset = hitboxConfig.yOffset,
+          width = hitboxConfig.width,
+          height = hitboxConfig.height;
+
+      var hitbox = this.scene.add.zone(sprite.x + xOffset, sprite.y + yOffset, width, height);
+      this.scene.physics.add.existing(hitbox);
+
+      var parent = hitboxConfig.parent || sprite;
+      hitbox.hitboxParent = parent;
+
+      if (hitboxConfig.onCreate) {
+        hitboxConfig.onCreate(hitbox);
+      }
+
+      this.hitboxes.push(Object.assign({}, hitboxConfig, { parent: parent, sprite: sprite, hitbox: hitbox }));
+
+      return hitbox;
+    }
+  }, {
+    key: 'addGroup',
+    value: function addGroup(sprite, hitboxConfigs) {
+      var _this2 = this;
+
+      var defaultConfig = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
+      var hitboxes = hitboxConfigs.map(function (hitboxConfig) {
+        return _this2.add(sprite, Object.assign({}, hitboxConfig, defaultConfig));
+      });
+
+      return this.scene.physics.add.group(hitboxes);
+    }
+  }, {
+    key: '_update',
+    value: function _update() {
+      this.hitboxes.forEach(this._syncHitbox);
+    }
+  }, {
+    key: '_syncHitbox',
+    value: function _syncHitbox(hitboxConfig) {
+      hitboxConfig.hitbox.x = hitboxConfig.sprite.x + hitboxConfig.xOffset;
+      hitboxConfig.hitbox.y = hitboxConfig.sprite.y + hitboxConfig.yOffset;
+
+      Phaser.Math.RotateAround(hitboxConfig.hitbox, hitboxConfig.sprite.x, hitboxConfig.sprite.y, hitboxConfig.sprite.rotation);
+    }
+  }, {
+    key: '_shutdown',
+    value: function _shutdown() {
+      var _this3 = this;
+
+      this.hitboxes.forEach(function (hitboxConfig) {
+        _this3.scene.physics.world.disableBody(hitboxConfig.hitbox.body);
+
+        var parent = hitboxConfig.parent || hitboxConfig.sprite;
+        delete parent.hitbox;
+        delete hitboxConfig.hitbox.hitboxParent;
+      });
+
+      this.hitboxes.splice(0, this.hitboxes.length);
+    }
+  }, {
+    key: '_destroy',
+    value: function _destroy() {
+      this._shutdown();
+      delete this.hitboxes;
+    }
+  }]);
+
+  return ArcadeHitboxPlugin;
+}(Phaser.Plugins.ScenePlugin);
+
+/***/ }),
+
+/***/ 1389:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 exports.TestScene = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -60,7 +189,7 @@ var TestScene = exports.TestScene = function (_Phaser$Scene) {
 
 /***/ }),
 
-/***/ 1389:
+/***/ 1390:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -73,7 +202,7 @@ exports.PreloadScene = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _phaser = __webpack_require__(79);
+var _phaser = __webpack_require__(95);
 
 var _phaser2 = _interopRequireDefault(_phaser);
 
@@ -183,7 +312,7 @@ var PreloadScene = exports.PreloadScene = function (_Phaser$Scene) {
 
 /***/ }),
 
-/***/ 1390:
+/***/ 1391:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -192,29 +321,29 @@ var PreloadScene = exports.PreloadScene = function (_Phaser$Scene) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.GameScene = undefined;
+exports.LevelScene = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _gameStates = __webpack_require__(239);
+var _levelStates = __webpack_require__(239);
 
-var STATES = _interopRequireWildcard(_gameStates);
-
-var _arrow = __webpack_require__(1391);
+var STATES = _interopRequireWildcard(_levelStates);
 
 var _effects = __webpack_require__(1392);
 
-var _parallaxBackground = __webpack_require__(1394);
+var _arrow = __webpack_require__(1395);
 
-var _targets = __webpack_require__(1395);
+var _parallaxBackground = __webpack_require__(1396);
 
-var _groundZone = __webpack_require__(1397);
+var _targets = __webpack_require__(1397);
 
-var _scrollZone = __webpack_require__(1398);
+var _groundZone = __webpack_require__(1399);
 
-var _balloons = __webpack_require__(1399);
+var _scrollZone = __webpack_require__(1400);
 
-var _config = __webpack_require__(38);
+var _balloons = __webpack_require__(1401);
+
+var _config = __webpack_require__(32);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -224,30 +353,32 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var GameScene = exports.GameScene = function (_Phaser$Scene) {
-  _inherits(GameScene, _Phaser$Scene);
+var LevelScene = exports.LevelScene = function (_Phaser$Scene) {
+  _inherits(LevelScene, _Phaser$Scene);
 
-  function GameScene() {
-    _classCallCheck(this, GameScene);
+  function LevelScene() {
+    _classCallCheck(this, LevelScene);
 
-    return _possibleConstructorReturn(this, (GameScene.__proto__ || Object.getPrototypeOf(GameScene)).call(this, { key: 'game' }));
+    return _possibleConstructorReturn(this, (LevelScene.__proto__ || Object.getPrototypeOf(LevelScene)).call(this, { key: 'level' }));
   }
 
-  _createClass(GameScene, [{
+  _createClass(LevelScene, [{
     key: 'create',
     value: function create(_ref) {
       var _this2 = this;
 
-      var level = _ref.level;
+      var levelConfig = _ref.levelConfig;
 
-      this.registry.set('charge', _config.config.entities.game.arrow.minCharge);
+      this.levelConfig = levelConfig;
+
+      this.registry.set('charge', _config.config.entities.level.arrow.minCharge);
       this.registry.set('scrollingDirection', 0);
       this.registry.set('state', STATES.PANNING_TO_TARGETS);
 
       this.parallaxBackground = new _parallaxBackground.ParallaxBackground(this, 'background-back', 'background-middle', 'background-front');
       this.arrow = new _arrow.Arrow(this);
       this.targets = new _targets.Targets(this);
-      this.balloons = new _balloons.Balloons(this, level);
+      this.balloons = new _balloons.Balloons(this);
       this.groundZone = new _groundZone.GroundZone(this);
       this.leftScrollZone = new _scrollZone.ScrollZone(this, -1);
       this.rightScrollZone = new _scrollZone.ScrollZone(this, 1);
@@ -259,10 +390,13 @@ var GameScene = exports.GameScene = function (_Phaser$Scene) {
       this.input.on('pointerdown', this._startCharge, this);
       this.input.on('pointerup', this._fireArrow, this);
 
-      this._loadLevel(level);
+      this._loadLevel();
 
       this.physics.add.collider(this.arrow.getHitbox(), this.targets.getHitboxes(), function (arrow, target) {
         return _this2._onArrowTargetCollide(arrow, target);
+      });
+      this.physics.add.collider(this.arrow.getHitbox(), this.targets.getBullseyeHitboxes(), function (arrow, target) {
+        return _this2._onArrowTargetBullseyeCollide(arrow, target);
       });
       this.balloons.addBalloonOverlap(this.arrow.getHitbox(), function (arrow, balloon) {
         return _this2._onArrowBalloonCollide(balloon);
@@ -290,20 +424,45 @@ var GameScene = exports.GameScene = function (_Phaser$Scene) {
       }
     }
   }, {
+    key: 'restartLevel',
+    value: function restartLevel() {
+      this._immediateScroll(0, true);
+
+      this._resetRegistry();
+
+      this.targets.resetTargetsForLevel(this.levelConfig);
+      this.balloons.resetBalloonsForLevel(this.levelConfig);
+
+      this._introPan();
+    }
+  }, {
     key: '_loadLevel',
-    value: function _loadLevel(level) {
+    value: function _loadLevel() {
+      this._resetRegistry();
+
+      this.targets.createTargetsForLevel(this.levelConfig);
+      this.balloons.createBalloonsForLevel(this.levelConfig);
+
+      this._introPan();
+    }
+  }, {
+    key: '_resetRegistry',
+    value: function _resetRegistry() {
+      this.registry.set('initialArrows', this.levelConfig.arrows);
+      this.registry.set('initialTargets', this.levelConfig.targets.length);
+      this.registry.set('initialBalloons', this.levelConfig.balloons.length);
+
+      this.registry.set('remainingArrows', this.levelConfig.arrows);
+      this.registry.set('remainingTargets', this.levelConfig.targets.length);
+      this.registry.set('remainingBalloons', this.levelConfig.balloons.length);
+      this.registry.set('poppedBalloons', 0);
+    }
+  }, {
+    key: '_introPan',
+    value: function _introPan() {
       var _this3 = this;
 
-      this.registry.set('initialTargets', level.targets.length);
-      this.registry.set('initialBalloons', level.balloons.length);
-
-      this.registry.set('arrows', 3);
-      this.registry.set('remainingTargets', level.targets.length);
-      this.registry.set('remainingBalloons', level.balloons.length);
-      this.registry.set('poppedBalloons', 0);
-
-      this.targets.createTargetsForLevel(level);
-      this.balloons.createBalloonsForLevel(level);
+      this.registry.set('state', STATES.PANNING_TO_TARGETS);
 
       var furthestTargetX = this.targets.getFurthestTargetX();
       var furthestBalloonX = this.balloons.getFurthestBalloonX();
@@ -326,27 +485,31 @@ var GameScene = exports.GameScene = function (_Phaser$Scene) {
   }, {
     key: '_startCharge',
     value: function _startCharge() {
-      this.tweens.killTweensOf(this.cameras.main);
+      if (this.registry.get('state') === STATES.REST) {
+        this.tweens.killTweensOf(this.cameras.main);
 
-      this.registry.set('scrollDirection', 0);
-      this.registry.set('state', STATES.CHARGE);
-      this._tweenScroll(0, 200);
+        this.registry.set('scrollDirection', 0);
+        this.registry.set('state', STATES.CHARGE);
+        this._tweenScroll(0, 200);
+      }
     }
   }, {
     key: '_fireArrow',
     value: function _fireArrow() {
-      this.tweens.killTweensOf(this.cameras.main);
+      if (this.registry.get('state') === STATES.CHARGE) {
+        this.tweens.killTweensOf(this.cameras.main);
 
-      this.cameras.main.startFollow(this.arrow.getSprite(), true);
-      this.registry.set('state', STATES.FLY);
-      this.arrow.fire();
+        this.cameras.main.startFollow(this.arrow.getSprite(), true);
+        this.registry.set('state', STATES.FLY);
+        this.arrow.fire();
+      }
     }
   }, {
     key: '_onArrowGroundCollide',
     value: function _onArrowGroundCollide() {
       var _this4 = this;
 
-      this.registry.set('arrows', this.registry.get('arrows') - 1);
+      this.registry.set('remainingArrows', this.registry.get('remainingArrows') - 1);
       this.registry.set('state', STATES.HIT);
 
       this.arrow.onHit();
@@ -360,22 +523,30 @@ var GameScene = exports.GameScene = function (_Phaser$Scene) {
     }
   }, {
     key: '_onArrowTargetCollide',
-    value: function _onArrowTargetCollide(arrow, target) {
+    value: function _onArrowTargetCollide(arrow, targetHitbox) {
       var _this5 = this;
 
-      this.registry.set('arrows', this.registry.get('arrows') - 1);
+      this.registry.set('remainingArrows', this.registry.get('remainingArrows') - 1);
       this.registry.set('remainingTargets', this.registry.get('remainingTargets') - 1);
       this.registry.set('state', STATES.HIT);
 
       this.arrow.onHit();
-      target.hitboxParent.onHit();
+      targetHitbox.hitboxParent.onHit();
 
-      _effects.Effects.flashOut([this.arrow.getSprite(), target.hitboxParent.getSprite()], function () {
+      _effects.Effects.flashOut([this.arrow.getSprite(), targetHitbox.hitboxParent.getSprite()], function () {
         _this5.registry.set('state', STATES.REST);
 
         _this5._checkLevelOver();
         _this5._reset();
       });
+    }
+  }, {
+    key: '_onArrowTargetBullseyeCollide',
+    value: function _onArrowTargetBullseyeCollide(arrow, targetBullseyeHitbox) {
+      var target = targetBullseyeHitbox.hitboxParent;
+
+      this._onArrowTargetCollide(arrow, targetBullseyeHitbox);
+      _effects.Effects.notify(this, target.sprite.x, target.sprite.y, 'Bullseye!');
     }
   }, {
     key: '_onArrowBalloonCollide',
@@ -395,7 +566,7 @@ var GameScene = exports.GameScene = function (_Phaser$Scene) {
   }, {
     key: '_checkLevelOver',
     value: function _checkLevelOver() {
-      var isLevelOver = this.registry.get('arrows') === 0 || this.registry.get('remainingTargets') === 0 && this.registry.get('remainingBalloons') === 0;
+      var isLevelOver = this.registry.get('remainingArrows') === 0 || this.registry.get('remainingTargets') === 0;
 
       if (isLevelOver) {
         this._endLevel();
@@ -438,170 +609,20 @@ var GameScene = exports.GameScene = function (_Phaser$Scene) {
       if (includeCamera) this.cameras.main.scrollX = targetScrollX;
       this.parallaxBackground.update(targetScrollX);
       this.leftScrollZone.updatePosition(targetScrollX);
-      this.rightScrollZone.updatePosition(targetScrollX + _config.config.layouts.game.scrollZones.rightX);
+      this.rightScrollZone.updatePosition(targetScrollX + _config.config.layouts.level.scrollZones.rightX);
       this.groundZone.updatePosition(targetScrollX);
     }
   }, {
     key: '_endLevel',
     value: function _endLevel() {
-      this.scene.pause('game');
+      this.scene.pause('level');
       this.scene.stop('ui');
       this.scene.launch('results');
     }
   }]);
 
-  return GameScene;
+  return LevelScene;
 }(Phaser.Scene);
-
-/***/ }),
-
-/***/ 1391:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Arrow = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _phaser = __webpack_require__(79);
-
-var _phaser2 = _interopRequireDefault(_phaser);
-
-var _gameStates = __webpack_require__(239);
-
-var STATES = _interopRequireWildcard(_gameStates);
-
-var _config = __webpack_require__(38);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var arrowLayoutConfig = _config.config.layouts.game.arrow;
-var arrowConfig = _config.config.entities.game.arrow;
-
-var Arrow = exports.Arrow = function () {
-  function Arrow(scene) {
-    _classCallCheck(this, Arrow);
-
-    this.scene = scene;
-
-    this.sprite = this.scene.physics.add.sprite(0, 0, 'arrow');
-    this.sprite.setDisplaySize(48, 12);
-
-    this.hitbox = this.scene.add.zone(0, 0, 12, 12);
-    this.scene.physics.add.existing(this.hitbox);
-
-    this.releaseSounds = {
-      low: this.scene.sound.add('arrow-release-low'),
-      medium: this.scene.sound.add('arrow-release-medium'),
-      high: this.scene.sound.add('arrow-release-high')
-    };
-
-    this.reset();
-  }
-
-  _createClass(Arrow, [{
-    key: 'update',
-    value: function update() {
-      var state = this.scene.registry.get('state');
-
-      if (state === STATES.FLY) {
-        this.sprite.rotation = _phaser2.default.Math.Angle.BetweenPoints(_phaser2.default.Math.Vector2.ZERO, this.sprite.body.velocity);
-        this._syncHitbox();
-      }
-
-      if (state === STATES.REST || state === STATES.CHARGE) {
-        this._angleToPointer();
-        this._syncHitbox();
-      }
-
-      if (state === STATES.CHARGE) {
-        var chargeAmount = this.scene.registry.get('charge');
-        var newCharge = _phaser2.default.Math.Clamp(chargeAmount + 5, arrowConfig.minCharge, arrowConfig.maxCharge);
-        this.scene.registry.set('charge', newCharge);
-      }
-    }
-  }, {
-    key: 'getSprite',
-    value: function getSprite() {
-      return this.sprite;
-    }
-  }, {
-    key: 'getHitbox',
-    value: function getHitbox() {
-      return this.hitbox;
-    }
-  }, {
-    key: 'fire',
-    value: function fire() {
-      var chargePercent = (this.scene.registry.get('charge') - arrowConfig.minCharge) / (arrowConfig.maxCharge - arrowConfig.minCharge);
-      if (chargePercent < 0.33) {
-        this.releaseSounds.low.play();
-      } else if (chargePercent < 0.66) {
-        this.releaseSounds.medium.play();
-      } else {
-        this.releaseSounds.high.play();
-      }
-
-      this.hitbox.body.enable = true;
-      this.sprite.body.allowGravity = true;
-      this.scene.physics.velocityFromRotation(this.sprite.rotation, this.scene.registry.get('charge'), this.sprite.body.velocity);
-    }
-  }, {
-    key: 'reset',
-    value: function reset() {
-      this.scene.registry.set('charge', arrowConfig.minCharge);
-
-      this.sprite.body.enable = true;
-      this.hitbox.body.enable = false;
-
-      this.sprite.x = arrowLayoutConfig.x;
-      this.sprite.y = arrowLayoutConfig.y;
-
-      this.sprite.alpha = 1;
-
-      this.sprite.body.allowGravity = false;
-      this.sprite.body.velocity.x = 0;
-      this.sprite.body.velocity.y = 0;
-
-      this.hitbox.body.allowGravity = false;
-
-      this._syncHitbox();
-    }
-  }, {
-    key: 'onHit',
-    value: function onHit() {
-      this.sprite.body.enable = false;
-      this.hitbox.body.enable = false;
-    }
-  }, {
-    key: '_angleToPointer',
-    value: function _angleToPointer() {
-      var angle = _phaser2.default.Math.Angle.BetweenPoints(this.sprite, this.scene.input.activePointer);
-      this.sprite.rotation = angle;
-    }
-  }, {
-    key: '_syncHitbox',
-    value: function _syncHitbox() {
-      var hitboxXOffset = 24;
-      var hitboxYOffset = 0;
-
-      this.hitbox.x = this.sprite.x + hitboxXOffset;
-      this.hitbox.y = this.sprite.y + hitboxYOffset;
-      _phaser2.default.Math.RotateAround(this.hitbox, this.sprite.x, this.sprite.y, this.sprite.rotation);
-    }
-  }]);
-
-  return Arrow;
-}();
 
 /***/ }),
 
@@ -618,8 +639,11 @@ exports.Effects = undefined;
 
 var _flashOut = __webpack_require__(1393);
 
+var _notify = __webpack_require__(1394);
+
 var Effects = exports.Effects = {
-  flashOut: _flashOut.flashOut
+  flashOut: _flashOut.flashOut,
+  notify: _notify.notify
 };
 
 /***/ }),
@@ -674,53 +698,48 @@ function flashOut(gameObjects, callback) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.ParallaxBackground = undefined;
+exports.notify = notify;
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _config = __webpack_require__(32);
 
-var _phaser = __webpack_require__(79);
+function notify(scene, x, y, string) {
+  var size = _config.config.entities.level.notify.size;
 
-var _phaser2 = _interopRequireDefault(_phaser);
+  var text = scene.add.bitmapText(x, y, 'font', string, size);
+  text.setOrigin(0.5, 1);
 
-var _config = __webpack_require__(38);
+  text.y -= size;
+  text.alpha = 0;
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  var tweens = [{
+    targets: [text],
+    props: {
+      alpha: 1,
+      y: '-=' + size
+    },
+    duration: 600
+  },
+  /*
+  {
+    targets: [text],
+    props: {
+      y: `-=${size / 2}`,
+    },
+    duration: 300,
+  },
+  */
+  {
+    targets: [text],
+    props: {
+      alpha: 0,
+      y: '-=' + size
+    },
+    duration: 600,
+    delay: 300
+  }];
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var ParallaxBackground = exports.ParallaxBackground = function () {
-  function ParallaxBackground(scene, backKey, middleKey, frontKey) {
-    _classCallCheck(this, ParallaxBackground);
-
-    this.scene = scene;
-
-    this.backgroundBack = scene.add.tileSprite(0, 0, _config.config.dimensions.viewport.width, _config.config.dimensions.viewport.height, backKey);
-    this.backgroundBack.setOrigin(0, 0);
-    this.backgroundBack.setTileScale(1, 1.35);
-    this.backgroundBack.setScrollFactor(0);
-
-    this.backgroundMiddle = scene.add.tileSprite(0, 0, _config.config.dimensions.viewport.width, _config.config.dimensions.viewport.height, middleKey);
-    this.backgroundMiddle.setOrigin(0, 0);
-    this.backgroundMiddle.setTileScale(1, 1.35);
-    this.backgroundMiddle.setScrollFactor(0);
-
-    this.backgroundFront = scene.add.tileSprite(0, 0, _config.config.dimensions.viewport.width, _config.config.dimensions.viewport.height, frontKey);
-    this.backgroundFront.setOrigin(0, 0);
-    this.backgroundFront.setTileScale(1, 1.35);
-    this.backgroundFront.setScrollFactor(0);
-  }
-
-  _createClass(ParallaxBackground, [{
-    key: 'update',
-    value: function update(scrollAmount) {
-      this.backgroundBack.tilePositionX = scrollAmount / 3;
-      this.backgroundMiddle.tilePositionX = scrollAmount / 2;
-      this.backgroundFront.tilePositionX = scrollAmount;
-    }
-  }]);
-
-  return ParallaxBackground;
-}();
+  scene.tweens.timeline({ tweens: tweens });
+}
 
 /***/ }),
 
@@ -733,13 +752,210 @@ var ParallaxBackground = exports.ParallaxBackground = function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.Arrow = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _phaser = __webpack_require__(95);
+
+var _phaser2 = _interopRequireDefault(_phaser);
+
+var _levelStates = __webpack_require__(239);
+
+var STATES = _interopRequireWildcard(_levelStates);
+
+var _config = __webpack_require__(32);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var arrowLayoutConfig = _config.config.layouts.level.arrow;
+var arrowConfig = _config.config.entities.level.arrow;
+
+var Arrow = exports.Arrow = function () {
+  function Arrow(scene) {
+    _classCallCheck(this, Arrow);
+
+    this.scene = scene;
+
+    this.sprite = this.scene.physics.add.sprite(0, 0, 'arrow');
+    this.sprite.setDisplaySize(48, 12);
+
+    this.hitbox = this.scene.arcadeHitbox.add(this.sprite, {
+      parent: this,
+      xOffset: 24,
+      yOffset: 0,
+      width: 6,
+      height: 6
+    });
+
+    this.releaseSounds = {
+      low: this.scene.sound.add('arrow-release-low'),
+      medium: this.scene.sound.add('arrow-release-medium'),
+      high: this.scene.sound.add('arrow-release-high')
+    };
+
+    this.reset();
+  }
+
+  _createClass(Arrow, [{
+    key: 'update',
+    value: function update() {
+      var state = this.scene.registry.get('state');
+
+      if (state === STATES.FLY) {
+        this.sprite.rotation = _phaser2.default.Math.Angle.BetweenPoints(_phaser2.default.Math.Vector2.ZERO, this.sprite.body.velocity);
+      }
+
+      if (state === STATES.REST || state === STATES.CHARGE) {
+        this._angleToPointer();
+      }
+
+      if (state === STATES.CHARGE) {
+        var chargeAmount = this.scene.registry.get('charge');
+        var newCharge = _phaser2.default.Math.Clamp(chargeAmount + 5, arrowConfig.minCharge, arrowConfig.maxCharge);
+        this.scene.registry.set('charge', newCharge);
+      }
+    }
+  }, {
+    key: 'getSprite',
+    value: function getSprite() {
+      return this.sprite;
+    }
+  }, {
+    key: 'getHitbox',
+    value: function getHitbox() {
+      return this.hitbox;
+    }
+  }, {
+    key: 'fire',
+    value: function fire() {
+      var chargePercent = (this.scene.registry.get('charge') - arrowConfig.minCharge) / (arrowConfig.maxCharge - arrowConfig.minCharge);
+      if (chargePercent < 0.33) {
+        this.releaseSounds.low.play();
+      } else if (chargePercent < 0.66) {
+        this.releaseSounds.medium.play();
+      } else {
+        this.releaseSounds.high.play();
+      }
+
+      this.hitbox.body.enable = true;
+      this.sprite.body.allowGravity = true;
+      this.scene.physics.velocityFromRotation(this.sprite.rotation, this.scene.registry.get('charge'), this.sprite.body.velocity);
+    }
+  }, {
+    key: 'reset',
+    value: function reset() {
+      this.scene.registry.set('charge', arrowConfig.minCharge);
+
+      this.sprite.body.enable = true;
+      this.hitbox.body.enable = false;
+
+      this.sprite.x = arrowLayoutConfig.x;
+      this.sprite.y = arrowLayoutConfig.y;
+
+      this.sprite.alpha = 1;
+
+      this.sprite.body.allowGravity = false;
+      this.sprite.body.velocity.x = 0;
+      this.sprite.body.velocity.y = 0;
+
+      this.hitbox.body.allowGravity = false;
+    }
+  }, {
+    key: 'onHit',
+    value: function onHit() {
+      this.sprite.body.enable = false;
+      this.hitbox.body.enable = false;
+    }
+  }, {
+    key: '_angleToPointer',
+    value: function _angleToPointer() {
+      var angle = _phaser2.default.Math.Angle.BetweenPoints(this.sprite, this.scene.input.activePointer);
+      this.sprite.rotation = angle;
+    }
+  }]);
+
+  return Arrow;
+}();
+
+/***/ }),
+
+/***/ 1396:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ParallaxBackground = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _config = __webpack_require__(32);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var ParallaxBackground = exports.ParallaxBackground = function () {
+  function ParallaxBackground(scene, backKey, middleKey, frontKey) {
+    _classCallCheck(this, ParallaxBackground);
+
+    this.backgroundBack = this._addBackground(scene, backKey);
+    this.backgroundMiddle = this._addBackground(scene, middleKey);
+    this.backgroundFront = this._addBackground(scene, frontKey);
+  }
+
+  _createClass(ParallaxBackground, [{
+    key: 'update',
+    value: function update(scrollAmount) {
+      this.backgroundBack.tilePositionX = scrollAmount / 3;
+      this.backgroundMiddle.tilePositionX = scrollAmount / 2;
+      this.backgroundFront.tilePositionX = scrollAmount;
+    }
+  }, {
+    key: '_addBackground',
+    value: function _addBackground(scene, key) {
+      var displayWidth = _config.config.layouts.level.background.width;
+      var displayHeight = _config.config.layouts.level.background.height;
+
+      var bgHeight = scene.textures.get(key).get().height;
+      var heightScaleFactor = 1 + (displayHeight - bgHeight) / displayHeight;
+
+      var bg = scene.add.tileSprite(0, 0, displayWidth, displayHeight, key);
+      bg.tileScaleY = heightScaleFactor;
+      bg.setOrigin(0, 0);
+      bg.setScrollFactor(0);
+
+      return bg;
+    }
+  }]);
+
+  return ParallaxBackground;
+}();
+
+/***/ }),
+
+/***/ 1397:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 exports.Targets = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _config = __webpack_require__(38);
+var _config = __webpack_require__(32);
 
-var _target = __webpack_require__(1396);
+var _target = __webpack_require__(1398);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -755,18 +971,32 @@ var Targets = exports.Targets = function () {
     key: 'getHitboxes',
     value: function getHitboxes() {
       return this.targets.map(function (target) {
-        return target.getHitbox();
+        return target.getHitboxes();
+      });
+    }
+  }, {
+    key: 'getBullseyeHitboxes',
+    value: function getBullseyeHitboxes() {
+      return this.targets.map(function (target) {
+        return target.getBullseyeHitbox();
       });
     }
   }, {
     key: 'createTargetsForLevel',
-    value: function createTargetsForLevel(level) {
+    value: function createTargetsForLevel(levelConfig) {
       var _this = this;
 
-      level.targets.forEach(function (coordinates) {
-        var target = new _target.Target(_this.scene, coordinates.x, _config.config.layouts.game.targets.y);
+      levelConfig.targets.forEach(function (coordinates) {
+        var target = new _target.Target(_this.scene, coordinates.x, _config.config.layouts.level.targets.y);
 
         _this.targets.push(target);
+      });
+    }
+  }, {
+    key: 'resetTargetsForLevel',
+    value: function resetTargetsForLevel() {
+      this.targets.forEach(function (target) {
+        return target.reset();
       });
     }
   }, {
@@ -787,7 +1017,7 @@ var Targets = exports.Targets = function () {
 
 /***/ }),
 
-/***/ 1396:
+/***/ 1398:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -809,28 +1039,69 @@ var Target = exports.Target = function () {
 
     this.sprite = scene.add.sprite(x, y, 'target');
 
-    this.hitbox = this.scene.add.zone(x - 3, y - 12, 12, 42);
-    this.scene.physics.add.existing(this.hitbox);
-    this.hitbox.body.allowGravity = false;
-    this.hitbox.body.immovable = true;
+    this.hitboxes = this.scene.arcadeHitbox.addGroup(this.sprite, [{
+      xOffset: -1,
+      yOffset: -25,
+      width: 11,
+      height: 15
+    }, {
+      xOffset: -3,
+      yOffset: 3,
+      width: 10,
+      height: 13
+    }], {
+      parent: this,
+      onCreate: function onCreate(hitbox) {
+        hitbox.body.allowGravity = false;
+        hitbox.body.immovable = true;
+      }
+    });
 
-    this.hitbox.hitboxParent = this;
+    this.bullseyeHitbox = this.scene.arcadeHitbox.add(this.sprite, {
+      parent: this,
+      xOffset: -3,
+      yOffset: -11,
+      width: 12,
+      height: 12,
+      onCreate: function onCreate(hitbox) {
+        hitbox.body.allowGravity = false;
+        hitbox.body.immovable = true;
+      }
+    });
   }
 
   _createClass(Target, [{
+    key: 'reset',
+    value: function reset() {
+      this.sprite.alpha = 1;
+      this.bullseyeHitbox.body.enable = true;
+      this.hitboxes.children.each(function (hitbox) {
+        hitbox.body.enable = true;
+      });
+    }
+  }, {
     key: 'getSprite',
     value: function getSprite() {
       return this.sprite;
     }
   }, {
-    key: 'getHitbox',
-    value: function getHitbox() {
-      return this.hitbox;
+    key: 'getHitboxes',
+    value: function getHitboxes() {
+      return this.hitboxes;
+    }
+  }, {
+    key: 'getBullseyeHitbox',
+    value: function getBullseyeHitbox() {
+      return this.bullseyeHitbox;
     }
   }, {
     key: 'onHit',
     value: function onHit() {
-      this.getHitbox().body.enable = false;
+      this.getHitboxes().getChildren().forEach(function (hitbox) {
+        hitbox.body.enable = false;
+      });
+
+      this.getBullseyeHitbox().body.enable = false;
     }
   }]);
 
@@ -839,7 +1110,7 @@ var Target = exports.Target = function () {
 
 /***/ }),
 
-/***/ 1397:
+/***/ 1399:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -852,7 +1123,7 @@ exports.GroundZone = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _config = __webpack_require__(38);
+var _config = __webpack_require__(32);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -866,11 +1137,11 @@ var GroundZone = exports.GroundZone = function (_Phaser$GameObjects$Z) {
   function GroundZone(scene) {
     _classCallCheck(this, GroundZone);
 
-    var _this = _possibleConstructorReturn(this, (GroundZone.__proto__ || Object.getPrototypeOf(GroundZone)).call(this, scene, _config.config.layouts.game.groundZone.x, _config.config.layouts.game.groundZone.y));
+    var _this = _possibleConstructorReturn(this, (GroundZone.__proto__ || Object.getPrototypeOf(GroundZone)).call(this, scene, _config.config.layouts.level.groundZone.x, _config.config.layouts.level.groundZone.y));
 
     scene.add.existing(_this);
 
-    _this.setSize(_config.config.layouts.game.groundZone.width, _config.config.layouts.game.groundZone.height);
+    _this.setSize(_config.config.layouts.level.groundZone.width, _config.config.layouts.level.groundZone.height);
     _this.setScrollFactor(0);
 
     scene.physics.world.enable(_this);
@@ -891,7 +1162,7 @@ var GroundZone = exports.GroundZone = function (_Phaser$GameObjects$Z) {
 
 /***/ }),
 
-/***/ 1398:
+/***/ 1400:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -904,17 +1175,17 @@ exports.ScrollZone = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _gameStates = __webpack_require__(239);
+var _levelStates = __webpack_require__(239);
 
-var STATES = _interopRequireWildcard(_gameStates);
+var STATES = _interopRequireWildcard(_levelStates);
 
-var _config = __webpack_require__(38);
+var _config = __webpack_require__(32);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var scrollZonesConfig = _config.config.layouts.game.scrollZones;
+var scrollZonesConfig = _config.config.layouts.level.scrollZones;
 
 var ScrollZone = exports.ScrollZone = function () {
   function ScrollZone(scene, scrollingDirection) {
@@ -962,7 +1233,7 @@ var ScrollZone = exports.ScrollZone = function () {
 
 /***/ }),
 
-/***/ 1399:
+/***/ 1401:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -980,33 +1251,45 @@ var _balloon = __webpack_require__(503);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Balloons = exports.Balloons = function () {
-  function Balloons(scene, level) {
+  function Balloons(scene) {
     _classCallCheck(this, Balloons);
 
     this.scene = scene;
-    this.level = level;
     this.balloons = [];
   }
 
   _createClass(Balloons, [{
     key: 'createBalloonsForLevel',
-    value: function createBalloonsForLevel() {
+    value: function createBalloonsForLevel(levelConfig) {
       var _this = this;
 
-      if (!this.level.balloons) {
+      if (!levelConfig.balloons) {
         return;
       }
 
-      this.level.balloons.forEach(function (balloon) {
+      levelConfig.balloons.forEach(function (balloon) {
         _this.balloons.push(new _balloon.Balloon(_this.scene, balloon.x, balloon.y));
+      });
+    }
+  }, {
+    key: 'resetBalloonsForLevel',
+    value: function resetBalloonsForLevel(levelConfig) {
+      var _this2 = this;
+
+      if (!levelConfig.balloons) {
+        return;
+      }
+
+      levelConfig.balloons.forEach(function (balloon, index) {
+        _this2.balloons[index].reset(balloon.x, balloon.y);
       });
     }
   }, {
     key: 'getFurthestBalloonX',
     value: function getFurthestBalloonX() {
-      return this.level.balloons.reduce(function (furthestX, balloon) {
-        if (balloon.x > furthestX) {
-          return balloon.x;
+      return this.balloons.reduce(function (furthestX, balloon) {
+        if (balloon.balloon.x > furthestX) {
+          return balloon.balloon.x;
         } else {
           return furthestX;
         }
@@ -1015,10 +1298,10 @@ var Balloons = exports.Balloons = function () {
   }, {
     key: 'addBalloonOverlap',
     value: function addBalloonOverlap(arrow, callback) {
-      var _this2 = this;
+      var _this3 = this;
 
       this.balloons.forEach(function (balloon) {
-        _this2.scene.physics.add.overlap(arrow, balloon.balloon, function (arrow) {
+        _this3.scene.physics.add.overlap(arrow, balloon.balloon.hitbox, function (arrow) {
           return callback(arrow, balloon);
         });
       });
@@ -1026,10 +1309,10 @@ var Balloons = exports.Balloons = function () {
   }, {
     key: 'addStringOverlap',
     value: function addStringOverlap(arrow, callback) {
-      var _this3 = this;
+      var _this4 = this;
 
       this.balloons.forEach(function (balloon) {
-        _this3.scene.physics.add.overlap(arrow, balloon.string, function (arrow) {
+        _this4.scene.physics.add.overlap(arrow, balloon.string.hitbox, function (arrow) {
           return callback(arrow, balloon);
         });
       });
@@ -1041,7 +1324,7 @@ var Balloons = exports.Balloons = function () {
 
 /***/ }),
 
-/***/ 1400:
+/***/ 1402:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1054,7 +1337,9 @@ exports.UiScene = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _config = __webpack_require__(38);
+var _config = __webpack_require__(32);
+
+var _restartButton = __webpack_require__(1403);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1062,7 +1347,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var arrowConfig = _config.config.entities.game.arrow;
+var arrowConfig = _config.config.entities.level.arrow;
 var uiConfig = _config.config.layouts.ui;
 
 var UiScene = exports.UiScene = function (_Phaser$Scene) {
@@ -1079,8 +1364,14 @@ var UiScene = exports.UiScene = function (_Phaser$Scene) {
     value: function create() {
       this.events.on('shutdown', this._cleanupRegistryListeners, this);
 
-      this.registry.events.on('changedata-arrows', this._updateArrows, this);
+      this.registry.events.on('changedata-remainingArrows', this._updateArrows, this);
       this.registry.events.on('changedata-charge', this._updateCharge, this);
+
+      this.bg = this.add.graphics();
+      this.bg.fillStyle(0x000000, 1);
+      this.bg.fillRect(uiConfig.background.x, uiConfig.background.y, uiConfig.background.width, uiConfig.background.height);
+
+      this.restartButton = new _restartButton.RestartLevelButton(this);
 
       this.arrowsText = this.add.bitmapText(uiConfig.quiverLabel.x, uiConfig.quiverLabel.y, 'font', 'Quiver:', uiConfig.quiverLabel.size);
       this.arrowsImages = this.add.group([], {
@@ -1089,26 +1380,27 @@ var UiScene = exports.UiScene = function (_Phaser$Scene) {
         setXY: { x: uiConfig.arrows.x, stepX: uiConfig.arrows.xStep, y: uiConfig.arrows.y },
         setRotation: { value: uiConfig.arrows.rotation },
         setScale: { x: 0.30, y: 0.30 },
-        repeat: this.registry.get('arrows') - 1
+        repeat: this.registry.get('remainingArrows') - 1
       });
 
-      this.chargeGaugeOutline = this.add.image(uiConfig.chargeGauge.x, uiConfig.chargeGauge.y, 'gauge-outline').setOrigin(0).setScale(1, 0.8);
-      this.chargeGaugeFill = this.add.image(uiConfig.chargeGauge.x, uiConfig.chargeGauge.y, 'gauge-fill').setOrigin(0).setScale(1, 0.8);
+      this.chargeText = this.add.bitmapText(uiConfig.chargeLabel.x, uiConfig.chargeLabel.y, 'font', 'Power:', uiConfig.chargeLabel.size);
+      this.chargeGaugeOutline = this.add.image(uiConfig.chargeGauge.x, uiConfig.chargeGauge.y, 'gauge-outline').setOrigin(0).setDisplaySize(128, 20);
+      this.chargeGaugeFill = this.add.image(uiConfig.chargeGauge.x, uiConfig.chargeGauge.y, 'gauge-fill').setOrigin(0).setDisplaySize(128, 20);
 
-      this._updateArrows(null, this.registry.get('arrows'));
+      this._updateArrows(null, this.registry.get('remainingArrows'));
       this._updateCharge(null, this.registry.get('charge'));
     }
   }, {
     key: '_cleanupRegistryListeners',
     value: function _cleanupRegistryListeners() {
-      this.registry.events.off('changedata-arrows', this._updateArrows, this);
+      this.registry.events.off('changedata-remainingArrows', this._updateArrows, this);
       this.registry.events.off('changedata-charge', this._updateCharge, this);
     }
   }, {
     key: '_updateArrows',
-    value: function _updateArrows(parent, value) {
+    value: function _updateArrows(parent, remainingArrows) {
       this.arrowsImages.getChildren().forEach(function (lifeImage, i) {
-        if (i < value) {
+        if (i < remainingArrows) {
           lifeImage.visible = true;
         } else {
           lifeImage.visible = false;
@@ -1131,7 +1423,45 @@ var UiScene = exports.UiScene = function (_Phaser$Scene) {
 
 /***/ }),
 
-/***/ 1401:
+/***/ 1403:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.RestartLevelButton = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _config = __webpack_require__(32);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var RestartLevelButton = exports.RestartLevelButton = function () {
+  function RestartLevelButton(scene) {
+    _classCallCheck(this, RestartLevelButton);
+
+    this.scene = scene;
+
+    this.button = this.scene.add.bitmapText(_config.config.layouts.ui.restartButton.x, _config.config.layouts.ui.restartButton.y, 'font', 'R', 28).setInteractive({ cursor: 'pointer' }).on('pointerdown', this._triggerLevelRestart, this);
+  }
+
+  _createClass(RestartLevelButton, [{
+    key: '_triggerLevelRestart',
+    value: function _triggerLevelRestart() {
+      this.scene.scene.get('level').restartLevel();
+    }
+  }]);
+
+  return RestartLevelButton;
+}();
+
+/***/ }),
+
+/***/ 1404:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1144,13 +1474,13 @@ exports.LevelSelectScene = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _phaser = __webpack_require__(79);
+var _phaser = __webpack_require__(95);
 
 var _phaser2 = _interopRequireDefault(_phaser);
 
-var _config = __webpack_require__(38);
+var _config = __webpack_require__(32);
 
-var _levels = __webpack_require__(1402);
+var _levels = __webpack_require__(1405);
 
 var _levels2 = _interopRequireDefault(_levels);
 
@@ -1212,9 +1542,9 @@ var LevelSelectScene = exports.LevelSelectScene = function (_Phaser$Scene) {
         this.add.image(x + starXStep * i, y + 30, starAsset).setOrigin(0.5, 0).setDisplaySize(24, 24);
       }
 
-      this.add.zone(x, y, 80, 54).setOrigin(0, 0).setInteractive({ cursor: 'pointer' }).once('pointerup', function () {
+      this.add.zone(x - 14, y, 80, 54).setOrigin(0, 0).setInteractive({ cursor: 'pointer' }).once('pointerup', function () {
         _this2.registry.set('levelIndex', levelIndex);
-        _this2.scene.start('game', { level: _levels2.default[levelIndex] });
+        _this2.scene.start('level', { levelConfig: _levels2.default[levelIndex] });
       });
     }
   }]);
@@ -1224,14 +1554,14 @@ var LevelSelectScene = exports.LevelSelectScene = function (_Phaser$Scene) {
 
 /***/ }),
 
-/***/ 1402:
+/***/ 1405:
 /***/ (function(module, exports) {
 
-module.exports = [{"targets":[{"x":500},{"x":600},{"x":900}],"balloons":[]},{"targets":[{"x":250},{"x":350}],"balloons":[]},{"targets":[{"x":400}],"balloons":[{"x":200,"y":150},{"x":700,"y":150}]},{"targets":[{"x":200}],"balloons":[]}]
+module.exports = [{"arrows":3,"targets":[{"x":500},{"x":600},{"x":900}],"balloons":[]},{"arrows":3,"targets":[{"x":250},{"x":350}],"balloons":[]},{"arrows":3,"targets":[{"x":400}],"balloons":[{"x":200,"y":150},{"x":700,"y":150}]},{"arrows":2,"targets":[{"x":200}],"balloons":[]}]
 
 /***/ }),
 
-/***/ 1403:
+/***/ 1406:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1246,7 +1576,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _storage = __webpack_require__(504);
 
-var _config = __webpack_require__(38);
+var _config = __webpack_require__(32);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1302,7 +1632,7 @@ var ResultsScene = exports.ResultsScene = function (_Phaser$Scene) {
         backgroundColor: '#6c6',
         padding: 6
       }).setOrigin(0.5, 0).setInteractive({ cursor: 'pointer' }).once('pointerup', function () {
-        _this3.scene.stop('game');
+        _this3.scene.stop('level');
         _this3.scene.stop('results');
         _this3.scene.start('level-select');
       });
@@ -1310,7 +1640,8 @@ var ResultsScene = exports.ResultsScene = function (_Phaser$Scene) {
   }, {
     key: '_calculateScore',
     value: function _calculateScore() {
-      var remainingArrows = this.registry.get('arrows');
+      var initialArrows = this.registry.get('initialArrows');
+      var remainingArrows = this.registry.get('remainingArrows');
       var arrowScore = remainingArrows * SCORE_MULTIPLIERS.arrows;
 
       var initialTargets = this.registry.get('initialTargets');
@@ -1322,7 +1653,7 @@ var ResultsScene = exports.ResultsScene = function (_Phaser$Scene) {
       var balloonScore = poppedBalloons * SCORE_MULTIPLIERS.balloons;
 
       var totalScore = arrowScore + targetScore + balloonScore;
-      var maxPossibleScore = initialTargets * SCORE_MULTIPLIERS.targets + initialBalloons * SCORE_MULTIPLIERS.balloons;
+      var maxPossibleScore = initialTargets * SCORE_MULTIPLIERS.targets + initialBalloons * SCORE_MULTIPLIERS.balloons + (initialArrows - initialTargets) * SCORE_MULTIPLIERS.arrows;
       var percentageScore = totalScore / maxPossibleScore;
 
       return {
@@ -1423,7 +1754,7 @@ module.exports = {"PANNING_TO_TARGETS":0,"REST":1,"CHARGE":2,"FLY":3,"HIT":4}
 
 /***/ }),
 
-/***/ 38:
+/***/ 32:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1447,30 +1778,34 @@ var config = exports.config = {
     }
   },
   layouts: {
-    game: {
+    level: {
       arrow: {
         x: 50,
-        y: 240
+        y: 210
       },
-      targets: { y: 230 },
+      targets: { y: 202 },
       balloons: {
         string: {
-          bottomY: 260,
+          bottomY: 220,
           width: 5
         }
       },
       groundZone: {
         x: 0,
-        y: 260,
+        y: 238,
         width: viewportWidth,
         height: 40
       },
       scrollZones: {
         width: 100,
-        height: viewportHeight,
+        height: viewportHeight - 100,
         leftX: 0,
         rightX: 540,
-        y: 0
+        y: 60
+      },
+      background: {
+        width: viewportWidth,
+        height: 280
       }
     },
     results: {
@@ -1499,28 +1834,46 @@ var config = exports.config = {
       }
     },
     ui: {
+      background: {
+        x: 0,
+        y: 245,
+        width: viewportWidth,
+        height: viewportHeight - 250
+      },
       quiverLabel: {
-        x: 30,
-        y: 15,
-        size: 24
+        x: 15,
+        y: 250,
+        size: 22
       },
       arrows: {
-        x: 120,
+        x: 105,
         xStep: 20,
-        y: 22,
+        y: 258,
         rotation: -45
       },
+      chargeLabel: {
+        x: 15,
+        y: 273,
+        size: 22
+      },
       chargeGauge: {
-        x: 30,
-        y: 40
+        x: 95,
+        y: 272
+      },
+      restartButton: {
+        x: 600,
+        y: 15
       }
     }
   },
   entities: {
-    game: {
+    level: {
       arrow: {
         minCharge: 200,
         maxCharge: 700
+      },
+      notify: {
+        size: 20
       }
     }
   }
@@ -1541,11 +1894,11 @@ exports.Balloon = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _config = __webpack_require__(38);
+var _config = __webpack_require__(32);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var balloonStringConfig = _config.config.layouts.game.balloons.string;
+var balloonStringConfig = _config.config.layouts.level.balloons.string;
 
 var Balloon = exports.Balloon = function () {
   function Balloon(scene, balloonX, balloonY) {
@@ -1553,27 +1906,60 @@ var Balloon = exports.Balloon = function () {
 
     this.scene = scene;
 
-    this.balloon = scene.physics.add.sprite(balloonX, balloonY, 'balloon-1');
+    this.balloon = scene.add.sprite(balloonX, balloonY, 'balloon-1');
     this.balloon.setOrigin(0.5);
     this.balloon.setScale(0.1);
-    this.balloon.body.allowGravity = false;
+    this.balloon.hitbox = this.scene.arcadeHitbox.add(this.balloon, {
+      xOffset: 0,
+      yOffset: -2,
+      width: 30,
+      height: 37
+    });
+    this.balloon.hitbox.body.allowGravity = false;
 
-    this.string = scene.physics.add.sprite(balloonX, balloonStringConfig.bottomY, 'balloon-string');
+    this.string = scene.add.sprite(balloonX, balloonStringConfig.bottomY, 'balloon-string');
     this.string.setOrigin(0.5, 1);
     this.string.displayHeight = balloonStringConfig.bottomY - (balloonY + this.balloon.displayHeight / 2);
     this.string.displayWidth = balloonStringConfig.width;
-    this.string.body.allowGravity = false;
+    this.string.hitbox = this.scene.arcadeHitbox.add(this.string, {
+      xOffset: 0,
+      yOffset: -(this.string.displayHeight / 2),
+      width: 6,
+      height: this.string.displayHeight
+    });
+    this.string.hitbox.body.allowGravity = false;
 
     this.popSound = scene.sound.add('balloon-pop');
   }
 
   _createClass(Balloon, [{
+    key: 'reset',
+    value: function reset(x, y) {
+      console.log('resetging balloon');
+      this.balloon.x = x;
+      this.balloon.y = y;
+      this.balloon.setTexture('balloon-1');
+
+      this.string.x = x;
+      this.string.y = balloonStringConfig.bottomY;
+      this.string.displayHeight = balloonStringConfig.bottomY - (y + this.balloon.displayHeight / 2);
+
+      this.scene.physics.world.enable(this.balloon.hitbox);
+      this.scene.physics.world.enable(this.string.hitbox);
+
+      this.balloon.visible = true;
+      this.balloon.active = true;
+
+      this.string.visible = true;
+      this.string.active = true;
+    }
+  }, {
     key: 'pop',
     value: function pop() {
       var _this = this;
 
-      this.scene.physics.world.disableBody(this.balloon.body);
-      this.scene.physics.world.disableBody(this.string.body);
+      this.scene.physics.world.disableBody(this.balloon.hitbox.body);
+      this.scene.physics.world.disableBody(this.string.hitbox.body);
 
       this.popSound.play();
 
@@ -1591,8 +1977,8 @@ var Balloon = exports.Balloon = function () {
   }, {
     key: 'cutString',
     value: function cutString() {
-      this.scene.physics.world.disableBody(this.balloon.body);
-      this.scene.physics.world.disableBody(this.string.body);
+      this.scene.physics.world.disableBody(this.balloon.hitbox.body);
+      this.scene.physics.world.disableBody(this.string.hitbox.body);
 
       this._collapseString();
       this._floatBalloonAway();
@@ -1709,21 +2095,23 @@ window.Storage = new Storage();
 "use strict";
 
 
-__webpack_require__(79);
+__webpack_require__(95);
 
-var _config = __webpack_require__(38);
+var _config = __webpack_require__(32);
 
-var _testScene = __webpack_require__(1388);
+var _arcadeHitbox = __webpack_require__(1388);
 
-var _preloadScene = __webpack_require__(1389);
+var _testScene = __webpack_require__(1389);
 
-var _gameScene = __webpack_require__(1390);
+var _preloadScene = __webpack_require__(1390);
 
-var _uiScene = __webpack_require__(1400);
+var _levelScene = __webpack_require__(1391);
 
-var _levelSelectScene = __webpack_require__(1401);
+var _uiScene = __webpack_require__(1402);
 
-var _resultsScene = __webpack_require__(1403);
+var _levelSelectScene = __webpack_require__(1404);
+
+var _resultsScene = __webpack_require__(1406);
 
 var gameConfig = {
   width: _config.config.dimensions.viewport.width,
@@ -1732,7 +2120,6 @@ var gameConfig = {
   physics: {
     default: 'arcade',
     arcade: {
-      debug: true,
       x: 0,
       y: 0,
       width: _config.config.dimensions.world.width,
@@ -1743,7 +2130,13 @@ var gameConfig = {
       checkCollision: { up: false, down: true, left: true, right: true }
     }
   },
-  scene: [_preloadScene.PreloadScene, _levelSelectScene.LevelSelectScene, _gameScene.GameScene, _uiScene.UiScene, _resultsScene.ResultsScene]
+  plugins: {
+    scene: [{
+      key: 'arcadeHitboxPlugin',
+      plugin: _arcadeHitbox.ArcadeHitboxPlugin,
+      mapping: 'arcadeHitbox' }]
+  },
+  scene: [_preloadScene.PreloadScene, _levelSelectScene.LevelSelectScene, _levelScene.LevelScene, _uiScene.UiScene, _resultsScene.ResultsScene]
 };
 
 new Phaser.Game(gameConfig);
