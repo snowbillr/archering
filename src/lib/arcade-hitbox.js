@@ -25,18 +25,15 @@ export class ArcadeHitboxPlugin extends Phaser.Plugins.ScenePlugin {
     this.scene.physics.add.existing(hitbox);
 
     const parent = hitboxConfig.parent || sprite;
-    this._augmentParent(parent, hitbox);
+    hitbox.hitboxParent = parent;
 
     this.hitboxes.push(Object.assign({}, hitboxConfig, { parent, sprite, hitbox }));
+
+    return hitbox;
   }
 
   _update() {
     this.hitboxes.forEach(this._syncHitbox);
-  }
-
-  _augmentParent(parent, hitbox) {
-    parent.hitbox = hitbox;
-    hitbox.hitboxParent = parent;
   }
 
   _syncHitbox(hitboxConfig) {

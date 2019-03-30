@@ -4,6 +4,7 @@ next up:
 - hitbox plugin
   - circle shape
   - take scale into account
+- tutorial
 
 clean up:
 - hitbox plugin

@@ -8,7 +8,7 @@ export class Balloon {
     this.balloon = scene.add.sprite(balloonX, balloonY, 'balloon-1');
     this.balloon.setOrigin(0.5);
     this.balloon.setScale(0.1);
-    this.scene.arcadeHitbox.add(this.balloon, {
+    this.balloon.hitbox = this.scene.arcadeHitbox.add(this.balloon, {
       xOffset: 0,
       yOffset: -2,
       width: 30,
@@ -20,7 +20,7 @@ export class Balloon {
     this.string.setOrigin(0.5, 1);
     this.string.displayHeight = balloonStringConfig.bottomY - (balloonY + this.balloon.displayHeight / 2);
     this.string.displayWidth = balloonStringConfig.width;
-    this.scene.arcadeHitbox.add(this.string, {
+    this.string.hitbox = this.scene.arcadeHitbox.add(this.string, {
       xOffset: 0,
       yOffset: -(this.string.displayHeight / 2),
       width: 6,

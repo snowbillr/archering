@@ -12,7 +12,7 @@ export class Arrow {
     this.sprite = this.scene.physics.add.sprite(0, 0, 'arrow');
     this.sprite.setDisplaySize(48, 12);
 
-    this.scene.arcadeHitbox.add(this.sprite, {
+    this.hitbox = this.scene.arcadeHitbox.add(this.sprite, {
       parent: this,
       xOffset: 24,
       yOffset: 0,
