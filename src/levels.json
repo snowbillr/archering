@@ -1,5 +1,6 @@
 [
   {
+    "arrows": 3,
     "targets": [
       { "x": 500 },
       { "x": 600 },
@@ -8,6 +9,7 @@
     "balloons": []
   },
   {
+    "arrows": 3,
     "targets": [
       { "x": 250 },
       { "x": 350 }
@@ -15,6 +17,7 @@
     "balloons": []
   },
   {
+    "arrows": 3,
     "targets": [
       { "x": 400 }
     ],
@@ -24,6 +27,7 @@
     ]
   },
   {
+    "arrows": 2,
     "targets": [
       { "x": 200 }
     ],

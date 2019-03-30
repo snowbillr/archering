@@ -7,7 +7,6 @@ next up:
 - hud update
   - targets remaining
   - balloons remaining
-- allow each level to have different numbers of arrows
 - do something with bullseye bonuses
 
 clean up:

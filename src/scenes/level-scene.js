@@ -81,11 +81,11 @@ export class LevelScene extends Phaser.Scene {
   }
 
   _resetRegistry() {
-    this.registry.set('initialArrows', 3);
+    this.registry.set('initialArrows', this.levelConfig.arrows);
     this.registry.set('initialTargets', this.levelConfig.targets.length);
     this.registry.set('initialBalloons', this.levelConfig.balloons.length);
 
-    this.registry.set('remainingArrows', 3);
+    this.registry.set('remainingArrows', this.levelConfig.arrows);
     this.registry.set('remainingTargets', this.levelConfig.targets.length);
     this.registry.set('remainingBalloons', this.levelConfig.balloons.length);
     this.registry.set('poppedBalloons', 0);
