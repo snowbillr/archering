@@ -65,6 +65,9 @@ export class LevelScene extends Phaser.Scene {
 
     this._resetRegistry();
 
+    this.targets.resetTargetsForLevel(this.levelConfig);
+    this.balloons.resetBalloonsForLevel(this.levelConfig);
+
     this._introPan();
   }
 
@@ -85,9 +88,6 @@ export class LevelScene extends Phaser.Scene {
     this.registry.set('remainingTargets', this.levelConfig.targets.length);
     this.registry.set('remainingBalloons', this.levelConfig.balloons.length);
     this.registry.set('poppedBalloons', 0);
-
-    this.targets.resetTargetsForLevel(this.levelConfig);
-    this.balloons.resetBalloonsForLevel(this.levelConfig);
   }
 
   _introPan() {
@@ -183,8 +183,7 @@ export class LevelScene extends Phaser.Scene {
   }
 
   _checkLevelOver() {
-    const isLevelOver = this.registry.get('arrows') === 0
-      || (this.registry.get('remainingTargets') === 0 && this.registry.get('remainingBalloons') === 0);
+    const isLevelOver = this.registry.get('arrows') === 0 || this.registry.get('remainingTargets') === 0;
 
     if (isLevelOver) {
       this._endLevel();
