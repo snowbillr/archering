@@ -40,6 +40,7 @@ export class LevelScene extends Phaser.Scene {
     this._loadLevel();
 
     this.physics.add.collider(this.arrow.getHitbox(), this.targets.getHitboxes(), (arrow, target) => this._onArrowTargetCollide(arrow, target));
+    this.physics.add.collider(this.arrow.getHitbox(), this.targets.getBullseyeHitboxes(), (arrow, target) => this._onArrowTargetBullseyeCollide(arrow, target));
     this.balloons.addBalloonOverlap(this.arrow.getHitbox(), (arrow, balloon) => this._onArrowBalloonCollide(balloon));
     this.balloons.addStringOverlap(this.arrow.getHitbox(), (arrow, balloon) => this._onArrowBalloonStringCollide(balloon));
     this.physics.add.collider(this.arrow.getHitbox(), this.groundZone, () => this._onArrowGroundCollide());
@@ -161,6 +162,13 @@ export class LevelScene extends Phaser.Scene {
       this._checkLevelOver();
       this._reset();
     });
+  }
+
+  _onArrowTargetBullseyeCollide(arrow, targetBullseyeHitbox) {
+    const target = targetBullseyeHitbox.hitboxParent;
+
+    this._onArrowTargetCollide(arrow, targetBullseyeHitbox);
+    Effects.notify(this, target.sprite.x, target.sprite.y, 'Bullseye!');
   }
 
   _onArrowBalloonCollide(balloon) {

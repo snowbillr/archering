@@ -11,6 +11,10 @@ export class Targets {
     return this.targets.map(target => target.getHitboxes());
   }
 
+  getBullseyeHitboxes() {
+    return this.targets.map(target => target.getBullseyeHitbox());
+  }
+
   createTargetsForLevel(levelConfig) {
     levelConfig.targets.forEach(coordinates => {
       const target = new Target(this.scene, coordinates.x, config.layouts.level.targets.y)

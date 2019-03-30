@@ -13,12 +13,6 @@ export class Target {
       },
       {
         xOffset: -3,
-        yOffset: -11,
-        width: 12,
-        height: 12,
-      },
-      {
-        xOffset: -3,
         yOffset: 3,
         width: 10,
         height: 13,
@@ -30,11 +24,26 @@ export class Target {
         hitbox.body.immovable = true;
       }
     });
+
+    this.bullseyeHitbox = this.scene.arcadeHitbox.add(this.sprite, {
+      parent: this,
+      xOffset: -3,
+      yOffset: -11,
+      width: 12,
+      height: 12,
+      onCreate: hitbox => {
+        hitbox.body.allowGravity = false;
+        hitbox.body.immovable = true;
+      }
+    });
   }
 
   reset() {
-    this.hitbox.body.enable = true;
     this.sprite.alpha = 1;
+    this.bullseyeHitbox.body.enable = true;
+    this.hitboxes.children.each(hitbox => {
+      hitbox.body.enable = true;
+    });
   }
 
   getSprite() {
@@ -45,9 +54,15 @@ export class Target {
     return this.hitboxes;
   }
 
+  getBullseyeHitbox() {
+    return this.bullseyeHitbox;
+  }
+
   onHit() {
     this.getHitboxes().getChildren().forEach(hitbox => {
       hitbox.body.enable = false;
     });
+
+    this.getBullseyeHitbox().body.enable = false;
   }
 }
