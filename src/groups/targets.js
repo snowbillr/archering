@@ -19,11 +19,7 @@ export class Targets {
     });
   }
 
-  resetTargetsForLevel(levelConfig) {
-    // levelConfig.targets.forEach((coordinates, i) => {
-      // const target = this.targets[i];
-      // target.reset();
-    // });
+  resetTargetsForLevel() {
     this.targets.forEach(target => target.reset());
   }
 

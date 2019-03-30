@@ -17,8 +17,6 @@ export class Target {
   }
 
   reset() {
-    console.log('resetting')
-
     this.hitbox.body.enable = true;
     this.sprite.alpha = 1;
   }

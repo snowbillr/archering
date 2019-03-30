@@ -71,7 +71,8 @@ export class LevelScene extends Phaser.Scene {
     this.registry.set('poppedBalloons', 0);
 
     this.targets.resetTargetsForLevel(this.levelConfig);
-    // this.balloons.resetBalloonsForLevel(this.levelConfig);
+    this.balloons.resetBalloonsForLevel(this.levelConfig);
+
     this._introPan();
   }
 

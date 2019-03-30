@@ -31,6 +31,26 @@ export class Balloon {
     this.popSound = scene.sound.add('balloon-pop');
   }
 
+  reset(x, y) {
+    console.log('resetging balloon')
+    this.balloon.x = x;
+    this.balloon.y = y;
+    this.balloon.setTexture('balloon-1');
+
+    this.string.x = x;
+    this.string.y = balloonStringConfig.bottomY;
+    this.string.displayHeight = balloonStringConfig.bottomY - (y + this.balloon.displayHeight / 2);
+
+    this.scene.physics.world.enable(this.balloon.hitbox);
+    this.scene.physics.world.enable(this.string.hitbox);
+
+    this.balloon.visible = true;
+    this.balloon.active = true;
+
+    this.string.visible = true;
+    this.string.active = true;
+  }
+
   pop() {
     this.scene.physics.world.disableBody(this.balloon.hitbox.body);
     this.scene.physics.world.disableBody(this.string.hitbox.body);

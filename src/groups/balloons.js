@@ -14,6 +14,14 @@ export class Balloons {
     });
   }
 
+  resetBalloonsForLevel(levelConfig) {
+    if (!levelConfig.balloons) { return; }
+
+    levelConfig.balloons.forEach((balloon, index) => {
+      this.balloons[index].reset(balloon.x, balloon.y);
+    });
+  }
+
   getFurthestBalloonX() {
     return this.balloons.reduce((furthestX, balloon) => {
       if (balloon.balloon.x > furthestX) {
