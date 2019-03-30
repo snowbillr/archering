@@ -16,6 +16,10 @@ export class UiScene extends Phaser.Scene {
     this.registry.events.on('changedata-remainingArrows', this._updateArrows, this);
     this.registry.events.on('changedata-charge', this._updateCharge, this);
 
+    this.bg = this.add.graphics();
+    this.bg.fillStyle(0x000000, 1);
+    this.bg.fillRect(uiConfig.background.x, uiConfig.background.y, uiConfig.background.width, uiConfig.background.height);
+
     this.restartButton = new RestartLevelButton(this);
 
     this.arrowsText = this.add.bitmapText(uiConfig.quiverLabel.x, uiConfig.quiverLabel.y, 'font', 'Quiver:', uiConfig.quiverLabel.size);
@@ -29,8 +33,12 @@ export class UiScene extends Phaser.Scene {
     });
 
     this.chargeText = this.add.bitmapText(uiConfig.chargeLabel.x, uiConfig.chargeLabel.y, 'font', 'Power:', uiConfig.chargeLabel.size);
-    this.chargeGaugeOutline = this.add.image(uiConfig.chargeGauge.x, uiConfig.chargeGauge.y, 'gauge-outline').setOrigin(0).setScale(1, 0.8);
-    this.chargeGaugeFill = this.add.image(uiConfig.chargeGauge.x, uiConfig.chargeGauge.y, 'gauge-fill').setOrigin(0).setScale(1, 0.8);
+    this.chargeGaugeOutline = this.add.image(uiConfig.chargeGauge.x, uiConfig.chargeGauge.y, 'gauge-outline')
+      .setOrigin(0)
+      .setDisplaySize(128, 20);
+    this.chargeGaugeFill = this.add.image(uiConfig.chargeGauge.x, uiConfig.chargeGauge.y, 'gauge-fill')
+      .setOrigin(0)
+      .setDisplaySize(128, 20);
 
     this._updateArrows(null, this.registry.get('remainingArrows'));
     this._updateCharge(null, this.registry.get('charge'));

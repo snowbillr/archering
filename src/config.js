@@ -16,27 +16,31 @@ export const config = {
     level: {
       arrow: {
         x: 50,
-        y: 240,
+        y: 210,
       },
-      targets: { y: 230 },
+      targets: { y: 202 },
       balloons: {
         string: {
-          bottomY: 260,
+          bottomY: 220,
           width: 5,
         }
       },
       groundZone: {
         x: 0,
-        y: 260,
+        y: 238,
         width: viewportWidth,
         height: 40,
       },
       scrollZones: {
         width: 100,
-        height: viewportHeight - 60,
+        height: viewportHeight - 100,
         leftX: 0,
         rightX: 540,
         y: 60,
+      },
+      background: {
+        width: viewportWidth,
+        height: 280,
       }
     },
     results: {
@@ -65,25 +69,31 @@ export const config = {
       }
     },
     ui: {
+      background: {
+        x: 0,
+        y: 245,
+        width: viewportWidth,
+        height: viewportHeight - 250,
+      },
       quiverLabel: {
-        x: 30,
-        y: 15,
-        size: 24,
+        x: 15,
+        y: 250,
+        size: 22,
       },
       arrows: {
-        x: 120,
+        x: 105,
         xStep: 20,
-        y: 22,
+        y: 258,
         rotation: -45,
       },
       chargeLabel: {
-        x: 30,
-        y: 44,
-        size: 24,
+        x: 15,
+        y: 273,
+        size: 22,
       },
       chargeGauge: {
-        x: 110,
-        y: 40,
+        x: 95,
+        y: 272,
       },
       restartButton: {
         x: 600,
