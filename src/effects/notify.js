@@ -1,8 +1,12 @@
+import { config } from '../config';
+
 export function notify(scene, x, y, string) {
-  const text = scene.add.bitmapText(x, y, 'font', string, 20);
+  const size = config.entities.level.notify.size;
+
+  const text = scene.add.bitmapText(x, y, 'font', string, size);
   text.setOrigin(0.5, 1);
 
-  text.y -= text.height;
+  text.y -= size;
   text.alpha = 0;
 
   const tweens = [
@@ -10,7 +14,7 @@ export function notify(scene, x, y, string) {
       targets: [text],
       props: {
         alpha: 1,
-        y: `-=${text.height}`,
+        y: `-=${size}`,
       },
       duration: 600,
     },
@@ -18,7 +22,7 @@ export function notify(scene, x, y, string) {
     {
       targets: [text],
       props: {
-        y: `-=${text.height / 2}`,
+        y: `-=${size / 2}`,
       },
       duration: 300,
     },
@@ -27,7 +31,7 @@ export function notify(scene, x, y, string) {
       targets: [text],
       props: {
         alpha: 0,
-        y: `-=${text.height}`,
+        y: `-=${size}`,
       },
       duration: 600,
       delay: 300,

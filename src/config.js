@@ -91,6 +91,9 @@ export const config = {
       arrow: {
         minCharge: 200,
         maxCharge: 700,
+      },
+      notify: {
+        size: 20,
       }
     }
   }
