@@ -114,19 +114,23 @@ export class LevelScene extends Phaser.Scene {
   }
 
   _startCharge() {
-    this.tweens.killTweensOf(this.cameras.main);
+    if (this.registry.get('state') === STATES.REST) {
+      this.tweens.killTweensOf(this.cameras.main);
 
-    this.registry.set('scrollDirection', 0);
-    this.registry.set('state', STATES.CHARGE);
-    this._tweenScroll(0, 200);
+      this.registry.set('scrollDirection', 0);
+      this.registry.set('state', STATES.CHARGE);
+      this._tweenScroll(0, 200);
+    }
   }
 
   _fireArrow() {
-    this.tweens.killTweensOf(this.cameras.main);
+    if (this.registry.get('state') === STATES.CHARGE) {
+      this.tweens.killTweensOf(this.cameras.main);
 
-    this.cameras.main.startFollow(this.arrow.getSprite(), true);
-    this.registry.set('state', STATES.FLY);
-    this.arrow.fire();
+      this.cameras.main.startFollow(this.arrow.getSprite(), true);
+      this.registry.set('state', STATES.FLY);
+      this.arrow.fire();
+    }
   }
 
   _onArrowGroundCollide() {
