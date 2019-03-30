@@ -16,8 +16,8 @@ export class Arrow {
       parent: this,
       xOffset: 24,
       yOffset: 0,
-      width: 12,
-      height: 12,
+      width: 6,
+      height: 6,
     });
 
     this.releaseSounds = {
