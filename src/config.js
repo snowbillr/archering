@@ -76,8 +76,13 @@ export const config = {
         y: 22,
         rotation: -45,
       },
-      chargeGauge: {
+      chargeLabel: {
         x: 30,
+        y: 44,
+        size: 24,
+      },
+      chargeGauge: {
+        x: 110,
         y: 40,
       },
       restartButton: {
