@@ -39,7 +39,6 @@ export class LevelScene extends Phaser.Scene {
 
     this._loadLevel();
 
-    console.log(this.targets.getHitboxes());
     this.physics.add.collider(this.arrow.getHitbox(), this.targets.getHitboxes(), (arrow, target) => this._onArrowTargetCollide(arrow, target));
     this.balloons.addBalloonOverlap(this.arrow.getHitbox(), (arrow, balloon) => this._onArrowBalloonCollide(balloon));
     this.balloons.addStringOverlap(this.arrow.getHitbox(), (arrow, balloon) => this._onArrowBalloonStringCollide(balloon));
