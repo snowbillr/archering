@@ -13,8 +13,7 @@ clean up:
 - destroy or reuse notify texts
 
 bugs:
-- click zones on level select screen aren't quite accurate
 
-- ideas:
+ideas:
   - bullseyes charge something up? ultimate arrow?
   - skills like splitting an arrow into 3 midflight, dropping a "bomb" from an arrow midflight

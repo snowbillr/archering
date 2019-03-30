@@ -50,7 +50,7 @@ export class LevelSelectScene extends Phaser.Scene {
         .setDisplaySize(24, 24);
     }
 
-    this.add.zone(x, y, 80, 54)
+    this.add.zone(x - 14, y, 80, 54)
       .setOrigin(0, 0)
       .setInteractive({ cursor: 'pointer' })
       .once('pointerup', () => {
