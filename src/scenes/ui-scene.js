@@ -13,7 +13,7 @@ export class UiScene extends Phaser.Scene {
   create() {
     this.events.on('shutdown', this._cleanupRegistryListeners, this);
 
-    this.registry.events.on('changedata-arrows', this._updateArrows, this);
+    this.registry.events.on('changedata-remainingArrows', this._updateArrows, this);
     this.registry.events.on('changedata-charge', this._updateCharge, this);
 
     this.restartButton = new RestartLevelButton(this);
@@ -25,26 +25,26 @@ export class UiScene extends Phaser.Scene {
       setXY: { x: uiConfig.arrows.x, stepX: uiConfig.arrows.xStep, y: uiConfig.arrows.y },
       setRotation: { value: uiConfig.arrows.rotation },
       setScale: { x: 0.30, y: 0.30 },
-      repeat: this.registry.get('arrows') - 1,
+      repeat: this.registry.get('remainingArrows') - 1,
     });
 
     this.chargeGaugeOutline = this.add.image(uiConfig.chargeGauge.x, uiConfig.chargeGauge.y, 'gauge-outline').setOrigin(0).setScale(1, 0.8);
     this.chargeGaugeFill = this.add.image(uiConfig.chargeGauge.x, uiConfig.chargeGauge.y, 'gauge-fill').setOrigin(0).setScale(1, 0.8);
 
-    this._updateArrows(null, this.registry.get('arrows'));
+    this._updateArrows(null, this.registry.get('remainingArrows'));
     this._updateCharge(null, this.registry.get('charge'));
   }
 
   _cleanupRegistryListeners() {
-    this.registry.events.off('changedata-arrows', this._updateArrows, this);
+    this.registry.events.off('changedata-remainingArrows', this._updateArrows, this);
     this.registry.events.off('changedata-charge', this._updateCharge, this);
   }
 
-  _updateArrows(parent, value) {
+  _updateArrows(parent, remainingArrows) {
     this.arrowsImages
       .getChildren()
       .forEach((lifeImage, i) => {
-        if (i < value) {
+        if (i < remainingArrows) {
           lifeImage.visible = true;
         } else {
           lifeImage.visible = false;

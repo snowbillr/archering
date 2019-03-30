@@ -48,7 +48,8 @@ export class ResultsScene extends Phaser.Scene {
   }
 
   _calculateScore() {
-    const remainingArrows = this.registry.get('arrows');
+    const initialArrows = this.registry.get('initialArrows');
+    const remainingArrows = this.registry.get('remainingArrows');
     const arrowScore = remainingArrows * SCORE_MULTIPLIERS.arrows;
 
     const initialTargets = this.registry.get('initialTargets');
@@ -60,7 +61,7 @@ export class ResultsScene extends Phaser.Scene {
     const balloonScore = poppedBalloons * SCORE_MULTIPLIERS.balloons;
 
     const totalScore = arrowScore + targetScore + balloonScore;
-    const maxPossibleScore = (initialTargets * SCORE_MULTIPLIERS.targets) + (initialBalloons * SCORE_MULTIPLIERS.balloons);
+    const maxPossibleScore = (initialTargets * SCORE_MULTIPLIERS.targets) + (initialBalloons * SCORE_MULTIPLIERS.balloons) + ((initialArrows - initialTargets) * SCORE_MULTIPLIERS.arrows);
     const percentageScore = totalScore / maxPossibleScore;
 
     return {

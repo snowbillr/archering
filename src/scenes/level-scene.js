@@ -81,10 +81,11 @@ export class LevelScene extends Phaser.Scene {
   }
 
   _resetRegistry() {
+    this.registry.set('initialArrows', 3);
     this.registry.set('initialTargets', this.levelConfig.targets.length);
     this.registry.set('initialBalloons', this.levelConfig.balloons.length);
 
-    this.registry.set('arrows', 3);
+    this.registry.set('remainingArrows', 3);
     this.registry.set('remainingTargets', this.levelConfig.targets.length);
     this.registry.set('remainingBalloons', this.levelConfig.balloons.length);
     this.registry.set('poppedBalloons', 0);
@@ -133,7 +134,7 @@ export class LevelScene extends Phaser.Scene {
   }
 
   _onArrowGroundCollide() {
-    this.registry.set('arrows', this.registry.get('arrows') - 1);
+    this.registry.set('remainingArrows', this.registry.get('remainingArrows') - 1);
     this.registry.set('state', STATES.HIT);
 
     this.arrow.onHit();
@@ -147,7 +148,7 @@ export class LevelScene extends Phaser.Scene {
   }
 
   _onArrowTargetCollide(arrow, targetHitbox) {
-    this.registry.set('arrows', this.registry.get('arrows') - 1);
+    this.registry.set('remainingArrows', this.registry.get('remainingArrows') - 1);
     this.registry.set('remainingTargets', this.registry.get('remainingTargets') - 1);
     this.registry.set('state', STATES.HIT);
 
@@ -183,7 +184,7 @@ export class LevelScene extends Phaser.Scene {
   }
 
   _checkLevelOver() {
-    const isLevelOver = this.registry.get('arrows') === 0 || this.registry.get('remainingTargets') === 0;
+    const isLevelOver = this.registry.get('remainingArrows') === 0 || this.registry.get('remainingTargets') === 0;
 
     if (isLevelOver) {
       this._endLevel();
