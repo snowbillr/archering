@@ -32,6 +32,14 @@ export class ArcadeHitboxPlugin extends Phaser.Plugins.ScenePlugin {
     return hitbox;
   }
 
+  addGroup(sprite, hitboxConfigs) {
+    const hitboxes = hitboxConfigs.map(hitboxConfig => {
+      return this.add(sprite, hitboxConfig);
+    });
+
+    return this.scene.physics.add.group(hitboxes);
+  }
+
   _update() {
     this.hitboxes.forEach(this._syncHitbox);
   }

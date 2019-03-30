@@ -39,6 +39,7 @@ export class LevelScene extends Phaser.Scene {
 
     this._loadLevel();
 
+    console.log(this.targets.getHitboxes());
     this.physics.add.collider(this.arrow.getHitbox(), this.targets.getHitboxes(), (arrow, target) => this._onArrowTargetCollide(arrow, target));
     this.balloons.addBalloonOverlap(this.arrow.getHitbox(), (arrow, balloon) => this._onArrowBalloonCollide(balloon));
     this.balloons.addStringOverlap(this.arrow.getHitbox(), (arrow, balloon) => this._onArrowBalloonStringCollide(balloon));
@@ -147,15 +148,15 @@ export class LevelScene extends Phaser.Scene {
     });
   }
 
-  _onArrowTargetCollide(arrow, target) {
+  _onArrowTargetCollide(arrow, targetHitbox) {
     this.registry.set('arrows', this.registry.get('arrows') - 1);
     this.registry.set('remainingTargets', this.registry.get('remainingTargets') - 1);
     this.registry.set('state', STATES.HIT);
 
     this.arrow.onHit();
-    target.hitboxParent.onHit();
+    targetHitbox.hitboxParent.onHit();
 
-    Effects.flashOut([this.arrow.getSprite(), target.hitboxParent.getSprite()], () => {
+    Effects.flashOut([this.arrow.getSprite(), targetHitbox.hitboxParent.getSprite()], () => {
       this.registry.set('state', STATES.REST);
 
       this._checkLevelOver();

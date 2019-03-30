@@ -8,7 +8,7 @@ export class Targets {
   }
 
   getHitboxes() {
-    return this.targets.map(target => target.getHitbox());
+    return this.targets.map(target => target.getHitboxes());
   }
 
   createTargetsForLevel(levelConfig) {
