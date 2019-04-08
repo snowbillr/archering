@@ -62,6 +62,12 @@ export class PreloadScene extends Phaser.Scene {
   _loadUiImages() {
     this.load.image('gauge-outline', 'assets/gauge-outline.png');
     this.load.image('gauge-fill', 'assets/gauge-fill.png');
+
+    this.load.image('gold-1', 'assets/gold-1.png');
+    this.load.image('gold-2', 'assets/gold-2.png');
+    this.load.image('gold-3', 'assets/gold-3.png');
+    this.load.image('gold-4', 'assets/gold-4.png');
+    this.load.image('gold-5', 'assets/gold-5.png');
   }
 
   _loadResultsImages() {

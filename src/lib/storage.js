@@ -1,10 +1,15 @@
 const LEVEL_STARS_KEY = 'levelStars';
+const GOLD_KEY = 'gold';
 
 export class Storage {
   constructor() {
     if (this._get(LEVEL_STARS_KEY) == null) {
       this._set(LEVEL_STARS_KEY, []);
     }
+  }
+
+  loadGold() {
+    return this._get(GOLD_KEY);
   }
 
   saveLevelStars(levelIndex, score) {

@@ -81,6 +81,17 @@ export const config = {
         width: viewportWidth + 70,
         height: viewportHeight - 230,
       },
+      goldIcon: {
+        x: 270,
+        y: viewportHeight - 30,
+        width: 40,
+        height: 40,
+      },
+      goldText: {
+        x: 300,
+        y: viewportHeight - 28,
+        size: 28,
+      },
       quiverLabel: {
         x: 15,
         y: 250,
