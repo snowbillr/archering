@@ -9,7 +9,7 @@ export class Storage {
   }
 
   loadGold() {
-    return this._get(GOLD_KEY);
+    return this._get(GOLD_KEY) || 0;
   }
 
   saveLevelStars(levelIndex, score) {

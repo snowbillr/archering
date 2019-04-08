@@ -1,5 +1,7 @@
 import Phaser from 'phaser';
 
+import { Storage } from '../lib/storage';
+
 export class PreloadScene extends Phaser.Scene {
   constructor() {
     super({ key: 'preload' });
@@ -19,6 +21,8 @@ export class PreloadScene extends Phaser.Scene {
 
   create() {
     this._createGameAnimations();
+
+    this._loadSavedStats();
 
     this.scene.start('level-select')
   }
@@ -94,5 +98,11 @@ export class PreloadScene extends Phaser.Scene {
         { key: 'balloon-6' },
       ],
     });
+  }
+
+  _loadSavedStats() {
+    const storage = new Storage();
+
+    this.registry.set('gold', storage.loadGold());
   }
 }
