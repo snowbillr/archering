@@ -6,6 +6,11 @@ next up:
 - tutorial
 - hud update
   - background/graphics
+  - slots for skills
+- "enemy" types
+  - deer running away
+  - vertical osciallation (animation of helpers turning a lever?)
+  - targets hanging from balloons
 
 clean up:
 - destroy or reuse notify texts
@@ -17,6 +22,6 @@ ideas:
     - alternatively, hits don't charge up a skill meter but give you gold. and you can use gold to buy charges for each skill in a store
   - bullseyes, balloons, targets all charge skill meter (or gold amount) different amounts
   - possible skills:
-    - splitting an arrow into 3 midflight
+    - splitting an arrow into 2 or 3 midflight
     - dropping a "bomb" from an arrow midflight
     - arrow going through multiple targets

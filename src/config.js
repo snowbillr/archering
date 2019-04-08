@@ -76,10 +76,10 @@ export const config = {
     },
     ui: {
       background: {
-        x: 0,
-        y: 245,
-        width: viewportWidth,
-        height: viewportHeight - 250,
+        x: -20,
+        y: 240,
+        width: viewportWidth + 40,
+        height: viewportHeight - 230,
       },
       quiverLabel: {
         x: 15,
