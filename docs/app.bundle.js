@@ -230,8 +230,9 @@ var PreloadScene = exports.PreloadScene = function (_Phaser$Scene) {
 
       this._loadSharedImages();
       this._loadLevelSelectImages();
-      this._loadGameImages();
+      this._loadLevelImages();
       this._loadUiImages();
+      this._loadResultsImages();
 
       this._loadGameSounds();
     }
@@ -266,8 +267,8 @@ var PreloadScene = exports.PreloadScene = function (_Phaser$Scene) {
       this.load.image('menu-bg-4', 'assets/menu-bg-4.png');
     }
   }, {
-    key: '_loadGameImages',
-    value: function _loadGameImages() {
+    key: '_loadLevelImages',
+    value: function _loadLevelImages() {
       this.load.image('background-back', 'assets/background-back.png');
       this.load.image('background-middle', 'assets/background-middle.png');
       this.load.image('background-front', 'assets/background-front.png');
@@ -287,6 +288,11 @@ var PreloadScene = exports.PreloadScene = function (_Phaser$Scene) {
     value: function _loadUiImages() {
       this.load.image('gauge-outline', 'assets/gauge-outline.png');
       this.load.image('gauge-fill', 'assets/gauge-fill.png');
+    }
+  }, {
+    key: '_loadResultsImages',
+    value: function _loadResultsImages() {
+      this.load.image('background-parchment', 'assets/background-parchment.png');
     }
   }, {
     key: '_loadGameSounds',
@@ -615,9 +621,9 @@ var LevelScene = exports.LevelScene = function (_Phaser$Scene) {
   }, {
     key: '_endLevel',
     value: function _endLevel() {
-      this.scene.pause('level');
+      this.scene.stop('level');
       this.scene.stop('ui');
-      this.scene.launch('results');
+      this.scene.start('results');
     }
   }]);
 
@@ -1367,9 +1373,7 @@ var UiScene = exports.UiScene = function (_Phaser$Scene) {
       this.registry.events.on('changedata-remainingArrows', this._updateArrows, this);
       this.registry.events.on('changedata-charge', this._updateCharge, this);
 
-      this.bg = this.add.graphics();
-      this.bg.fillStyle(0x000000, 1);
-      this.bg.fillRect(uiConfig.background.x, uiConfig.background.y, uiConfig.background.width, uiConfig.background.height);
+      this.add.image(uiConfig.background.x, uiConfig.background.y, 'background-parchment').setDisplaySize(uiConfig.background.width, uiConfig.background.height).setOrigin(0, 0);
 
       this.restartButton = new _restartButton.RestartLevelButton(this);
 
@@ -1605,6 +1609,8 @@ var ResultsScene = exports.ResultsScene = function (_Phaser$Scene) {
     value: function create() {
       var _this2 = this;
 
+      this.add.image(resultsConfig.background.x, resultsConfig.background.y, 'background-parchment').setDisplaySize(resultsConfig.background.width, resultsConfig.background.height);
+
       var didWin = this.registry.get('remainingTargets') === 0;
 
       var titleText = didWin ? 'Level Passed!' : 'Level Failed!';
@@ -1632,7 +1638,6 @@ var ResultsScene = exports.ResultsScene = function (_Phaser$Scene) {
         backgroundColor: '#6c6',
         padding: 6
       }).setOrigin(0.5, 0).setInteractive({ cursor: 'pointer' }).once('pointerup', function () {
-        _this3.scene.stop('level');
         _this3.scene.stop('results');
         _this3.scene.start('level-select');
       });
@@ -1786,7 +1791,7 @@ var config = exports.config = {
       targets: { y: 202 },
       balloons: {
         string: {
-          bottomY: 220,
+          bottomY: 230,
           width: 5
         }
       },
@@ -1805,7 +1810,7 @@ var config = exports.config = {
       },
       background: {
         width: viewportWidth,
-        height: 280
+        height: 270
       }
     },
     results: {
@@ -1813,6 +1818,12 @@ var config = exports.config = {
         x: 320,
         y: 40,
         size: 32
+      },
+      background: {
+        x: viewportWidth / 2,
+        y: viewportHeight / 2,
+        width: viewportWidth * 1.3,
+        height: viewportHeight * 1.3
       },
       levelSelectButton: {
         x: 320,
@@ -1835,10 +1846,10 @@ var config = exports.config = {
     },
     ui: {
       background: {
-        x: 0,
-        y: 245,
-        width: viewportWidth,
-        height: viewportHeight - 250
+        x: -30,
+        y: 240,
+        width: viewportWidth + 70,
+        height: viewportHeight - 230
       },
       quiverLabel: {
         x: 15,
