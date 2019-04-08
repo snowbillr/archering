@@ -15,6 +15,7 @@ export class UiScene extends Phaser.Scene {
 
     this.registry.events.on('changedata-remainingArrows', this._updateArrows, this);
     this.registry.events.on('changedata-charge', this._updateCharge, this);
+    this.registry.events.on('changedata-gold', this._updateGold, this);
 
     this.add.image(uiConfig.background.x, uiConfig.background.y, 'background-parchment')
       .setDisplaySize(uiConfig.background.width, uiConfig.background.height)
@@ -42,11 +43,12 @@ export class UiScene extends Phaser.Scene {
 
     const goldIcon = this.add.image(uiConfig.goldIcon.x, uiConfig.goldIcon.y, 'gold-5')
       .setDisplaySize(uiConfig.goldIcon.width, uiConfig.goldIcon.height);
-    const goldText = this.add.bitmapText(uiConfig.goldText.x, uiConfig.goldText.y, 'font', 0, uiConfig.goldText.size)
+    this.goldText = this.add.bitmapText(uiConfig.goldText.x, uiConfig.goldText.y, 'font', 0, uiConfig.goldText.size)
       .setOrigin(0, 0.5);
 
     this._updateArrows(null, this.registry.get('remainingArrows'));
     this._updateCharge(null, this.registry.get('charge'));
+    this._updateGold(null, this.registry.get('gold'));
   }
 
   _cleanupRegistryListeners() {
@@ -72,5 +74,9 @@ export class UiScene extends Phaser.Scene {
     const chargePercent = (value - minCharge) / (maxCharge - minCharge);
 
     this.chargeGaugeFill.scaleX = chargePercent;
+  }
+
+  _updateGold(parent, value) {
+    this.goldText.text = value;
   }
 }
