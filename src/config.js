@@ -40,7 +40,7 @@ export const config = {
       },
       background: {
         width: viewportWidth,
-        height: 280,
+        height: 270,
       }
     },
     results: {
@@ -76,9 +76,9 @@ export const config = {
     },
     ui: {
       background: {
-        x: -20,
+        x: -30,
         y: 240,
-        width: viewportWidth + 40,
+        width: viewportWidth + 70,
         height: viewportHeight - 230,
       },
       quiverLabel: {
