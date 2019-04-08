@@ -82,8 +82,8 @@ export const config = {
         height: viewportHeight - 230,
       },
       goldIcon: {
-        x: 270,
-        y: viewportHeight - 30,
+        x: 240,
+        y: viewportHeight - 10,
         width: 40,
         height: 40,
       },

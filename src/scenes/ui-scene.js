@@ -42,9 +42,10 @@ export class UiScene extends Phaser.Scene {
       .setDisplaySize(128, 20);
 
     const goldIcon = this.add.image(uiConfig.goldIcon.x, uiConfig.goldIcon.y, 'gold-5')
-      .setDisplaySize(uiConfig.goldIcon.width, uiConfig.goldIcon.height);
+      .setDisplaySize(uiConfig.goldIcon.width, uiConfig.goldIcon.height)
+      .setOrigin(0, 1);
     this.goldText = this.add.bitmapText(uiConfig.goldText.x, uiConfig.goldText.y, 'font', 0, uiConfig.goldText.size)
-      .setOrigin(0, 0.5);
+      .setOrigin(1, 0.5);
 
     this._updateArrows(null, this.registry.get('remainingArrows'));
     this._updateCharge(null, this.registry.get('charge'));
