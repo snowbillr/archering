@@ -16,10 +16,7 @@ export class UiScene extends Phaser.Scene {
     this.registry.events.on('changedata-remainingArrows', this._updateArrows, this);
     this.registry.events.on('changedata-charge', this._updateCharge, this);
 
-    // this.bg = this.add.graphics();
-    // this.bg.fillStyle(0x000000, 1);
-    // this.bg.fillRect(uiConfig.background.x, uiConfig.background.y, uiConfig.background.width, uiConfig.background.height);
-    const background = this.add.image(uiConfig.background.x, uiConfig.background.y, 'background-parchment')
+    this.add.image(uiConfig.background.x, uiConfig.background.y, 'background-parchment')
       .setDisplaySize(uiConfig.background.width, uiConfig.background.height)
       .setOrigin(0, 0)
 
