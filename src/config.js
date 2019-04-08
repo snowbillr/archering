@@ -21,7 +21,7 @@ export const config = {
       targets: { y: 202 },
       balloons: {
         string: {
-          bottomY: 220,
+          bottomY: 230,
           width: 5,
         }
       },
@@ -48,6 +48,12 @@ export const config = {
         x: 320,
         y: 40,
         size: 32,
+      },
+      background: {
+        x: viewportWidth / 2,
+        y: viewportHeight / 2,
+        width: viewportWidth * 1.3,
+        height: viewportHeight * 1.3,
       },
       levelSelectButton: {
         x: 320,

@@ -10,8 +10,9 @@ export class PreloadScene extends Phaser.Scene {
 
     this._loadSharedImages();
     this._loadLevelSelectImages();
-    this._loadGameImages();
+    this._loadLevelImages();
     this._loadUiImages();
+    this._loadResultsImages();
 
     this._loadGameSounds();
   }
@@ -42,7 +43,7 @@ export class PreloadScene extends Phaser.Scene {
     this.load.image('menu-bg-4', 'assets/menu-bg-4.png');
   }
 
-  _loadGameImages() {
+  _loadLevelImages() {
     this.load.image('background-back', 'assets/background-back.png');
     this.load.image('background-middle', 'assets/background-middle.png');
     this.load.image('background-front', 'assets/background-front.png');
@@ -61,6 +62,10 @@ export class PreloadScene extends Phaser.Scene {
   _loadUiImages() {
     this.load.image('gauge-outline', 'assets/gauge-outline.png');
     this.load.image('gauge-fill', 'assets/gauge-fill.png');
+  }
+
+  _loadResultsImages() {
+    this.load.image('background-parchment', 'assets/background-parchment.png');
   }
 
   _loadGameSounds() {

@@ -14,6 +14,9 @@ export class ResultsScene extends Phaser.Scene {
   }
 
   create() {
+    this.add.image(resultsConfig.background.x, resultsConfig.background.y, 'background-parchment')
+      .setDisplaySize(resultsConfig.background.width, resultsConfig.background.height)
+
     const didWin = this.registry.get('remainingTargets') === 0
 
     const titleText = didWin ? 'Level Passed!' : 'Level Failed!';
@@ -41,7 +44,6 @@ export class ResultsScene extends Phaser.Scene {
     }).setOrigin(0.5, 0)
       .setInteractive({ cursor: 'pointer' })
       .once('pointerup', () => {
-        this.scene.stop('level');
         this.scene.stop('results');
         this.scene.start('level-select');
     });

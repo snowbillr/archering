@@ -223,8 +223,8 @@ export class LevelScene extends Phaser.Scene {
   }
 
   _endLevel() {
-    this.scene.pause('level');
+    this.scene.stop('level');
     this.scene.stop('ui');
-    this.scene.launch('results');
+    this.scene.start('results');
   }
 }
