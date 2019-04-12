@@ -19,6 +19,7 @@ clean up:
 - destroy or reuse notify texts
 
 bugs:
+- camera shouldn't scroll one pixel to the left at rest on far left of screen
 
 ideas:
   - hits charge up skill meter, when skill meter is full enough you can use a skill
