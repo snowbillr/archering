@@ -1,5 +1,4 @@
 current:
-- keyboard shortcuts for skills
 
 next up:
 - level builder
@@ -7,14 +6,12 @@ next up:
   - circle shape
   - take scale into account
 - tutorial
-- hud update
-  - background/graphics
-  - slots for skills
 - "enemy" types
   - deer running away
   - vertical osciallation (animation of helpers turning a lever?)
   - targets hanging from balloons (when balloon goes away the target falls to the ground)
   - horizontal target laying on ground
+- keyboard shortcuts for skills
 
 clean up:
 - destroy or reuse notify texts
