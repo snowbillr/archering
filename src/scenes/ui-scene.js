@@ -1,6 +1,6 @@
 import { config } from '../config';
 
-import { RestartLevelButton } from '../entities/restart-button';
+import { RestartLevelButton } from '../entities/restart-level-button';
 
 const arrowConfig = config.entities.level.arrow;
 const uiConfig = config.layouts.ui;
