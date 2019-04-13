@@ -10,16 +10,19 @@ next up:
 - "enemy" types
   - deer running away
   - vertical osciallation (animation of helpers turning a lever?)
-  - targets hanging from balloons
+  - targets hanging from balloons (when balloon goes away the target falls to the ground)
   - horizontal target laying on ground
 
 clean up:
 - destroy or reuse notify texts
+- different enemy type collisions shouldn't all be handled from the level scene
+  - when there are a bunch more this will get unreasonable
 
 bugs:
 - camera shouldn't scroll one pixel to the left at rest on far left of screen
 
 ideas:
+  - should targets and arrows disappear when they are hit/used up?
   - hitting "enemies" gives you gold (different amounts for each enemy)
   - can buy skill charges with gold
   - can unlock skills and skill upgrades with stars

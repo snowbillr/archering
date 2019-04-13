@@ -9,6 +9,7 @@ import { ScrollZone } from '../entities/scroll-zone';
 import { Balloons } from '../groups/balloons';
 
 import { config } from '../config';
+import { ArrowBalloonCollider } from '../colliders/arrow-balloon-collider';
 
 export class LevelScene extends Phaser.Scene {
   constructor() {
@@ -39,10 +40,12 @@ export class LevelScene extends Phaser.Scene {
 
     this._loadLevel();
 
+    const arrowBalloonCollider = new ArrowBalloonCollider(this);
+
     this.physics.add.collider(this.arrow.getHitbox(), this.targets.getHitboxes(), (arrow, target) => this._onArrowTargetCollide(arrow, target));
     this.physics.add.collider(this.arrow.getHitbox(), this.targets.getBullseyeHitboxes(), (arrow, target) => this._onArrowTargetBullseyeCollide(arrow, target));
-    this.balloons.addBalloonOverlap(this.arrow.getHitbox(), (arrow, balloon) => this._onArrowBalloonCollide(balloon));
-    this.balloons.addStringOverlap(this.arrow.getHitbox(), (arrow, balloon) => this._onArrowBalloonStringCollide(balloon));
+    this.balloons.addBalloonOverlap(this.arrow.getHitbox(), arrowBalloonCollider.onBalloonHit);
+    this.balloons.addStringOverlap(this.arrow.getHitbox(), arrowBalloonCollider.onStringHit);
     this.physics.add.collider(this.arrow.getHitbox(), this.groundZone, () => this._onArrowGroundCollide());
 
     this.scene.launch('ui');
@@ -172,21 +175,6 @@ export class LevelScene extends Phaser.Scene {
 
     this._onArrowTargetCollide(arrow, targetBullseyeHitbox, config.entities.level.targetBullseye.gold);
     Effects.notify(this, target.sprite.x, target.sprite.y, 'Bullseye!');
-  }
-
-  _onArrowBalloonCollide(balloon) {
-    this.registry.set(config.registryKeys.level.remainingBalloons, this.registry.get(config.registryKeys.level.remainingBalloons) - 1);
-    this.registry.set(config.registryKeys.level.poppedBalloons, this.registry.get(config.registryKeys.level.poppedBalloons) + 1);
-
-    this.registry.set(config.registryKeys.level.gold, this.registry.get(config.registryKeys.level.gold) + config.entities.level.balloon.gold);
-
-    balloon.pop()
-  }
-
-  _onArrowBalloonStringCollide(balloon) {
-    this.registry.set(config.registryKeys.level.remainingBalloons, this.registry.get(config.registryKeys.level.remainingBalloons) - 1);
-
-    balloon.cutString();
   }
 
   _checkLevelOver() {
