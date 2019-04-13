@@ -34,7 +34,6 @@ export class LevelScene extends Phaser.Scene {
     this.cameras.main.setBounds(0, 0, config.dimensions.world.width, config.dimensions.world.height);
 
     this.input.setDefaultCursor('crosshair');
-
     this.input.on('pointerdown', this._startCharge, this);
     this.input.on('pointerup', this._fireArrow, this);
 
