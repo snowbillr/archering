@@ -175,6 +175,7 @@ export class LevelScene extends Phaser.Scene {
   }
 
   _reset() {
+    this.registry.set(config.registryKeys.level.skills.spectralArrow, false);
     this.cameras.main.stopFollow();
     this._tweenScroll(0, 300);
     this.arrow.reset();
