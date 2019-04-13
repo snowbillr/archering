@@ -1,5 +1,4 @@
 current:
-- disable skill button when there are no charges
 - keyboard shortcuts for skills
 
 next up:
@@ -21,6 +20,7 @@ clean up:
 - destroy or reuse notify texts
 
 bugs:
+- should not be able to click anywhere on hud and fire arrow (e.g. disabled skill button)
 
 ideas:
   - should targets and arrows disappear when they are hit/used up?
