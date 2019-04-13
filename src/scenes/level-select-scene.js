@@ -54,7 +54,7 @@ export class LevelSelectScene extends Phaser.Scene {
       .setOrigin(0, 0)
       .setInteractive({ cursor: 'pointer' })
       .once('pointerup', () => {
-        this.registry.set('levelIndex', levelIndex);
+        this.registry.set(config.registryKeys.level.index, levelIndex);
         this.scene.start('level', { levelConfig: levels[levelIndex] });
       });
   }

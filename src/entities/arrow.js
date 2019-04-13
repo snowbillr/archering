@@ -30,7 +30,7 @@ export class Arrow {
   }
 
   update() {
-    const state = this.scene.registry.get('state');
+    const state = this.scene.registry.get(config.registryKeys.level.state);
 
     if (state === STATES.FLY) {
       this.sprite.rotation = Phaser.Math.Angle.BetweenPoints(Phaser.Math.Vector2.ZERO, this.sprite.body.velocity);
@@ -41,9 +41,9 @@ export class Arrow {
     }
 
     if (state === STATES.CHARGE) {
-      const chargeAmount = this.scene.registry.get('charge');
+      const chargeAmount = this.scene.registry.get(config.registryKeys.level.arrow.charge);
       const newCharge = Phaser.Math.Clamp(chargeAmount + 5, arrowConfig.minCharge, arrowConfig.maxCharge);
-      this.scene.registry.set('charge', newCharge);
+      this.scene.registry.set(config.registryKeys.level.arrow.charge, newCharge);
     }
   }
 
@@ -56,7 +56,7 @@ export class Arrow {
   }
 
   fire() {
-    const chargePercent = (this.scene.registry.get('charge') - arrowConfig.minCharge) / (arrowConfig.maxCharge - arrowConfig.minCharge);
+    const chargePercent = (this.scene.registry.get(config.registryKeys.level.arrow.charge) - arrowConfig.minCharge) / (arrowConfig.maxCharge - arrowConfig.minCharge);
     if (chargePercent < 0.33) {
       this.releaseSounds.low.play();
     } else if (chargePercent < 0.66) {
@@ -67,11 +67,11 @@ export class Arrow {
 
     this.hitbox.body.enable = true;
     this.sprite.body.allowGravity = true;
-    this.scene.physics.velocityFromRotation(this.sprite.rotation, this.scene.registry.get('charge'), this.sprite.body.velocity)
+    this.scene.physics.velocityFromRotation(this.sprite.rotation, this.scene.registry.get(config.registryKeys.level.arrow.charge), this.sprite.body.velocity)
   }
 
   reset() {
-    this.scene.registry.set('charge', arrowConfig.minCharge);
+    this.scene.registry.set(config.registryKeys.level.arrow.charge, arrowConfig.minCharge);
 
     this.sprite.body.enable = true;
     this.hitbox.body.enable = false;

@@ -2,6 +2,8 @@ import Phaser from 'phaser';
 
 import { Storage } from '../lib/storage';
 
+import { config } from '../config';
+
 export class PreloadScene extends Phaser.Scene {
   constructor() {
     super({ key: 'preload' });
@@ -103,6 +105,6 @@ export class PreloadScene extends Phaser.Scene {
   _loadSavedStats() {
     const storage = new Storage();
 
-    this.registry.set('gold', storage.loadGold());
+    this.registry.set(config.registryKeys.gold, storage.loadGold());
   }
 }

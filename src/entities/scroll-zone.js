@@ -27,10 +27,10 @@ export class ScrollZone {
   }
 
   _updateScrollingDirection(scrollingDirection) {
-    const state = this.scene.registry.get('state');
+    const state = this.scene.registry.get(config.registryKeys.level.state);
 
     if (state === STATES.REST) {
-      this.scene.registry.set('scrollingDirection', scrollingDirection);
+      this.scene.registry.set(config.registryKeys.level.scrollingDirection, scrollingDirection);
     }
   }
 }

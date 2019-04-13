@@ -18,9 +18,9 @@ export class LevelScene extends Phaser.Scene {
   create({ levelConfig }) {
     this.levelConfig = levelConfig;
 
-    this.registry.set('charge', config.entities.level.arrow.minCharge);
-    this.registry.set('scrollingDirection', 0);
-    this.registry.set('state', STATES.PANNING_TO_TARGETS);
+    this.registry.set(config.registryKeys.level.arrow.charge, config.entities.level.arrow.minCharge);
+    this.registry.set(config.registryKeys.level.scrollingDirection, 0);
+    this.registry.set(config.registryKeys.level.state, STATES.PANNING_TO_TARGETS);
 
     this.parallaxBackground = new ParallaxBackground(this, 'background-back', 'background-middle', 'background-front');
     this.arrow = new Arrow(this);
@@ -51,10 +51,10 @@ export class LevelScene extends Phaser.Scene {
   update() {
     this.arrow.update();
 
-    const state = this.registry.get('state');
+    const state = this.registry.get(config.registryKeys.level.state);
 
     if (state === STATES.REST) {
-      this._immediateScroll(this.cameras.main.scrollX + (6 * this.registry.get('scrollingDirection')))
+      this._immediateScroll(this.cameras.main.scrollX + (6 * this.registry.get(config.registryKeys.level.scrollingDirection)))
     } else if (state === STATES.FLY) {
       this._immediateScroll(this.cameras.main.scrollX, false);
     }
@@ -81,18 +81,18 @@ export class LevelScene extends Phaser.Scene {
   }
 
   _resetRegistry() {
-    this.registry.set('initialArrows', this.levelConfig.arrows);
-    this.registry.set('initialTargets', this.levelConfig.targets.length);
-    this.registry.set('initialBalloons', this.levelConfig.balloons.length);
+    this.registry.set(config.registryKeys.level.initialArrows, this.levelConfig.arrows);
+    this.registry.set(config.registryKeys.level.initialTargets, this.levelConfig.targets.length);
+    this.registry.set(config.registryKeys.level.initialBalloons, this.levelConfig.balloons.length);
 
-    this.registry.set('remainingArrows', this.levelConfig.arrows);
-    this.registry.set('remainingTargets', this.levelConfig.targets.length);
-    this.registry.set('remainingBalloons', this.levelConfig.balloons.length);
-    this.registry.set('poppedBalloons', 0);
+    this.registry.set(config.registryKeys.level.remainingArrows, this.levelConfig.arrows);
+    this.registry.set(config.registryKeys.level.remainingTargets, this.levelConfig.targets.length);
+    this.registry.set(config.registryKeys.level.remainingBalloons, this.levelConfig.balloons.length);
+    this.registry.set(config.registryKeys.level.poppedBalloons, 0);
   }
 
   _introPan() {
-    this.registry.set('state', STATES.PANNING_TO_TARGETS);
+    this.registry.set(config.registryKeys.level.state, STATES.PANNING_TO_TARGETS);
 
     const furthestTargetX = this.targets.getFurthestTargetX();
     const furthestBalloonX = this.balloons.getFurthestBalloonX();
@@ -105,42 +105,42 @@ export class LevelScene extends Phaser.Scene {
         hold: 500,
         ease: Phaser.Math.Easing.Quadratic.InOut,
         onComplete: () => {
-          this.registry.set('state', STATES.REST);
+          this.registry.set(config.registryKeys.level.state, STATES.REST);
         }
       });
     } else {
-      this.registry.set('state', STATES.REST);
+      this.registry.set(config.registryKeys.level.state, STATES.REST);
     }
   }
 
   _startCharge() {
-    if (this.registry.get('state') === STATES.REST) {
+    if (this.registry.get(config.registryKeys.level.state) === STATES.REST) {
       this.tweens.killTweensOf(this.cameras.main);
 
-      this.registry.set('scrollDirection', 0);
-      this.registry.set('state', STATES.CHARGE);
+      this.registry.set(config.registryKeys.level.scrollingDirection, 0);
+      this.registry.set(config.registryKeys.level.state, STATES.CHARGE);
       this._tweenScroll(0, 200);
     }
   }
 
   _fireArrow() {
-    if (this.registry.get('state') === STATES.CHARGE) {
+    if (this.registry.get(config.registryKeys.level.state) === STATES.CHARGE) {
       this.tweens.killTweensOf(this.cameras.main);
 
       this.cameras.main.startFollow(this.arrow.getSprite(), true);
-      this.registry.set('state', STATES.FLY);
+      this.registry.set(config.registryKeys.level.state, STATES.FLY);
       this.arrow.fire();
     }
   }
 
   _onArrowGroundCollide() {
-    this.registry.set('remainingArrows', this.registry.get('remainingArrows') - 1);
-    this.registry.set('state', STATES.HIT);
+    this.registry.set(config.registryKeys.level.remainingArrows, this.registry.get(config.registryKeys.level.remainingArrows) - 1);
+    this.registry.set(config.registryKeys.level.state, STATES.HIT);
 
     this.arrow.onHit();
 
     Effects.flashOut([this.arrow.getSprite()], () => {
-      this.registry.set('state', STATES.REST);
+      this.registry.set(config.registryKeys.level.state, STATES.REST);
 
       this._checkLevelOver();
       this._reset();
@@ -148,17 +148,17 @@ export class LevelScene extends Phaser.Scene {
   }
 
   _onArrowTargetCollide(arrow, targetHitbox, gold = config.entities.level.target.gold) {
-    this.registry.set('remainingArrows', this.registry.get('remainingArrows') - 1);
-    this.registry.set('remainingTargets', this.registry.get('remainingTargets') - 1);
-    this.registry.set('state', STATES.HIT);
+    this.registry.set(config.registryKeys.level.remainingArrows, this.registry.get(config.registryKeys.level.remainingArrows) - 1);
+    this.registry.set(config.registryKeys.level.remainingTargets, this.registry.get(config.registryKeys.level.remainingTargets) - 1);
+    this.registry.set(config.registryKeys.level.state, STATES.HIT);
 
-    this.registry.set('gold', this.registry.get('gold') + gold);
+    this.registry.set(config.registryKeys.gold, this.registry.get(config.registryKeys.gold) + gold);
 
     this.arrow.onHit();
     targetHitbox.hitboxParent.onHit();
 
     Effects.flashOut([this.arrow.getSprite(), targetHitbox.hitboxParent.getSprite()], () => {
-      this.registry.set('state', STATES.REST);
+      this.registry.set(config.registryKeys.level.state, STATES.REST);
 
       this._checkLevelOver();
       this._reset();
@@ -173,22 +173,22 @@ export class LevelScene extends Phaser.Scene {
   }
 
   _onArrowBalloonCollide(balloon) {
-    this.registry.set('remainingBalloons', this.registry.get('remainingBalloons') - 1);
-    this.registry.set('poppedBalloons', this.registry.get('poppedBalloons') + 1);
+    this.registry.set(config.registryKeys.level.remainingBalloons, this.registry.get(config.registryKeys.level.remainingBalloons) - 1);
+    this.registry.set(config.registryKeys.level.poppedBalloons, this.registry.get(config.registryKeys.level.poppedBalloons) + 1);
 
-    this.registry.set('gold', this.registry.get('gold') + config.entities.level.balloon.gold);
+    this.registry.set(config.registryKeys.gold, this.registry.get(config.registryKeys.gold) + config.entities.level.balloon.gold);
 
     balloon.pop()
   }
 
   _onArrowBalloonStringCollide(balloon) {
-    this.registry.set('remainingBalloons', this.registry.get('remainingBalloons') - 1);
+    this.registry.set(config.registryKeys.level.remainingBalloons, this.registry.get(config.registryKeys.level.remainingBalloons) - 1);
 
     balloon.cutString();
   }
 
   _checkLevelOver() {
-    const isLevelOver = this.registry.get('remainingArrows') === 0 || this.registry.get('remainingTargets') === 0;
+    const isLevelOver = this.registry.get(config.registryKeys.level.remainingArrows) === 0 || this.registry.get(config.registryKeys.level.remainingTargets) === 0;
 
     if (isLevelOver) {
       this._endLevel();

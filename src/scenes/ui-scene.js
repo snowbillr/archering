@@ -13,9 +13,9 @@ export class UiScene extends Phaser.Scene {
   create() {
     this.events.on('shutdown', this._cleanupRegistryListeners, this);
 
-    this.registry.events.on('changedata-remainingArrows', this._updateArrows, this);
-    this.registry.events.on('changedata-charge', this._updateCharge, this);
-    this.registry.events.on('changedata-gold', this._updateGold, this);
+    this.registry.events.on(`changedata-${config.registryKeys.level.remainingArrows}`, this._updateArrows, this);
+    this.registry.events.on(`changedata-${config.registryKeys.level.arrow.charge}`, this._updateCharge, this);
+    this.registry.events.on(`changedata-${config.registryKeys.gold}`, this._updateGold, this);
 
     this.add.image(uiConfig.background.x, uiConfig.background.y, 'background-parchment')
       .setDisplaySize(uiConfig.background.width, uiConfig.background.height)
@@ -30,7 +30,7 @@ export class UiScene extends Phaser.Scene {
       setXY: { x: uiConfig.arrows.x, stepX: uiConfig.arrows.xStep, y: uiConfig.arrows.y },
       setRotation: { value: uiConfig.arrows.rotation },
       setScale: { x: 0.30, y: 0.30 },
-      repeat: this.registry.get('remainingArrows') - 1,
+      repeat: this.registry.get(config.registryKeys.level.remainingArrows) - 1,
     });
 
     this.chargeText = this.add.bitmapText(uiConfig.chargeLabel.x, uiConfig.chargeLabel.y, 'font', 'Power:', uiConfig.chargeLabel.size);
@@ -47,15 +47,15 @@ export class UiScene extends Phaser.Scene {
     this.goldText = this.add.bitmapText(uiConfig.goldText.x, uiConfig.goldText.y, 'font', 0, uiConfig.goldText.size)
       .setOrigin(0, 1);
 
-    this._updateArrows(null, this.registry.get('remainingArrows'));
-    this._updateCharge(null, this.registry.get('charge'));
-    this._updateGold(null, this.registry.get('gold'));
+    this._updateArrows(null, this.registry.get(config.registryKeys.level.remainingArrows));
+    this._updateCharge(null, this.registry.get(config.registryKeys.level.arrow.charge));
+    this._updateGold(null, this.registry.get(config.registryKeys.gold));
   }
 
   _cleanupRegistryListeners() {
-    this.registry.events.off('changedata-remainingArrows', this._updateArrows, this);
-    this.registry.events.off('changedata-charge', this._updateCharge, this);
-    this.registry.events.off('changedata-gold', this._updateGold, this);
+    this.registry.events.off(`changedata-${config.registryKeys.level.remainingArrows}`, this._updateArrows, this);
+    this.registry.events.off(`changedata-${config.registryKeys.level.arrow.charge}`, this._updateCharge, this);
+    this.registry.events.off(`changedata-${config.registryKeys.gold}`, this._updateGold, this);
   }
 
   _updateArrows(parent, remainingArrows) {
@@ -79,13 +79,17 @@ export class UiScene extends Phaser.Scene {
   }
 
   _updateGold(parent, newGold, oldGold = newGold) {
-    this.tweens.add({
-      targets: [{ value: oldGold }],
-      props: { value: newGold },
-      duration: 300,
-      onUpdate: tween => {
-        this.goldText.setText(Phaser.Math.RoundTo(tween.getValue()));
-      }
-    });
+    if (newGold == oldGold) {
+      this.goldText.setText(newGold);
+    } else {
+      this.tweens.add({
+        targets: [{ value: oldGold }],
+        props: { value: newGold },
+        duration: 300,
+        onUpdate: tween => {
+          this.goldText.setText(Phaser.Math.RoundTo(tween.getValue()));
+        }
+      });
+    }
   }
 }

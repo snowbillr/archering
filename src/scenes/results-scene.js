@@ -19,13 +19,13 @@ export class ResultsScene extends Phaser.Scene {
     this.add.image(resultsConfig.background.x, resultsConfig.background.y, 'background-parchment')
       .setDisplaySize(resultsConfig.background.width, resultsConfig.background.height)
 
-    const didWin = this.registry.get('remainingTargets') === 0
+    const didWin = this.registry.get(config.registryKeys.level.remainingTargets) === 0
 
     const titleText = didWin ? 'Level Passed!' : 'Level Failed!';
     this.add.bitmapText(resultsConfig.title.x, resultsConfig.title.y, 'font', titleText, resultsConfig.title.size)
       .setOrigin(0.5, 0);
 
-    this.storage.saveGold(this.registry.get('gold'));
+    this.storage.saveGold(this.registry.get(config.registryKeys.gold));
     if (didWin) {
       const scores = this._calculateScore();
 
@@ -53,16 +53,16 @@ export class ResultsScene extends Phaser.Scene {
   }
 
   _calculateScore() {
-    const initialArrows = this.registry.get('initialArrows');
-    const remainingArrows = this.registry.get('remainingArrows');
+    const initialArrows = this.registry.get(config.registryKeys.level.initialArrows);
+    const remainingArrows = this.registry.get(config.registryKeys.level.remainingArrows);
     const arrowScore = remainingArrows * SCORE_MULTIPLIERS.arrows;
 
-    const initialTargets = this.registry.get('initialTargets');
-    const remainingTargets = this.registry.get('remainingTargets');
+    const initialTargets = this.registry.get(config.registryKeys.level.initialTargets);
+    const remainingTargets = this.registry.get(config.registryKeys.level.remainingTargets);
     const targetScore = (initialTargets - remainingTargets) * SCORE_MULTIPLIERS.targets;
 
-    const initialBalloons = this.registry.get('initialBalloons');
-    const poppedBalloons = this.registry.get('poppedBalloons');
+    const initialBalloons = this.registry.get(config.registryKeys.level.initialBalloons);
+    const poppedBalloons = this.registry.get(config.registryKeys.level.poppedBalloons);
     const balloonScore = poppedBalloons * SCORE_MULTIPLIERS.balloons;
 
     const totalScore = arrowScore + targetScore + balloonScore;
@@ -79,7 +79,7 @@ export class ResultsScene extends Phaser.Scene {
   }
 
   _saveScore(scores) {
-    const levelIndex = this.registry.get('levelIndex');
+    const levelIndex = this.registry.get(config.registryKeys.level.index);
     const existingStars = this.storage.loadLevelStars(levelIndex);
 
     if (scores.stars > existingStars) {

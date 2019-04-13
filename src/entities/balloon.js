@@ -32,7 +32,6 @@ export class Balloon {
   }
 
   reset(x, y) {
-    console.log('resetging balloon')
     this.balloon.x = x;
     this.balloon.y = y;
     this.balloon.setTexture('balloon-1');

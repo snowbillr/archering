@@ -137,5 +137,23 @@ export const config = {
         size: 20,
       }
     }
+  },
+  registryKeys: {
+    gold: 'gold',
+    level: {
+      index: 'level.index',
+      state: 'level.state',
+      scrollingDirection: 'level.scrollingDirection',
+      initialArrows: 'level.initialArrows',
+      initialTargets: 'level.initialTargets',
+      initialBalloons: 'level.initialBalloons',
+      remainingArrows: 'level.remainingArrows',
+      remainingTargets: 'level.remainingTargets',
+      remainingBalloons: 'level.remainingBalloons',
+      poppedBalloons: 'level.poppedBalloons',
+      arrow: {
+        charge: 'level.arrow.charge',
+      },
+    }
   }
 }
