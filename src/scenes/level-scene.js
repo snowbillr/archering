@@ -11,6 +11,7 @@ import { Balloons } from '../groups/balloons';
 import { config } from '../config';
 import { ArrowBalloonCollider } from '../colliders/arrow-balloon-collider';
 import { ArrowTargetCollider } from '../colliders/arrow-target-collider';
+import { ArrowGroundCollider } from '../colliders/arrow-ground-collider';
 
 export class LevelScene extends Phaser.Scene {
   constructor() {
@@ -43,12 +44,14 @@ export class LevelScene extends Phaser.Scene {
 
     const arrowBalloonCollider = new ArrowBalloonCollider(this);
     const arrowTargetCollider = new ArrowTargetCollider(this, this.arrowColliderCallback);
+    const arrowGroundCollider = new ArrowGroundCollider(this, this.arrowColliderCallback);
 
     this.physics.add.collider(this.arrow.getHitbox(), this.targets.getHitboxes(), arrowTargetCollider.onTargetHit);
     this.physics.add.collider(this.arrow.getHitbox(), this.targets.getBullseyeHitboxes(), arrowTargetCollider.onBullseyeHit);
     this.balloons.addBalloonOverlap(this.arrow.getHitbox(), arrowBalloonCollider.onBalloonHit);
     this.balloons.addStringOverlap(this.arrow.getHitbox(), arrowBalloonCollider.onStringHit);
-    this.physics.add.collider(this.arrow.getHitbox(), this.groundZone, () => this._onArrowGroundCollide());
+    // this.physics.add.collider(this.arrow.getHitbox(), this.groundZone, () => this._onArrowGroundCollide());
+    this.physics.add.collider(this.arrow.getHitbox(), this.groundZone, arrowGroundCollider.onHit);
 
     this.scene.launch('ui');
   }
@@ -143,20 +146,6 @@ export class LevelScene extends Phaser.Scene {
       this.registry.set(config.registryKeys.level.state, STATES.FLY);
       this.arrow.fire();
     }
-  }
-
-  _onArrowGroundCollide() {
-    this.registry.set(config.registryKeys.level.remainingArrows, this.registry.get(config.registryKeys.level.remainingArrows) - 1);
-    this.registry.set(config.registryKeys.level.state, STATES.HIT);
-
-    this.arrow.onHit();
-
-    Effects.flashOut([this.arrow.getSprite()], () => {
-      this.registry.set(config.registryKeys.level.state, STATES.REST);
-
-      this._checkLevelOver();
-      this._reset();
-    });
   }
 
   _checkLevelOver() {
