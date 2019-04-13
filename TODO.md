@@ -15,11 +15,8 @@ next up:
 
 clean up:
 - destroy or reuse notify texts
-- different enemy type collisions shouldn't all be handled from the level scene
-  - when there are a bunch more this will get unreasonable
 
 bugs:
-- camera shouldn't scroll one pixel to the left at rest on far left of screen
 
 ideas:
   - should targets and arrows disappear when they are hit/used up?

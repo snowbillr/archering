@@ -62,7 +62,11 @@ export class LevelScene extends Phaser.Scene {
     const state = this.registry.get(config.registryKeys.level.state);
 
     if (state === STATES.REST) {
-      this._immediateScroll(this.cameras.main.scrollX + (6 * this.registry.get(config.registryKeys.level.scrollingDirection)))
+      let scrollAmount = 6 * this.registry.get(config.registryKeys.level.scrollingDirection);
+      if (this.cameras.main.scrollX == 0 && scrollAmount < 0) {
+        scrollAmount = 0;
+      }
+      this._immediateScroll(this.cameras.main.scrollX + scrollAmount)
     } else if (state === STATES.FLY) {
       this._immediateScroll(this.cameras.main.scrollX, false);
     }
