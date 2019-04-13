@@ -21,11 +21,7 @@ export class LevelScene extends Phaser.Scene {
   create({ levelConfig }) {
     this.levelConfig = levelConfig;
 
-    this.registry.set(config.registryKeys.level.arrow.charge, config.entities.level.arrow.minCharge);
-    this.registry.set(config.registryKeys.level.scrollingDirection, 0);
-    this.registry.set(config.registryKeys.level.state, STATES.PANNING_TO_TARGETS);
-
-    this.registry.set(config.registryKeys.level.skills.spectralArrow, false);
+    this.events.on('shutdown', this._cleanupRegistryListeners, this);
 
     this.parallaxBackground = new ParallaxBackground(this, 'background-back', 'background-middle', 'background-front');
     this.arrow = new Arrow(this);
@@ -89,6 +85,10 @@ export class LevelScene extends Phaser.Scene {
     this._reset();
   }
 
+  _cleanupRegistryListeners() {
+    this.arrow.cleanupRegistryListeners();
+  }
+
   _loadLevel() {
     this._resetRegistry();
 
@@ -99,7 +99,12 @@ export class LevelScene extends Phaser.Scene {
   }
 
   _resetRegistry() {
+    this.registry.set(config.registryKeys.level.arrow.charge, config.entities.level.arrow.minCharge);
+    this.registry.set(config.registryKeys.level.scrollingDirection, 0);
+
     this.registry.set(config.registryKeys.level.gold, 0);
+
+    this.registry.set(config.registryKeys.level.skills.spectralArrow, false);
 
     this.registry.set(config.registryKeys.level.initialArrows, this.levelConfig.arrows);
     this.registry.set(config.registryKeys.level.initialTargets, this.levelConfig.targets.length);
@@ -109,6 +114,8 @@ export class LevelScene extends Phaser.Scene {
     this.registry.set(config.registryKeys.level.remainingTargets, this.levelConfig.targets.length);
     this.registry.set(config.registryKeys.level.remainingBalloons, this.levelConfig.balloons.length);
     this.registry.set(config.registryKeys.level.poppedBalloons, 0);
+
+    this.registry.set(config.registryKeys.level.state, STATES.PANNING_TO_TARGETS);
   }
 
   _introPan() {

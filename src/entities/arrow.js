@@ -26,15 +26,21 @@ export class Arrow {
       high: this.scene.sound.add('arrow-release-high'),
     };
 
-    this.scene.registry.events.on(`changedata-${config.registryKeys.level.skills.spectralArrow}`, (parent, spectralArrow) => {
-      if (spectralArrow) {
-        this.sprite.setTexture('arrow-glow');
-      } else {
-        this.sprite.setTexture('arrow');
-      }
-    });
+    this.scene.registry.events.on(`changedata-${config.registryKeys.level.skills.spectralArrow}`, this._updateTextureForSkill, this);
 
     this.reset();
+  }
+
+  cleanupRegistryListeners() {
+    this.scene.registry.events.off(`changedata-${config.registryKeys.level.skills.spectralArrow}`, this._updateTextureForSkill);
+  }
+
+  _updateTextureForSkill(parent, spectralArrow) {
+    if (spectralArrow) {
+      this.sprite.setTexture('arrow-glow');
+    } else {
+      this.sprite.setTexture('arrow');
+    }
   }
 
   update() {
