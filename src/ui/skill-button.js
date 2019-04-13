@@ -4,19 +4,21 @@ export class SkillButton {
     this.levelKey = levelKey;
     this.skillKey = skillKey;
 
-    const background = this.scene.add.image(x, y, 'skill-background')
+    this.background = this.scene.add.image(x, y, 'skill-background')
       .setDisplaySize(42, 42);
-    const icon = this.scene.add.image(x, y, iconKey)
+    this.icon = this.scene.add.image(x, y, iconKey)
       .setScale(0.45)
       .setAngle(-45);
 
-    const chargeCount = this.scene.registry.get(skillKey).chargeCount;
-    this.chargeCountText = this.scene.add.bitmapText(x + 16, y + 16, 'font', chargeCount, 12)
+    this.chargeCountText = this.scene.add.bitmapText(x + 16, y + 16, 'font', '', 12)
       .setOrigin(1, 1);
 
-    const clickZone = this.scene.add.zone(x, y, 42, 42)
+    this.clickZone = this.scene.add.zone(x, y, 42, 42)
       .setInteractive({ cursor: 'pointer' })
       .on('pointerdown', this.onUse, this);
+
+    this.scene.registry.events.on(`changedata-${skillKey}`, this._updateButton, this);
+    this._updateButton(null, this.scene.registry.get(skillKey));
   }
 
   onUse() {
@@ -25,7 +27,21 @@ export class SkillButton {
     const skillConfig = this.scene.registry.get(this.skillKey);
     skillConfig.chargeCount -= 1;
 
-    this.chargeCountText.text = skillConfig.chargeCount;
     this.scene.registry.set(this.skillKey, skillConfig);
+  }
+
+  _updateButton(parent, skillConfig) {
+    console.log('updating button')
+    if (skillConfig.chargeCount === 0) {
+      this.clickZone.disableInteractive();
+      this.background.setTint(0xcccccc);
+      this.icon.setTint(0xcccccc);
+    }
+
+    this.chargeCountText.text = skillConfig.chargeCount;
+  }
+
+  cleanupRegistryListeners() {
+    this.scene.registry.events.off(this.levelKey, this._updateButton);
   }
 }

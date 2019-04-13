@@ -59,6 +59,8 @@ export class UiScene extends Phaser.Scene {
     this.registry.events.off(`changedata-${config.registryKeys.level.remainingArrows}`, this._updateArrows, this);
     this.registry.events.off(`changedata-${config.registryKeys.level.arrow.charge}`, this._updateCharge, this);
     this.registry.events.off(`changedata-${config.registryKeys.level.gold}`, this._updateLevelGold, this);
+
+    this.spectralArrowButton.cleanupRegistryListeners();
   }
 
   _updateArrows(parent, remainingArrows) {
