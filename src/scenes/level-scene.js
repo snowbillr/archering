@@ -25,6 +25,8 @@ export class LevelScene extends Phaser.Scene {
     this.registry.set(config.registryKeys.level.scrollingDirection, 0);
     this.registry.set(config.registryKeys.level.state, STATES.PANNING_TO_TARGETS);
 
+    this.registry.set(config.registryKeys.level.skills.spectralArrow, false);
+
     this.parallaxBackground = new ParallaxBackground(this, 'background-back', 'background-middle', 'background-front');
     this.arrow = new Arrow(this);
     this.targets = new Targets(this);
@@ -46,11 +48,10 @@ export class LevelScene extends Phaser.Scene {
     const arrowTargetCollider = new ArrowTargetCollider(this, this.arrowColliderCallback);
     const arrowGroundCollider = new ArrowGroundCollider(this, this.arrowColliderCallback);
 
-    this.physics.add.collider(this.arrow.getHitbox(), this.targets.getHitboxes(), arrowTargetCollider.onTargetHit);
-    this.physics.add.collider(this.arrow.getHitbox(), this.targets.getBullseyeHitboxes(), arrowTargetCollider.onBullseyeHit);
+    this.physics.add.overlap(this.arrow.getHitbox(), this.targets.getHitboxes(), arrowTargetCollider.onTargetHit);
+    this.physics.add.overlap(this.arrow.getHitbox(), this.targets.getBullseyeHitboxes(), arrowTargetCollider.onBullseyeHit);
     this.balloons.addBalloonOverlap(this.arrow.getHitbox(), arrowBalloonCollider.onBalloonHit);
     this.balloons.addStringOverlap(this.arrow.getHitbox(), arrowBalloonCollider.onStringHit);
-    // this.physics.add.collider(this.arrow.getHitbox(), this.groundZone, () => this._onArrowGroundCollide());
     this.physics.add.collider(this.arrow.getHitbox(), this.groundZone, arrowGroundCollider.onHit);
 
     this.scene.launch('ui');

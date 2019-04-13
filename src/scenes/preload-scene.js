@@ -54,6 +54,8 @@ export class PreloadScene extends Phaser.Scene {
     this.load.image('background-middle', 'assets/background-middle.png');
     this.load.image('background-front', 'assets/background-front.png');
 
+    this.load.image('arrow-glow', 'assets/arrow-glow.png');
+
     this.load.image('target', 'assets/target.png');
 
     this.load.image('balloon-1', 'assets/balloon/1.png');

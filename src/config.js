@@ -155,6 +155,9 @@ export const config = {
       arrow: {
         charge: 'level.arrow.charge',
       },
+      skills: {
+        spectralArrow: 'level.spectralArrow',
+      }
     }
   }
 }

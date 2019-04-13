@@ -1,5 +1,7 @@
 export class Target {
   constructor(scene, x, y) {
+    this.wasHit = false;
+
     this.scene = scene;
 
     this.sprite = scene.add.sprite(x, y, 'target');
@@ -59,6 +61,9 @@ export class Target {
   }
 
   onHit() {
+    if (this.wasHit) { return; }
+    this.wasHit =true;
+
     this.getHitboxes().getChildren().forEach(hitbox => {
       hitbox.body.enable = false;
     });

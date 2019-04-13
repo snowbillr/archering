@@ -26,6 +26,14 @@ export class Arrow {
       high: this.scene.sound.add('arrow-release-high'),
     };
 
+    this.scene.registry.events.on(`changedata-${config.registryKeys.level.skills.spectralArrow}`, (parent, spectralArrow) => {
+      if (spectralArrow) {
+        this.sprite.setTexture('arrow-glow');
+      } else {
+        this.sprite.setTexture('arrow');
+      }
+    });
+
     this.reset();
   }
 
