@@ -10,6 +10,7 @@ import { Balloons } from '../groups/balloons';
 
 import { config } from '../config';
 import { ArrowBalloonCollider } from '../colliders/arrow-balloon-collider';
+import { ArrowTargetCollider } from '../colliders/arrow-target-collider';
 
 export class LevelScene extends Phaser.Scene {
   constructor() {
@@ -41,9 +42,10 @@ export class LevelScene extends Phaser.Scene {
     this._loadLevel();
 
     const arrowBalloonCollider = new ArrowBalloonCollider(this);
+    const arrowTargetCollider = new ArrowTargetCollider(this, this.arrowColliderCallback);
 
-    this.physics.add.collider(this.arrow.getHitbox(), this.targets.getHitboxes(), (arrow, target) => this._onArrowTargetCollide(arrow, target));
-    this.physics.add.collider(this.arrow.getHitbox(), this.targets.getBullseyeHitboxes(), (arrow, target) => this._onArrowTargetBullseyeCollide(arrow, target));
+    this.physics.add.collider(this.arrow.getHitbox(), this.targets.getHitboxes(), arrowTargetCollider.onTargetHit);
+    this.physics.add.collider(this.arrow.getHitbox(), this.targets.getBullseyeHitboxes(), arrowTargetCollider.onBullseyeHit);
     this.balloons.addBalloonOverlap(this.arrow.getHitbox(), arrowBalloonCollider.onBalloonHit);
     this.balloons.addStringOverlap(this.arrow.getHitbox(), arrowBalloonCollider.onStringHit);
     this.physics.add.collider(this.arrow.getHitbox(), this.groundZone, () => this._onArrowGroundCollide());
@@ -72,6 +74,11 @@ export class LevelScene extends Phaser.Scene {
     this.balloons.resetBalloonsForLevel(this.levelConfig);
 
     this._introPan();
+  }
+
+  arrowColliderCallback() {
+    this._checkLevelOver();
+    this._reset();
   }
 
   _loadLevel() {
@@ -152,37 +159,18 @@ export class LevelScene extends Phaser.Scene {
     });
   }
 
-  _onArrowTargetCollide(arrow, targetHitbox, gold = config.entities.level.target.gold) {
-    this.registry.set(config.registryKeys.level.remainingArrows, this.registry.get(config.registryKeys.level.remainingArrows) - 1);
-    this.registry.set(config.registryKeys.level.remainingTargets, this.registry.get(config.registryKeys.level.remainingTargets) - 1);
-    this.registry.set(config.registryKeys.level.state, STATES.HIT);
-
-    this.registry.set(config.registryKeys.level.gold, this.registry.get(config.registryKeys.level.gold) + gold);
-
-    this.arrow.onHit();
-    targetHitbox.hitboxParent.onHit();
-
-    Effects.flashOut([this.arrow.getSprite(), targetHitbox.hitboxParent.getSprite()], () => {
-      this.registry.set(config.registryKeys.level.state, STATES.REST);
-
-      this._checkLevelOver();
-      this._reset();
-    });
-  }
-
-  _onArrowTargetBullseyeCollide(arrow, targetBullseyeHitbox) {
-    const target = targetBullseyeHitbox.hitboxParent;
-
-    this._onArrowTargetCollide(arrow, targetBullseyeHitbox, config.entities.level.targetBullseye.gold);
-    Effects.notify(this, target.sprite.x, target.sprite.y, 'Bullseye!');
-  }
-
   _checkLevelOver() {
     const isLevelOver = this.registry.get(config.registryKeys.level.remainingArrows) === 0 || this.registry.get(config.registryKeys.level.remainingTargets) === 0;
 
     if (isLevelOver) {
       this._endLevel();
     }
+  }
+
+    _endLevel() {
+    this.scene.stop('level');
+    this.scene.stop('ui');
+    this.scene.start('results');
   }
 
   _reset() {
@@ -214,11 +202,5 @@ export class LevelScene extends Phaser.Scene {
     this.leftScrollZone.updatePosition(targetScrollX);
     this.rightScrollZone.updatePosition(targetScrollX + config.layouts.level.scrollZones.rightX);
     this.groundZone.updatePosition(targetScrollX);
-  }
-
-  _endLevel() {
-    this.scene.stop('level');
-    this.scene.stop('ui');
-    this.scene.start('results');
   }
 }
