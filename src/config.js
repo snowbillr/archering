@@ -88,8 +88,8 @@ export const config = {
         height: 40,
       },
       goldText: {
-        x: 300,
-        y: viewportHeight - 28,
+        x: 290,
+        y: viewportHeight - 15,
         size: 28,
       },
       quiverLabel: {
@@ -123,6 +123,15 @@ export const config = {
       arrow: {
         minCharge: 200,
         maxCharge: 700,
+      },
+      target: {
+        gold: 10,
+      },
+      targetBullseye: {
+        gold: 50,
+      },
+      balloon: {
+        gold: 30,
       },
       notify: {
         size: 20,

@@ -6,6 +6,14 @@ export class Storage {
     if (this._get(LEVEL_STARS_KEY) == null) {
       this._set(LEVEL_STARS_KEY, []);
     }
+
+    if (!this._has(GOLD_KEY)) {
+      this._set(GOLD_KEY, 0);
+    }
+  }
+
+  saveGold(gold) {
+    this._set(GOLD_KEY, gold);
   }
 
   loadGold() {
@@ -35,6 +43,10 @@ export class Storage {
     const value = this._get(key);
     const updatedValue = updater(value);
     this._set(key, updatedValue);
+  }
+
+  _has(key) {
+    return this._get(key) != null;
   }
 }
 

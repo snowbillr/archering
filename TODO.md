@@ -12,11 +12,13 @@ next up:
   - vertical osciallation (animation of helpers turning a lever?)
   - targets hanging from balloons
 - gold
-  - get gold for hitting targets/bullseyes/balloons
   - don't apply earned gold until the end of the level (i.e. it shouldn't apply when restarting a level) (but the displayed total should still increase)
+  - animate gold value increase
 
 clean up:
 - destroy or reuse notify texts
+- registry data doesn't go away unless you clear it, so clear level scene data after the level is done
+  - prefix that data with `level.*`?
 
 bugs:
 - camera shouldn't scroll one pixel to the left at rest on far left of screen

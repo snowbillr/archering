@@ -14,6 +14,8 @@ export class ResultsScene extends Phaser.Scene {
   }
 
   create() {
+    this.storage = new Storage();
+
     this.add.image(resultsConfig.background.x, resultsConfig.background.y, 'background-parchment')
       .setDisplaySize(resultsConfig.background.width, resultsConfig.background.height)
 
@@ -23,6 +25,7 @@ export class ResultsScene extends Phaser.Scene {
     this.add.bitmapText(resultsConfig.title.x, resultsConfig.title.y, 'font', titleText, resultsConfig.title.size)
       .setOrigin(0.5, 0);
 
+    this.storage.saveGold(this.registry.get('gold'));
     if (didWin) {
       const scores = this._calculateScore();
 
@@ -76,13 +79,11 @@ export class ResultsScene extends Phaser.Scene {
   }
 
   _saveScore(scores) {
-    const storage = new Storage();
-
     const levelIndex = this.registry.get('levelIndex');
-    const existingStars = storage.loadLevelStars(levelIndex);
+    const existingStars = this.storage.loadLevelStars(levelIndex);
 
     if (scores.stars > existingStars) {
-      storage.saveLevelStars(levelIndex, scores.stars);
+      this.storage.saveLevelStars(levelIndex, scores.stars);
     }
   }
 

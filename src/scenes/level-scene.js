@@ -147,10 +147,12 @@ export class LevelScene extends Phaser.Scene {
     });
   }
 
-  _onArrowTargetCollide(arrow, targetHitbox) {
+  _onArrowTargetCollide(arrow, targetHitbox, gold = config.entities.level.target.gold) {
     this.registry.set('remainingArrows', this.registry.get('remainingArrows') - 1);
     this.registry.set('remainingTargets', this.registry.get('remainingTargets') - 1);
     this.registry.set('state', STATES.HIT);
+
+    this.registry.set('gold', this.registry.get('gold') + gold);
 
     this.arrow.onHit();
     targetHitbox.hitboxParent.onHit();
@@ -166,13 +168,15 @@ export class LevelScene extends Phaser.Scene {
   _onArrowTargetBullseyeCollide(arrow, targetBullseyeHitbox) {
     const target = targetBullseyeHitbox.hitboxParent;
 
-    this._onArrowTargetCollide(arrow, targetBullseyeHitbox);
+    this._onArrowTargetCollide(arrow, targetBullseyeHitbox, config.entities.level.targetBullseye.gold);
     Effects.notify(this, target.sprite.x, target.sprite.y, 'Bullseye!');
   }
 
   _onArrowBalloonCollide(balloon) {
     this.registry.set('remainingBalloons', this.registry.get('remainingBalloons') - 1);
     this.registry.set('poppedBalloons', this.registry.get('poppedBalloons') + 1);
+
+    this.registry.set('gold', this.registry.get('gold') + config.entities.level.balloon.gold);
 
     balloon.pop()
   }

@@ -41,11 +41,11 @@ export class UiScene extends Phaser.Scene {
       .setOrigin(0)
       .setDisplaySize(128, 20);
 
-    const goldIcon = this.add.image(uiConfig.goldIcon.x, uiConfig.goldIcon.y, 'gold-5')
+    this.goldIcon = this.add.image(uiConfig.goldIcon.x, uiConfig.goldIcon.y, 'gold-5')
       .setDisplaySize(uiConfig.goldIcon.width, uiConfig.goldIcon.height)
       .setOrigin(0, 1);
     this.goldText = this.add.bitmapText(uiConfig.goldText.x, uiConfig.goldText.y, 'font', 0, uiConfig.goldText.size)
-      .setOrigin(1, 0.5);
+      .setOrigin(0, 1);
 
     this._updateArrows(null, this.registry.get('remainingArrows'));
     this._updateCharge(null, this.registry.get('charge'));
@@ -55,6 +55,7 @@ export class UiScene extends Phaser.Scene {
   _cleanupRegistryListeners() {
     this.registry.events.off('changedata-remainingArrows', this._updateArrows, this);
     this.registry.events.off('changedata-charge', this._updateCharge, this);
+    this.registry.events.off('changedata-gold', this._updateGold, this);
   }
 
   _updateArrows(parent, remainingArrows) {
@@ -77,7 +78,14 @@ export class UiScene extends Phaser.Scene {
     this.chargeGaugeFill.scaleX = chargePercent;
   }
 
-  _updateGold(parent, value) {
-    this.goldText.text = value;
+  _updateGold(parent, newGold, oldGold = newGold) {
+    this.tweens.add({
+      targets: [{ value: oldGold }],
+      props: { value: newGold },
+      duration: 300,
+      onUpdate: tween => {
+        this.goldText.setText(Phaser.Math.RoundTo(tween.getValue()));
+      }
+    });
   }
 }
