@@ -15,7 +15,7 @@ export class UiScene extends Phaser.Scene {
 
     this.registry.events.on(`changedata-${config.registryKeys.level.remainingArrows}`, this._updateArrows, this);
     this.registry.events.on(`changedata-${config.registryKeys.level.arrow.charge}`, this._updateCharge, this);
-    this.registry.events.on(`changedata-${config.registryKeys.gold}`, this._updateGold, this);
+    this.registry.events.on(`changedata-${config.registryKeys.level.gold}`, this._updateLevelGold, this);
 
     this.add.image(uiConfig.background.x, uiConfig.background.y, 'background-parchment')
       .setDisplaySize(uiConfig.background.width, uiConfig.background.height)
@@ -49,13 +49,13 @@ export class UiScene extends Phaser.Scene {
 
     this._updateArrows(null, this.registry.get(config.registryKeys.level.remainingArrows));
     this._updateCharge(null, this.registry.get(config.registryKeys.level.arrow.charge));
-    this._updateGold(null, this.registry.get(config.registryKeys.gold));
+    this._updateLevelGold(null);
   }
 
   _cleanupRegistryListeners() {
     this.registry.events.off(`changedata-${config.registryKeys.level.remainingArrows}`, this._updateArrows, this);
     this.registry.events.off(`changedata-${config.registryKeys.level.arrow.charge}`, this._updateCharge, this);
-    this.registry.events.off(`changedata-${config.registryKeys.gold}`, this._updateGold, this);
+    this.registry.events.off(`changedata-${config.registryKeys.level.gold}`, this._updateLevelGold, this);
   }
 
   _updateArrows(parent, remainingArrows) {
@@ -78,18 +78,18 @@ export class UiScene extends Phaser.Scene {
     this.chargeGaugeFill.scaleX = chargePercent;
   }
 
-  _updateGold(parent, newGold, oldGold = newGold) {
-    if (newGold == oldGold) {
-      this.goldText.setText(newGold);
-    } else {
-      this.tweens.add({
-        targets: [{ value: oldGold }],
-        props: { value: newGold },
-        duration: 300,
-        onUpdate: tween => {
-          this.goldText.setText(Phaser.Math.RoundTo(tween.getValue()));
-        }
-      });
-    }
+  _updateLevelGold(parent, newLevelGold = 0, oldLevelGold = 0) {
+    const baseGold = this.registry.get(config.registryKeys.gold);
+    const lastLevelGold = baseGold + oldLevelGold;
+    const updatedLevelGold = baseGold + newLevelGold;
+
+    this.tweens.add({
+      targets: [{ value: lastLevelGold}],
+      props: { value: updatedLevelGold },
+      duration: 300,
+      onUpdate: tween => {
+        this.goldText.setText(Phaser.Math.RoundTo(tween.getValue()));
+      }
+    });
   }
 }

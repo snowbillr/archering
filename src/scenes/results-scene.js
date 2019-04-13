@@ -25,7 +25,7 @@ export class ResultsScene extends Phaser.Scene {
     this.add.bitmapText(resultsConfig.title.x, resultsConfig.title.y, 'font', titleText, resultsConfig.title.size)
       .setOrigin(0.5, 0);
 
-    this.storage.saveGold(this.registry.get(config.registryKeys.gold));
+    this.storage.saveGold(this.registry.get(config.registryKeys.gold) + this.registry.get(config.registryKeys.level.gold));
     if (didWin) {
       const scores = this._calculateScore();
 

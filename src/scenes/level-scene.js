@@ -81,6 +81,8 @@ export class LevelScene extends Phaser.Scene {
   }
 
   _resetRegistry() {
+    this.registry.set(config.registryKeys.level.gold, 0);
+
     this.registry.set(config.registryKeys.level.initialArrows, this.levelConfig.arrows);
     this.registry.set(config.registryKeys.level.initialTargets, this.levelConfig.targets.length);
     this.registry.set(config.registryKeys.level.initialBalloons, this.levelConfig.balloons.length);
@@ -152,7 +154,7 @@ export class LevelScene extends Phaser.Scene {
     this.registry.set(config.registryKeys.level.remainingTargets, this.registry.get(config.registryKeys.level.remainingTargets) - 1);
     this.registry.set(config.registryKeys.level.state, STATES.HIT);
 
-    this.registry.set(config.registryKeys.gold, this.registry.get(config.registryKeys.gold) + gold);
+    this.registry.set(config.registryKeys.level.gold, this.registry.get(config.registryKeys.level.gold) + gold);
 
     this.arrow.onHit();
     targetHitbox.hitboxParent.onHit();
@@ -176,7 +178,7 @@ export class LevelScene extends Phaser.Scene {
     this.registry.set(config.registryKeys.level.remainingBalloons, this.registry.get(config.registryKeys.level.remainingBalloons) - 1);
     this.registry.set(config.registryKeys.level.poppedBalloons, this.registry.get(config.registryKeys.level.poppedBalloons) + 1);
 
-    this.registry.set(config.registryKeys.gold, this.registry.get(config.registryKeys.gold) + config.entities.level.balloon.gold);
+    this.registry.set(config.registryKeys.level.gold, this.registry.get(config.registryKeys.level.gold) + config.entities.level.balloon.gold);
 
     balloon.pop()
   }

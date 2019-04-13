@@ -141,6 +141,7 @@ export const config = {
   registryKeys: {
     gold: 'gold',
     level: {
+      gold: 'level.gold',
       index: 'level.index',
       state: 'level.state',
       scrollingDirection: 'level.scrollingDirection',
