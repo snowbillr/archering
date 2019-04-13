@@ -83,13 +83,17 @@ export class UiScene extends Phaser.Scene {
     const lastLevelGold = baseGold + oldLevelGold;
     const updatedLevelGold = baseGold + newLevelGold;
 
-    this.tweens.add({
-      targets: [{ value: lastLevelGold}],
-      props: { value: updatedLevelGold },
-      duration: 300,
-      onUpdate: tween => {
-        this.goldText.setText(Phaser.Math.RoundTo(tween.getValue()));
-      }
-    });
+    if (lastLevelGold == updatedLevelGold) {
+      this.goldText.setText(updatedLevelGold);
+    } else {
+      this.tweens.add({
+        targets: [{ value: lastLevelGold }],
+        props: { value: updatedLevelGold },
+        duration: (updatedLevelGold - lastLevelGold) * 20,
+        onUpdate: tween => {
+          this.goldText.setText(Phaser.Math.RoundTo(tween.getValue()));
+        }
+      });
+    }
   }
 }
