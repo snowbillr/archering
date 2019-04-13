@@ -1,3 +1,10 @@
+current:
+- add the concept of charges to a skill
+- disable skill button when there are no charges
+- decrease charge count each time one is used
+- show charge count on button
+- keyboard shortcuts for skills
+
 next up:
 - level builder
 - hitbox plugin
