@@ -1,6 +1,7 @@
 import { config } from '../config';
 
-import { RestartLevelButton } from '../entities/restart-level-button';
+import { RestartLevelButton } from '../ui/restart-level-button';
+import { SkillButton } from '../ui/skill-button';
 
 const arrowConfig = config.entities.level.arrow;
 const uiConfig = config.layouts.ui;
@@ -47,11 +48,7 @@ export class UiScene extends Phaser.Scene {
     this.goldText = this.add.bitmapText(uiConfig.goldText.x, uiConfig.goldText.y, 'font', 0, uiConfig.goldText.size)
       .setOrigin(0, 1);
 
-    this.spectralArrowButton = this.add.bitmapText(380, 255, 'font', 'spectral arrow', 20)
-      .setInteractive({ cursor: 'pointer '})
-      .on('pointerdown', () => {
-        this.registry.set(config.registryKeys.level.skills.spectralArrow, true);
-      }, this);
+    this.spectralArrowButton = new SkillButton(this, 380, 270, 'arrow-glow', config.registryKeys.level.skills.spectralArrow);
 
     this._updateArrows(null, this.registry.get(config.registryKeys.level.remainingArrows));
     this._updateCharge(null, this.registry.get(config.registryKeys.level.arrow.charge));

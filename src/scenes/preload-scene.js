@@ -39,6 +39,9 @@ export class PreloadScene extends Phaser.Scene {
     this.load.image('star-gray', 'assets/star-gray.png');
 
     this.load.image('arrow', 'assets/arrow.png');
+    this.load.image('arrow-glow', 'assets/arrow-glow.png');
+
+    this.load.image('skill-background', 'assets/skill-background.png');
   }
 
   _loadLevelSelectImages() {
@@ -53,8 +56,6 @@ export class PreloadScene extends Phaser.Scene {
     this.load.image('background-back', 'assets/background-back.png');
     this.load.image('background-middle', 'assets/background-middle.png');
     this.load.image('background-front', 'assets/background-front.png');
-
-    this.load.image('arrow-glow', 'assets/arrow-glow.png');
 
     this.load.image('target', 'assets/target.png');
 
