@@ -27,3 +27,4 @@ ideas:
     - splitting an arrow into 2 or 3 midflight
     - dropping a "bomb" from an arrow midflight
     - arrow going through multiple targets
+  - gold icon should change depending on how much gold you have
