@@ -1,5 +1,6 @@
 const LEVEL_STARS_KEY = 'levelStars';
 const GOLD_KEY = 'gold';
+const SKILLS_KEY = 'skills';
 
 export class Storage {
   constructor() {
@@ -10,6 +11,26 @@ export class Storage {
     if (!this._has(GOLD_KEY)) {
       this._set(GOLD_KEY, 0);
     }
+
+    if (!this._has(SKILLS_KEY)) {
+      this._set(SKILLS_KEY, {
+        spectralArrow: {
+          chargeCount: 0
+        }
+      });
+    }
+  }
+
+  saveSkill(skillKey, skillData) {
+    this._update(SKILLS_KEY, allSkills => {
+      allSkills[skillKey] = skillData;
+
+      return allSkills;
+    });
+  }
+
+  loadSkill(skillKey) {
+    return this._get(SKILLS_KEY)[skillKey];
   }
 
   saveGold(gold) {

@@ -24,7 +24,7 @@ export class PreloadScene extends Phaser.Scene {
   create() {
     this._createGameAnimations();
 
-    this._loadSavedStats();
+    this._loadSaveData();
 
     this.scene.start('level-select')
   }
@@ -105,9 +105,11 @@ export class PreloadScene extends Phaser.Scene {
     });
   }
 
-  _loadSavedStats() {
+  _loadSaveData() {
     const storage = new Storage();
 
     this.registry.set(config.registryKeys.gold, storage.loadGold());
+
+    this.registry.set(config.registryKeys.skills.spectralArrow, storage.loadSkill('spectralArrow'));
   }
 }

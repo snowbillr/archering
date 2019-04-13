@@ -48,7 +48,7 @@ export class UiScene extends Phaser.Scene {
     this.goldText = this.add.bitmapText(uiConfig.goldText.x, uiConfig.goldText.y, 'font', 0, uiConfig.goldText.size)
       .setOrigin(0, 1);
 
-    this.spectralArrowButton = new SkillButton(this, 380, 270, 'arrow-glow', config.registryKeys.level.skills.spectralArrow);
+    this.spectralArrowButton = new SkillButton(this, 380, 270, 'arrow-glow', config.registryKeys.level.skills.spectralArrow, config.registryKeys.skills.spectralArrow);
 
     this._updateArrows(null, this.registry.get(config.registryKeys.level.remainingArrows));
     this._updateCharge(null, this.registry.get(config.registryKeys.level.arrow.charge));

@@ -140,6 +140,9 @@ export const config = {
   },
   registryKeys: {
     gold: 'gold',
+    skills: {
+      spectralArrow: 'skills.spectralArrow',
+    },
     level: {
       gold: 'level.gold',
       index: 'level.index',
@@ -156,7 +159,7 @@ export const config = {
         charge: 'level.arrow.charge',
       },
       skills: {
-        spectralArrow: 'level.spectralArrow',
+        spectralArrow: 'level.skills.spectralArrow',
       }
     }
   }

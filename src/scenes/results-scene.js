@@ -26,6 +26,8 @@ export class ResultsScene extends Phaser.Scene {
       .setOrigin(0.5, 0);
 
     this.storage.saveGold(this.registry.get(config.registryKeys.gold) + this.registry.get(config.registryKeys.level.gold));
+    this.storage.saveSkill('spectralArrow', this.registry.get(config.registryKeys.skills.spectralArrow));
+
     if (didWin) {
       const scores = this._calculateScore();
 
