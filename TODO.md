@@ -11,6 +11,7 @@ next up:
   - deer running away
   - vertical osciallation (animation of helpers turning a lever?)
   - targets hanging from balloons
+  - horizontal target laying on ground
 
 clean up:
 - destroy or reuse notify texts
@@ -19,9 +20,9 @@ bugs:
 - camera shouldn't scroll one pixel to the left at rest on far left of screen
 
 ideas:
-  - hits charge up skill meter, when skill meter is full enough you can use a skill
-    - alternatively, hits don't charge up a skill meter but give you gold. and you can use gold to buy charges for each skill in a store
-  - bullseyes, balloons, targets all charge skill meter (or gold amount) different amounts
+  - hitting "enemies" gives you gold (different amounts for each enemy)
+  - can buy skill charges with gold
+  - can unlock skills and skill upgrades with stars
   - possible skills:
     - splitting an arrow into 2 or 3 midflight
     - dropping a "bomb" from an arrow midflight
