@@ -1,5 +1,6 @@
 import { config } from '../config';
 import { Cannonball } from '../entities/cannonball';
+import { CannonballGroundCollider } from '../colliders/cannonball-ground-collider';
 
 const SKILL_CONFIG_KEY = config.registryKeys.skills.cannonball;
 const LEVEL_KEY = config.registryKeys.level.skills.cannonball;
@@ -11,13 +12,14 @@ export class CannonballSkill {
 
   activate() {
     const levelScene = this.scene.scene.get('level');
-    const cannonball = new Cannonball(this.scene, 200, 100);
+    const cannonball = new Cannonball(levelScene, levelScene.arrow.getSprite().x, levelScene.arrow.getSprite().y);
 
     const ground = levelScene.groundZone;
     const targets = levelScene.targets;
     const balloons = levelScene.balloons;
 
-    this.scene.physics.add.collider(cannonball.sprite, ground);
+    const cannonballGroundCollider = new CannonballGroundCollider();
+    levelScene.physics.add.collider(cannonball.sprite, ground, cannonballGroundCollider.onHit);
 
     // TODO: balloons
 
@@ -29,9 +31,9 @@ export class CannonballSkill {
     // this.scene.physics.add.collider(cannonball.sprite, targets.getHitboxes());
     targets.getHitboxes().forEach(group => {
       group.children.entries.forEach(zone => {
-        this.scene.physics.add.collider(cannonball.sprite, zone);
+        levelScene.physics.add.collider(cannonball.sprite, zone);
       });
     });
-    this.scene.physics.add.collider(cannonball.sprite, targets.getBullseyeHitboxes());
+    levelScene.physics.add.collider(cannonball.sprite, targets.getBullseyeHitboxes());
   }
 }

@@ -18,7 +18,7 @@ export class ArrowTargetCollider {
     targetHitbox.hitboxParent.onHit();
 
     if (this.scene.registry.get(config.registryKeys.level.skills.spectralArrow)) {
-      Effects.flashOut([targetHitbox.hitboxParent.getSprite()], () => {});
+      Effects.flashOut([targetHitbox.hitboxParent.getSprite()]);
     } else {
       this.scene.registry.set(config.registryKeys.level.state, STATES.HIT);
       this.scene.registry.set(config.registryKeys.level.remainingArrows, this.scene.registry.get(config.registryKeys.level.remainingArrows) - 1);

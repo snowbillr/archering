@@ -1,4 +1,4 @@
-export function flashOut(gameObjects, callback) {
+export function flashOut(gameObjects, callback = () => {}) {
   if (gameObjects.length === 0) { callback(); }
 
   const scene = gameObjects[0].scene;
