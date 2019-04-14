@@ -17,7 +17,7 @@ export class Storage {
         spectralArrow: {
           chargeCount: 0,
         },
-        bomb: {
+        cannonball: {
           chargeCount: 0,
         }
       });

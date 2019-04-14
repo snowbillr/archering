@@ -142,7 +142,7 @@ export const config = {
     gold: 'gold',
     skills: {
       spectralArrow: 'skills.spectralArrow',
-      bomb: 'skills.bomb',
+      cannonball: 'skills.cannonball',
     },
     level: {
       gold: 'level.gold',
@@ -161,7 +161,7 @@ export const config = {
       },
       skills: {
         spectralArrow: 'level.skills.spectralArrow',
-        bomb: 'level.skills.bomb',
+        cannonball: 'level.skills.cannonball',
       }
     }
   }
