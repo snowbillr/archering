@@ -22,19 +22,17 @@ export class SkillButton {
   }
 
   onUse() {
-    this.scene.registry.set(this.levelKey, true);
-
     const skillConfig = this.scene.registry.get(this.skillKey);
 
     if (skillConfig.chargeCount > 0) {
-      skillConfig.chargeCount -= 1;
+      this.scene.registry.set(this.levelKey, true);
 
+      skillConfig.chargeCount -= 1;
       this.scene.registry.set(this.skillKey, skillConfig);
     }
   }
 
   _updateButton(parent, skillConfig) {
-    console.log('updating button')
     if (skillConfig.chargeCount === 0) {
       this.background.setTint(0xcccccc);
       this.icon.setTint(0xcccccc);
