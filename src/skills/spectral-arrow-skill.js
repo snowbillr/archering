@@ -2,7 +2,7 @@ import { config } from '../config';
 
 const LEVEL_KEY = config.registryKeys.level.skills.spectralArrow;
 
-export class SpectralArrow {
+export class SpectralArrowSkill {
   constructor(scene) {
     this.scene = scene;
   }
