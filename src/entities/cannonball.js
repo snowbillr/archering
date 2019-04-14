@@ -4,14 +4,13 @@ export class Cannonball {
 
     this.sprite = scene.physics.add.sprite(x, y, 'cannonball')
       .setDisplaySize(32, 32)
-      // .setCircle(32)
 
     this.hitbox = this.scene.arcadeHitbox.add(this.sprite, {
       parent: this,
-      xOffset: 0,
-      yOffset: 0,
-      width: 32,
-      height: 32,
+      xOffset: -16,
+      yOffset: -16,
+      shape: 'circle',
+      radius: 16,
       onCreate: hitbox => {
         hitbox.body.allowGravity = false;
       }

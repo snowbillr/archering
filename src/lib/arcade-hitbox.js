@@ -14,16 +14,22 @@ export class ArcadeHitboxPlugin extends Phaser.Plugins.ScenePlugin {
     {
       parent?: any,
       onCreate?: hitbox => void,
+      shape?: 'rectangle'|'circle',
       xOffset: number,
       yOffset: number,
-      width: number,
-      height: number,
+      width?: number,
+      height?: number,
+      radius?: number,
     }
    */
   add(sprite, hitboxConfig) {
     const { xOffset, yOffset, width, height } = hitboxConfig;
     const hitbox = this.scene.add.zone(sprite.x + xOffset, sprite.y + yOffset, width, height);
     this.scene.physics.add.existing(hitbox);
+
+    if (hitboxConfig.shape === 'circle') {
+      hitbox.body.setCircle(hitboxConfig.radius);
+    }
 
     const parent = hitboxConfig.parent || sprite;
     hitbox.hitboxParent = parent;
