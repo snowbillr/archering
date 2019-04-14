@@ -1,4 +1,5 @@
 import { config } from '../config';
+import * as STATES from '../level-states';
 
 import { RestartLevelButton } from '../ui/restart-level-button';
 import { SkillButton } from '../ui/skill-button';
@@ -52,8 +53,8 @@ export class UiScene extends Phaser.Scene {
 
     const spectralArrowSkill = new SpectralArrowSkill(this);
     const cannonballSkill = new CannonballSkill(this);
-    this.spectralArrowButton = new SkillButton(this, 380, 270, 'arrow-glow', config.registryKeys.skills.spectralArrow, spectralArrowSkill, Phaser.Input.Keyboard.KeyCodes.ONE);
-    this.cannonballButton = new SkillButton(this, 430, 270, 'cannonball', config.registryKeys.skills.cannonball, cannonballSkill, Phaser.Input.Keyboard.KeyCodes.TWO);
+    this.spectralArrowButton = new SkillButton(this, 380, 270, 'arrow-glow', config.registryKeys.skills.spectralArrow, spectralArrowSkill, Phaser.Input.Keyboard.KeyCodes.ONE, [STATES.REST, STATES.CHARGE, STATES.FLY]);
+    this.cannonballButton = new SkillButton(this, 430, 270, 'cannonball', config.registryKeys.skills.cannonball, cannonballSkill, Phaser.Input.Keyboard.KeyCodes.TWO, [STATES.FLY]);
 
     this._updateArrows(null, this.registry.get(config.registryKeys.level.remainingArrows));
     this._updateCharge(null, this.registry.get(config.registryKeys.level.arrow.charge));

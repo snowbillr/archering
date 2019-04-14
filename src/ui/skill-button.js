@@ -1,8 +1,12 @@
+import * as STATES from '../level-states';
+import { config } from '../config';
+
 export class SkillButton {
-  constructor(scene, x, y, iconKey, skillConfigKey, skill, shortcutKey) {
+  constructor(scene, x, y, iconKey, skillConfigKey, skill, shortcutKey, validStates) {
     this.scene = scene;
     this.skillConfigKey = skillConfigKey;
     this.skill = skill;
+    this.validStates = validStates;
 
     this.background = this.scene.add.image(x, y, 'skill-background')
       .setDisplaySize(42, 42);
@@ -25,7 +29,10 @@ export class SkillButton {
   onUse() {
     const skillConfig = this.scene.registry.get(this.skillConfigKey);
 
-    if (skillConfig.chargeCount > 0) {
+    const hasCharges = skillConfig.chargeCount > 0;
+    const isValidState = this.validStates == null ? true : this.validStates.includes(this.scene.registry.get(config.registryKeys.level.state));
+
+    if (hasCharges && isValidState) {
       skillConfig.chargeCount -= 1;
       this.scene.registry.set(this.skillConfigKey, skillConfig);
 

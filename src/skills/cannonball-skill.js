@@ -13,7 +13,6 @@ export class CannonballSkill {
 
   activate() {
     const levelScene = this.scene.scene.get('level');
-    // const cannonball = new Cannonball(levelScene, 250, 100);
     const cannonball = new Cannonball(levelScene, levelScene.arrow.getSprite().x, levelScene.arrow.getSprite().y);
 
     const ground = levelScene.groundZone;
