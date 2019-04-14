@@ -1,6 +1,7 @@
 import { config } from '../config';
 import { Cannonball } from '../entities/cannonball';
 import { CannonballGroundCollider } from '../colliders/cannonball-ground-collider';
+import { CannonballTargetCollider } from '../colliders/cannonball-target-collider';
 
 const SKILL_CONFIG_KEY = config.registryKeys.skills.cannonball;
 const LEVEL_KEY = config.registryKeys.level.skills.cannonball;
@@ -12,6 +13,7 @@ export class CannonballSkill {
 
   activate() {
     const levelScene = this.scene.scene.get('level');
+    // const cannonball = new Cannonball(levelScene, 250, 100);
     const cannonball = new Cannonball(levelScene, levelScene.arrow.getSprite().x, levelScene.arrow.getSprite().y);
 
     const ground = levelScene.groundZone;
@@ -21,19 +23,23 @@ export class CannonballSkill {
     const cannonballGroundCollider = new CannonballGroundCollider();
     levelScene.physics.add.collider(cannonball.sprite, ground, cannonballGroundCollider.onHit);
 
-    // TODO: balloons
+    // TODO: balloon
 
     /*
-     * This is a bug with 3.16.2.
-     * It looks like if the first arg is a circle, the second arg can't be a group.
+     * This looks like a bug with 3.16.2.
+     * It seems that if the first arg's body is a circle, the second arg can't be a group.
      * So the workaround is to iterate over the group and add individual colliders.
     */
     // this.scene.physics.add.collider(cannonball.sprite, targets.getHitboxes());
+    const cannonballTargetCollider = new CannonballTargetCollider(levelScene);
     targets.getHitboxes().forEach(group => {
       group.children.entries.forEach(zone => {
-        levelScene.physics.add.collider(cannonball.sprite, zone);
+        // hacky until i implement circles in the hitbox lib
+        levelScene.physics.add.collider(cannonball.sprite, zone, cannonballTargetCollider.onTargetHit.bind(cannonballTargetCollider, cannonball, zone));
       });
     });
-    levelScene.physics.add.collider(cannonball.sprite, targets.getBullseyeHitboxes());
+
+    // TODO - add on hit handler for bullseyes
+    // levelScene.physics.add.collider(cannonball.sprite, targets.getBullseyeHitboxes());
   }
 }

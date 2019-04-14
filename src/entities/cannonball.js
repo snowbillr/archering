@@ -6,4 +6,8 @@ export class Cannonball {
       .setCircle(32)
       .setDisplaySize(32, 32)
   }
+
+  onHit() {
+    this.sprite.body.enable = false;
+  }
 }

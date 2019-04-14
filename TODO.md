@@ -1,4 +1,9 @@
 current:
+- cannonball can only be launched when the arrow is flying
+- balloon (and string) & cannonball collision
+- cannonball and target bullseye collision
+- hitbox plugin circle shape
+- some of the colliders are pretty similar, any opportunity to dry them up?
 
 next up:
 - level builder

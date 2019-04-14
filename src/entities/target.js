@@ -62,7 +62,7 @@ export class Target {
 
   onHit() {
     if (this.wasHit) { return; }
-    this.wasHit =true;
+    this.wasHit = true;
 
     this.getHitboxes().getChildren().forEach(hitbox => {
       hitbox.body.enable = false;

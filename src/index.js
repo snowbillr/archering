@@ -20,7 +20,6 @@ const gameConfig = {
   physics: {
     default: 'arcade',
     arcade: {
-      debug: true,
       x: 0,
       y: 0,
       width: config.dimensions.world.width,
