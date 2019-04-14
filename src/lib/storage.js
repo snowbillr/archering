@@ -15,7 +15,10 @@ export class Storage {
     if (!this._has(SKILLS_KEY)) {
       this._set(SKILLS_KEY, {
         spectralArrow: {
-          chargeCount: 0
+          chargeCount: 0,
+        },
+        bomb: {
+          chargeCount: 0,
         }
       });
     }

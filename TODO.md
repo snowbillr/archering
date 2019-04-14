@@ -11,7 +11,7 @@ next up:
   - vertical osciallation (animation of helpers turning a lever?)
   - targets hanging from balloons (when balloon goes away the target falls to the ground)
   - horizontal target laying on ground
-- keyboard shortcuts for skills
+- keyboard shortcuts for skills - https://labs.phaser.io/edit.html?src=src\input\keyboard\add%20single%20key.js
 
 clean up:
 - destroy or reuse notify texts

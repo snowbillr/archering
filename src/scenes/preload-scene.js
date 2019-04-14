@@ -41,6 +41,8 @@ export class PreloadScene extends Phaser.Scene {
     this.load.image('arrow', 'assets/arrow.png');
     this.load.image('arrow-glow', 'assets/arrow-glow.png');
 
+    this.load.image('bomb', 'assets/bomb.png');
+
     this.load.image('skill-background', 'assets/skill-background.png');
   }
 
@@ -111,5 +113,6 @@ export class PreloadScene extends Phaser.Scene {
     this.registry.set(config.registryKeys.gold, storage.loadGold());
 
     this.registry.set(config.registryKeys.skills.spectralArrow, storage.loadSkill('spectralArrow'));
+    this.registry.set(config.registryKeys.skills.bomb, storage.loadSkill('bomb'));
   }
 }

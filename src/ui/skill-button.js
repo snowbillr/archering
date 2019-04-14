@@ -1,8 +1,8 @@
 export class SkillButton {
-  constructor(scene, x, y, iconKey, levelKey, skillKey) {
+  constructor(scene, x, y, iconKey, skillConfigKey, skill) {
     this.scene = scene;
-    this.levelKey = levelKey;
-    this.skillKey = skillKey;
+    this.skillKey = skillConfigKey;
+    this.skill = skill;
 
     this.background = this.scene.add.image(x, y, 'skill-background')
       .setDisplaySize(42, 42);
@@ -17,19 +17,12 @@ export class SkillButton {
       .setInteractive({ cursor: 'pointer' })
       .on('pointerdown', this.onUse, this);
 
-    this.scene.registry.events.on(`changedata-${skillKey}`, this._updateButton, this);
-    this._updateButton(null, this.scene.registry.get(skillKey));
+    this.scene.registry.events.on(`changedata-${skillConfigKey}`, this._updateButton, this);
+    this._updateButton(null, this.scene.registry.get(skillConfigKey));
   }
 
   onUse() {
-    const skillConfig = this.scene.registry.get(this.skillKey);
-
-    if (skillConfig.chargeCount > 0) {
-      this.scene.registry.set(this.levelKey, true);
-
-      skillConfig.chargeCount -= 1;
-      this.scene.registry.set(this.skillKey, skillConfig);
-    }
+    this.skill.activate();
   }
 
   _updateButton(parent, skillConfig) {
@@ -42,6 +35,6 @@ export class SkillButton {
   }
 
   cleanupRegistryListeners() {
-    this.scene.registry.events.off(this.levelKey, this._updateButton);
+    this.scene.registry.events.off(`changedata-${this.skillKey}`, this._updateButton);
   }
 }
