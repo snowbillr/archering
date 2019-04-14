@@ -45,8 +45,8 @@ export class LevelScene extends Phaser.Scene {
 
     this.physics.add.overlap(this.arrow.getHitbox(), this.targets.getHitboxes(), arrowTargetCollider.onTargetHit);
     this.physics.add.overlap(this.arrow.getHitbox(), this.targets.getBullseyeHitboxes(), arrowTargetCollider.onBullseyeHit);
-    this.balloons.addBalloonOverlap(this.arrow.getHitbox(), arrowBalloonCollider.onBalloonHit);
-    this.balloons.addStringOverlap(this.arrow.getHitbox(), arrowBalloonCollider.onStringHit);
+    this.physics.add.overlap(this.arrow.getHitbox(), this.balloons.getBalloonHitboxes(), arrowBalloonCollider.onBalloonHit)
+    this.physics.add.overlap(this.arrow.getHitbox(), this.balloons.getStringHitboxes(), arrowBalloonCollider.onStringHit)
     this.physics.add.collider(this.arrow.getHitbox(), this.groundZone, arrowGroundCollider.onHit);
 
     this.scene.launch('ui');

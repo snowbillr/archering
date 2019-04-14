@@ -15,6 +15,7 @@ export class Balloon {
       height: 37,
     });
     this.balloon.hitbox.body.allowGravity = false;
+    this.balloon.balloonParent = this;
 
     this.string = scene.add.sprite(balloonX, balloonStringConfig.bottomY, 'balloon-string');
     this.string.setOrigin(0.5, 1);
@@ -27,6 +28,7 @@ export class Balloon {
       height: this.string.displayHeight,
     });
     this.string.hitbox.body.allowGravity = false;
+    this.string.balloonParent = this;
 
     this.popSound = scene.sound.add('balloon-pop');
   }

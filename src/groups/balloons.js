@@ -32,15 +32,11 @@ export class Balloons {
     }, 0);
   }
 
-  addBalloonOverlap(arrow, callback) {
-    this.balloons.forEach(balloon => {
-      this.scene.physics.add.overlap(arrow, balloon.balloon.hitbox, arrow => callback(arrow, balloon));
-    });
+  getBalloonHitboxes() {
+    return this.balloons.map(balloon => balloon.balloon.hitbox);
   }
 
-  addStringOverlap(arrow, callback) {
-    this.balloons.forEach(balloon => {
-      this.scene.physics.add.overlap(arrow, balloon.string.hitbox, arrow => callback(arrow, balloon));
-    });
+  getStringHitboxes() {
+    return this.balloons.map(balloon => balloon.string.hitbox);
   }
 }
