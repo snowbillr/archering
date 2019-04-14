@@ -1,12 +1,9 @@
 current:
-- cannonball and target bullseye collision
-- hitbox plugin circle shape
 - some of the colliders are pretty similar, any opportunity to dry them up?
 
 next up:
 - level builder
 - hitbox plugin
-  - circle shape
   - take scale into account
 - tutorial
 - "enemy" types
