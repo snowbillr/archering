@@ -21,10 +21,10 @@ export class CannonballSkill {
     const balloons = levelScene.balloons;
 
     const cannonballGroundCollider = new CannonballGroundCollider();
-    levelScene.physics.add.collider(cannonball.sprite, ground, cannonballGroundCollider.onHit);
+    levelScene.physics.add.collider(cannonball.hitbox, ground, cannonballGroundCollider.onHit);
 
     const cannonballBalloonCollider = new CannonballBalloonCollider(levelScene);
-    levelScene.physics.add.collider(cannonball.sprite, balloons.getBalloonHitboxes(), cannonballBalloonCollider.onBalloonHit);
+    levelScene.physics.add.collider(cannonball.hitbox, balloons.getBalloonHitboxes(), cannonballBalloonCollider.onBalloonHit);
 
     /*
      * This looks like a bug with 3.16.2.
@@ -36,7 +36,7 @@ export class CannonballSkill {
     targets.getHitboxes().forEach(group => {
       group.children.entries.forEach(zone => {
         // hacky until i implement circles in the hitbox lib
-        levelScene.physics.add.collider(cannonball.sprite, zone, cannonballTargetCollider.onTargetHit.bind(cannonballTargetCollider, cannonball, zone));
+        levelScene.physics.add.collider(cannonball.hitbox, zone, cannonballTargetCollider.onTargetHit.bind(cannonballTargetCollider, cannonball, zone));
       });
     });
     // TODO - add on hit handler for bullseyes

@@ -3,9 +3,10 @@ import { Effects } from '../effects';
 export class CannonballGroundCollider {
   constructor() {}
 
-  onHit(cannonball, ground) {
-    cannonball.body.enable = false;
+  onHit(cannonballHitbox, ground) {
+    const cannonball = cannonballHitbox.hitboxParent;
 
-    Effects.flashOut([cannonball]);
+    cannonball.onHit();
+    Effects.flashOut([cannonball.sprite]);
   }
 }
