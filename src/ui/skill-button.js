@@ -1,7 +1,7 @@
 export class SkillButton {
   constructor(scene, x, y, iconKey, skillConfigKey, skill) {
     this.scene = scene;
-    this.skillKey = skillConfigKey;
+    this.skillConfigKey = skillConfigKey;
     this.skill = skill;
 
     this.background = this.scene.add.image(x, y, 'skill-background')
@@ -22,7 +22,14 @@ export class SkillButton {
   }
 
   onUse() {
-    this.skill.activate();
+    const skillConfig = this.scene.registry.get(this.skillConfigKey);
+
+    if (skillConfig.chargeCount > 0) {
+      skillConfig.chargeCount -= 1;
+      this.scene.registry.set(this.skillConfigKey, skillConfig);
+
+      this.skill.activate();
+    }
   }
 
   _updateButton(parent, skillConfig) {
@@ -35,6 +42,6 @@ export class SkillButton {
   }
 
   cleanupRegistryListeners() {
-    this.scene.registry.events.off(`changedata-${this.skillKey}`, this._updateButton);
+    this.scene.registry.events.off(`changedata-${this.skillConfigKey}`, this._updateButton);
   }
 }
