@@ -2,6 +2,7 @@ import { config } from '../config';
 import { Cannonball } from '../entities/cannonball';
 import { CannonballGroundCollider } from '../colliders/cannonball-ground-collider';
 import { CannonballTargetCollider } from '../colliders/cannonball-target-collider';
+import { CannonballBalloonCollider } from '../colliders/cannonball-balloon-collider';
 
 const SKILL_CONFIG_KEY = config.registryKeys.skills.cannonball;
 const LEVEL_KEY = config.registryKeys.level.skills.cannonball;
@@ -22,7 +23,8 @@ export class CannonballSkill {
     const cannonballGroundCollider = new CannonballGroundCollider();
     levelScene.physics.add.collider(cannonball.sprite, ground, cannonballGroundCollider.onHit);
 
-    // TODO: balloon
+    const cannonballBalloonCollider = new CannonballBalloonCollider(levelScene);
+    levelScene.physics.add.collider(cannonball.sprite, balloons.getBalloonHitboxes(), cannonballBalloonCollider.onBalloonHit);
 
     /*
      * This looks like a bug with 3.16.2.
@@ -37,7 +39,6 @@ export class CannonballSkill {
         levelScene.physics.add.collider(cannonball.sprite, zone, cannonballTargetCollider.onTargetHit.bind(cannonballTargetCollider, cannonball, zone));
       });
     });
-
     // TODO - add on hit handler for bullseyes
     // levelScene.physics.add.collider(cannonball.sprite, targets.getBullseyeHitboxes());
   }
