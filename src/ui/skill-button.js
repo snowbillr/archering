@@ -1,5 +1,5 @@
 export class SkillButton {
-  constructor(scene, x, y, iconKey, skillConfigKey, skill) {
+  constructor(scene, x, y, iconKey, skillConfigKey, skill, shortcutKey) {
     this.scene = scene;
     this.skillConfigKey = skillConfigKey;
     this.skill = skill;
@@ -16,6 +16,7 @@ export class SkillButton {
     this.clickZone = this.scene.add.zone(x, y, 42, 42)
       .setInteractive({ cursor: 'pointer' })
       .on('pointerdown', this.onUse, this);
+    this.shortcutKey = this.scene.input.keyboard.addKey(shortcutKey).on('down', this.onUse, this);
 
     this.scene.registry.events.on(`changedata-${skillConfigKey}`, this._updateButton, this);
     this._updateButton(null, this.scene.registry.get(skillConfigKey));
