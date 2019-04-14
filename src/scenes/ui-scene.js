@@ -3,6 +3,7 @@ import { config } from '../config';
 import { RestartLevelButton } from '../ui/restart-level-button';
 import { SkillButton } from '../ui/skill-button';
 import { SpectralArrow } from '../skills/spectral-arrow';
+import { Bomb } from '../skills/bomb';
 
 const arrowConfig = config.entities.level.arrow;
 const uiConfig = config.layouts.ui;
@@ -50,8 +51,9 @@ export class UiScene extends Phaser.Scene {
       .setOrigin(0, 1);
 
     const spectralArrowSkill = new SpectralArrow(this);
+    const bombSkill = new Bomb(this);
     this.spectralArrowButton = new SkillButton(this, 380, 270, 'arrow-glow', config.registryKeys.skills.spectralArrow, spectralArrowSkill);
-    // this.bombButton = new SkillButton(this, 430, 270, 'bomb', config.registryKeys.level.skills.bomb, config.registryKeys.skills.bomb);
+    this.bombButton = new SkillButton(this, 430, 270, 'bomb', config.registryKeys.skills.bomb, bombSkill);
 
     this._updateArrows(null, this.registry.get(config.registryKeys.level.remainingArrows));
     this._updateCharge(null, this.registry.get(config.registryKeys.level.arrow.charge));

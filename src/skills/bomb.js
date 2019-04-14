@@ -9,5 +9,6 @@ export class Bomb {
   }
 
   activate() {
+    console.log('boom')
   }
 }
