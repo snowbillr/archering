@@ -18,6 +18,7 @@ next up:
 
 clean up:
 - destroy or reuse notify texts
+- skill button args are getting beefy
 
 bugs:
 
