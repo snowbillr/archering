@@ -17,6 +17,7 @@ clean up:
 - skill button args are getting beefy
 
 bugs:
+- clicking on ui scene shouldn't propagate event down to level scene (https://github.com/photonstorm/phaser/blob/master/src/input/InputManager.js#L318)
 
 ideas:
   - should targets and arrows disappear when they are hit/used up?
