@@ -28,3 +28,7 @@ ideas:
     - dropping a "bomb" from an arrow midflight
     - arrow going through multiple targets
   - gold icon should change depending on how much gold you have
+  - achievements
+    - something watching the registry
+    - when it happens, show a notification on the screen (banner pops in in the top right?)
+    - reward is gold

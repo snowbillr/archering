@@ -51,5 +51,6 @@ export class SkillButton {
 
   cleanupRegistryListeners() {
     this.scene.registry.events.off(`changedata-${this.skillConfigKey}`, this._updateButton);
+    this.shortcutKey.off('down', this.onUse, this);
   }
 }
