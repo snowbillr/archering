@@ -1,10 +1,8 @@
 import { config } from '../config';
-import * as STATES from '../level-states';
 
 import { RestartLevelButton } from '../ui/restart-level-button';
-import { SkillButton } from '../ui/skill-button';
-import { SpectralArrowSkill } from '../skills/spectral-arrow-skill';
-import { CannonballSkill } from '../skills/cannonball-skill';
+import { SpectralArrowButton } from '../ui/spectral-arrow-button';
+import { CannonballButton } from '../ui/cannonball-button';
 
 const arrowConfig = config.entities.level.arrow;
 const uiConfig = config.layouts.ui;
@@ -53,8 +51,8 @@ export class UiScene extends Phaser.Scene {
 
     const skillManager = this.scene.get('level').skillManager;
     this.skillButtons = [
-      new SkillButton(this, skillManager, 380, 270, 'arrow-glow', config.registryKeys.skills.spectralArrow, Phaser.Input.Keyboard.KeyCodes.ONE),
-      new SkillButton(this, skillManager, 430, 270, 'cannonball', config.registryKeys.skills.cannonball, Phaser.Input.Keyboard.KeyCodes.TWO),
+      new SpectralArrowButton(this, skillManager, 380, 270),
+      new CannonballButton(this, skillManager, 430, 270),
     ];
 
     this._updateArrows(null, this.registry.get(config.registryKeys.level.remainingArrows));

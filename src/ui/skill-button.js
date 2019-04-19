@@ -1,16 +1,11 @@
-import { config } from '../config';
-
 export class SkillButton {
-  constructor(scene, skillManager, x, y, iconKey, skillKey, shortcutKey) {
+  constructor(scene, skillManager, x, y, skillKey, shortcutKey) {
     this.scene = scene;
     this.skillKey = skillKey;
     this.skillManager = skillManager;
 
     this.background = this.scene.add.image(x, y, 'skill-background')
       .setDisplaySize(42, 42);
-    this.icon = this.scene.add.image(x, y, iconKey)
-      .setScale(0.45)
-      .setAngle(-45);
 
     this.chargeCountText = this.scene.add.bitmapText(x + 16, y + 16, 'font', '', 12)
       .setOrigin(1, 1);

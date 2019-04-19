@@ -15,7 +15,6 @@ next up:
 
 clean up:
 - destroy or reuse notify texts
-- skill button args are getting beefy
 - some of the colliders are pretty similar, any opportunity to dry them up?
 - level scene's load and restart methods are pretty similar, any opportunity to dry them up?
 
