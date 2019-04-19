@@ -1,7 +1,8 @@
 current:
-- some of the colliders are pretty similar, any opportunity to dry them up?
 
 next up:
+- split arrow skill
+- skill store
 - level builder
 - hitbox plugin
   - take scale into account
@@ -15,19 +16,16 @@ next up:
 clean up:
 - destroy or reuse notify texts
 - skill button args are getting beefy
+- some of the colliders are pretty similar, any opportunity to dry them up?
+- level scene's load and restart methods are pretty similar, any opportunity to dry them up?
 
 bugs:
 - clicking on ui scene shouldn't propagate event down to level scene (https://github.com/photonstorm/phaser/blob/master/src/input/InputManager.js#L318)
 
 ideas:
   - should targets and arrows disappear when they are hit/used up?
-  - hitting "enemies" gives you gold (different amounts for each enemy)
   - can buy skill charges with gold
   - can unlock skills and skill upgrades with stars
-  - possible skills:
-    - splitting an arrow into 2 or 3 midflight
-    - dropping a "bomb" from an arrow midflight
-    - arrow going through multiple targets
   - gold icon should change depending on how much gold you have
   - achievements
     - something watching the registry
