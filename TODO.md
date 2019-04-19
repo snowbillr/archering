@@ -22,11 +22,11 @@ bugs:
 - clicking on ui scene shouldn't propagate event down to level scene (https://github.com/photonstorm/phaser/blob/master/src/input/InputManager.js#L318)
 
 ideas:
-  - should targets and arrows disappear when they are hit/used up?
+  - should enemies and arrows disappear when they are hit/used up?
   - can buy skill charges with gold
   - can unlock skills and skill upgrades with stars
   - gold icon should change depending on how much gold you have
   - achievements
     - something watching the registry
-    - when it happens, show a notification on the screen (banner pops in in the top right?)
-    - reward is gold
+    - when an achievement happens, show a notification on the screen (banner pops in in the top right?)
+    - reward is gold or skill charges
