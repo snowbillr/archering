@@ -22,6 +22,7 @@ export class UiScene extends Phaser.Scene {
     this.add.image(uiConfig.background.x, uiConfig.background.y, 'background-parchment')
       .setDisplaySize(uiConfig.background.width, uiConfig.background.height)
       .setOrigin(0, 0)
+      .setInteractive();
 
     this.restartButton = new RestartLevelButton(this);
 

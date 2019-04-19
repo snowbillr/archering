@@ -19,7 +19,6 @@ clean up:
 - level scene's load and restart methods are pretty similar, any opportunity to dry them up?
 
 bugs:
-- clicking on ui scene shouldn't propagate event down to level scene (https://github.com/photonstorm/phaser/blob/master/src/input/InputManager.js#L318)
 
 ideas:
   - should enemies and arrows disappear when they are hit/used up?
