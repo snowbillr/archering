@@ -1,12 +1,10 @@
-import * as STATES from '../level-states';
 import { config } from '../config';
 
 export class SkillButton {
-  constructor(scene, x, y, iconKey, skillConfigKey, skill, shortcutKey, validStates) {
+  constructor(scene, skillManager, x, y, iconKey, skillKey, shortcutKey) {
     this.scene = scene;
-    this.skillConfigKey = skillConfigKey;
-    this.skill = skill;
-    this.validStates = validStates;
+    this.skillKey = skillKey;
+    this.skillManager = skillManager;
 
     this.background = this.scene.add.image(x, y, 'skill-background')
       .setDisplaySize(42, 42);
@@ -22,21 +20,13 @@ export class SkillButton {
       .on('pointerdown', this.onUse, this);
     this.shortcutKey = this.scene.input.keyboard.addKey(shortcutKey).on('down', this.onUse, this);
 
-    this.scene.registry.events.on(`changedata-${skillConfigKey}`, this._updateButton, this);
-    this._updateButton(null, this.scene.registry.get(skillConfigKey));
+    this.scene.registry.events.on(`changedata-${skillKey}`, this._updateButton, this);
+    this._updateButton(null, this.scene.registry.get(skillKey));
   }
 
   onUse() {
-    const skillConfig = this.scene.registry.get(this.skillConfigKey);
-
-    const hasCharges = skillConfig.chargeCount > 0;
-    const isValidState = this.validStates == null ? true : this.validStates.includes(this.scene.registry.get(config.registryKeys.level.state));
-
-    if (hasCharges && isValidState) {
-      skillConfig.chargeCount -= 1;
-      this.scene.registry.set(this.skillConfigKey, skillConfig);
-
-      this.skill.activate();
+    if (this.skillManager.canActivate(this.skillKey)) {
+      this.skillManager.activate(this.skillKey);
     }
   }
 
@@ -50,7 +40,7 @@ export class SkillButton {
   }
 
   cleanupRegistryListeners() {
-    this.scene.registry.events.off(`changedata-${this.skillConfigKey}`, this._updateButton);
+    this.scene.registry.events.off(`changedata-${this.skillKey}`, this._updateButton);
     this.shortcutKey.off('down', this.onUse, this);
   }
 }

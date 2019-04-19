@@ -1,4 +1,5 @@
 import { config } from '../config';
+import * as STATES from '../level-states';
 import { Cannonball } from '../entities/cannonball';
 import { CannonballGroundCollider } from '../colliders/cannonball-ground-collider';
 import { CannonballTargetCollider } from '../colliders/cannonball-target-collider';
@@ -7,6 +8,8 @@ import { CannonballBalloonCollider } from '../colliders/cannonball-balloon-colli
 export class CannonballSkill {
   constructor(scene) {
     this.scene = scene;
+
+    this.validStates = [STATES.FLY];
   }
 
   activate() {
@@ -39,5 +42,9 @@ export class CannonballSkill {
 
     // TODO - add on hit handler for bullseyes
     // levelScene.physics.add.collider(cannonball.sprite, targets.getBullseyeHitboxes());
+  }
+
+  deactivate() {
+    // no op
   }
 }

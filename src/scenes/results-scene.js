@@ -16,6 +16,9 @@ export class ResultsScene extends Phaser.Scene {
   create() {
     this.storage = new Storage();
 
+    this.storage.saveGold(this.registry.get(config.registryKeys.gold) + this.registry.get(config.registryKeys.level.gold));
+    this.storage.saveSkill('spectralArrow', this.registry.get(config.registryKeys.skills.spectralArrow));
+
     this.add.image(resultsConfig.background.x, resultsConfig.background.y, 'background-parchment')
       .setDisplaySize(resultsConfig.background.width, resultsConfig.background.height)
 
@@ -24,9 +27,6 @@ export class ResultsScene extends Phaser.Scene {
     const titleText = didWin ? 'Level Passed!' : 'Level Failed!';
     this.add.bitmapText(resultsConfig.title.x, resultsConfig.title.y, 'font', titleText, resultsConfig.title.size)
       .setOrigin(0.5, 0);
-
-    this.storage.saveGold(this.registry.get(config.registryKeys.gold) + this.registry.get(config.registryKeys.level.gold));
-    this.storage.saveSkill('spectralArrow', this.registry.get(config.registryKeys.skills.spectralArrow));
 
     if (didWin) {
       const scores = this._calculateScore();

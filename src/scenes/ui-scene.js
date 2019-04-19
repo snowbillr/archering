@@ -51,10 +51,12 @@ export class UiScene extends Phaser.Scene {
     this.goldText = this.add.bitmapText(uiConfig.goldText.x, uiConfig.goldText.y, 'font', 0, uiConfig.goldText.size)
       .setOrigin(0, 1);
 
-    const spectralArrowSkill = new SpectralArrowSkill(this);
-    const cannonballSkill = new CannonballSkill(this);
-    this.spectralArrowButton = new SkillButton(this, 380, 270, 'arrow-glow', config.registryKeys.skills.spectralArrow, spectralArrowSkill, Phaser.Input.Keyboard.KeyCodes.ONE, [STATES.REST, STATES.CHARGE, STATES.FLY]);
-    this.cannonballButton = new SkillButton(this, 430, 270, 'cannonball', config.registryKeys.skills.cannonball, cannonballSkill, Phaser.Input.Keyboard.KeyCodes.TWO, [STATES.FLY]);
+    const skillManager = this.scene.get('level').skillManager;
+    this.skillButtons = [];
+    const spectralArrowButton = new SkillButton(this, skillManager, 380, 270, 'arrow-glow', config.registryKeys.skills.spectralArrow, Phaser.Input.Keyboard.KeyCodes.ONE);
+    const cannonballButton = new SkillButton(this, skillManager, 430, 270, 'cannonball', config.registryKeys.skills.cannonball, Phaser.Input.Keyboard.KeyCodes.TWO);
+    this.skillButtons.push(spectralArrowButton);
+    this.skillButtons.push(cannonballButton);
 
     this._updateArrows(null, this.registry.get(config.registryKeys.level.remainingArrows));
     this._updateCharge(null, this.registry.get(config.registryKeys.level.arrow.charge));
@@ -66,7 +68,7 @@ export class UiScene extends Phaser.Scene {
     this.registry.events.off(`changedata-${config.registryKeys.level.arrow.charge}`, this._updateCharge, this);
     this.registry.events.off(`changedata-${config.registryKeys.level.gold}`, this._updateLevelGold, this);
 
-    this.spectralArrowButton.cleanupRegistryListeners();
+    this.skillButtons.forEach(button => button.cleanupRegistryListeners());
   }
 
   _updateArrows(parent, remainingArrows) {

@@ -12,6 +12,7 @@ import { config } from '../config';
 import { ArrowBalloonCollider } from '../colliders/arrow-balloon-collider';
 import { ArrowTargetCollider } from '../colliders/arrow-target-collider';
 import { ArrowGroundCollider } from '../colliders/arrow-ground-collider';
+import { SkillManager } from '../skills/skill-manager';
 
 export class LevelScene extends Phaser.Scene {
   constructor() {
@@ -20,25 +21,29 @@ export class LevelScene extends Phaser.Scene {
 
   create({ levelConfig }) {
     this.levelConfig = levelConfig;
+    this.skillManager = new SkillManager(this);
 
-    this.events.on('shutdown', this._cleanupRegistryListeners, this);
-
-    this.parallaxBackground = new ParallaxBackground(this, 'background-back', 'background-middle', 'background-front');
-    this.arrow = new Arrow(this);
-    this.targets = new Targets(this);
-    this.balloons = new Balloons(this);
-    this.groundZone = new GroundZone(this);
-    this.leftScrollZone = new ScrollZone(this, -1);
-    this.rightScrollZone = new ScrollZone(this, 1);
-
+    // camera
     this.cameras.main.setBounds(0, 0, config.dimensions.world.width, config.dimensions.world.height);
 
+    // input
     this.input.setDefaultCursor('crosshair');
     this.input.on('pointerdown', this._startCharge, this);
     this.input.on('pointerup', this._fireArrow, this);
 
+    // entities
+    this.parallaxBackground = new ParallaxBackground(this, 'background-back', 'background-middle', 'background-front');
+    this.groundZone = new GroundZone(this);
+    this.leftScrollZone = new ScrollZone(this, -1);
+    this.rightScrollZone = new ScrollZone(this, 1);
+    this.arrow = new Arrow(this);
+    this.targets = new Targets(this);
+    this.balloons = new Balloons(this);
+
+    // load level (must come after entities because it uses targets and balloons)
     this._loadLevel();
 
+    // physics
     const arrowBalloonCollider = new ArrowBalloonCollider(this);
     const arrowTargetCollider = new ArrowTargetCollider(this, this.arrowColliderCallback);
     const arrowGroundCollider = new ArrowGroundCollider(this, this.arrowColliderCallback);
@@ -49,6 +54,7 @@ export class LevelScene extends Phaser.Scene {
     this.physics.add.overlap(this.arrow.getHitbox(), this.balloons.getStringHitboxes(), arrowBalloonCollider.onStringHit)
     this.physics.add.collider(this.arrow.getHitbox(), this.groundZone, arrowGroundCollider.onHit);
 
+    // launch ui
     this.scene.launch('ui');
   }
 
@@ -71,6 +77,7 @@ export class LevelScene extends Phaser.Scene {
   restartLevel() {
     this._immediateScroll(0, true);
 
+    this.skillManager.deactivateAll();
     this._resetRegistry();
 
     this.targets.resetTargetsForLevel(this.levelConfig);
@@ -82,10 +89,6 @@ export class LevelScene extends Phaser.Scene {
   arrowColliderCallback() {
     this._checkLevelOver();
     this._reset();
-  }
-
-  _cleanupRegistryListeners() {
-    this.arrow.cleanupRegistryListeners();
   }
 
   _loadLevel() {
@@ -102,8 +105,6 @@ export class LevelScene extends Phaser.Scene {
     this.registry.set(config.registryKeys.level.scrollingDirection, 0);
 
     this.registry.set(config.registryKeys.level.gold, 0);
-
-    this.registry.set(config.registryKeys.level.skills.spectralArrow, false);
 
     this.registry.set(config.registryKeys.level.initialArrows, this.levelConfig.arrows);
     this.registry.set(config.registryKeys.level.initialTargets, this.levelConfig.targets.length);
@@ -167,14 +168,16 @@ export class LevelScene extends Phaser.Scene {
     }
   }
 
-    _endLevel() {
+  _endLevel() {
+    this.skillManager.deactivateAll();
+
     this.scene.stop('level');
     this.scene.stop('ui');
     this.scene.start('results');
   }
 
   _reset() {
-    this.registry.set(config.registryKeys.level.skills.spectralArrow, false);
+    this.skillManager.deactivateAll();
     this.cameras.main.stopFollow();
     this._tweenScroll(0, 300);
     this.arrow.reset();
