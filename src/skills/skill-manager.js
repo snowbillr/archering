@@ -40,6 +40,12 @@ export class SkillManager {
     this.skills[skillKey].skill.activate();
   }
 
+  update() {
+    Object.values(this.skills)
+      .filter(s => s.isActive)
+      .forEach(s => s.skill.update());
+  }
+
   isActive(skillKey) {
     return this.skills[skillKey].isActive;
   }

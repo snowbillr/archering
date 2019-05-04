@@ -1,7 +1,8 @@
 current:
+- split arrow skill
+- duplicate code in split arrow colliders/arrow colliders
 
 next up:
-- split arrow skill
 - skill store
 - level builder
 - hitbox plugin

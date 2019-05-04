@@ -61,6 +61,8 @@ export class LevelScene extends Phaser.Scene {
   update() {
     this.arrow.update();
 
+    this.skillManager.update();
+
     const state = this.registry.get(config.registryKeys.level.state);
 
     if (state === STATES.REST) {

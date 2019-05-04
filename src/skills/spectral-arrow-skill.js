@@ -11,6 +11,10 @@ export class SpectralArrowSkill {
     this.scene.arrow.activateSpectralArrowSprite();
   }
 
+  update() {
+    // no op
+  }
+
   deactivate() {
     this.scene.arrow.deactivateSpectralArrowSprite();
   }

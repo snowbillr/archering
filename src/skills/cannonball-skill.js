@@ -43,6 +43,10 @@ export class CannonballSkill {
     // levelScene.physics.add.collider(cannonball.sprite, targets.getBullseyeHitboxes());
   }
 
+  update() {
+    // no op
+  }
+
   deactivate() {
     // no op
   }
