@@ -110,9 +110,14 @@ export class PreloadScene extends Phaser.Scene {
   _loadSaveData() {
     const storage = new Storage();
 
+    // storage.saveSkill('spectralArrow', {chargeCount: 5})
+    // storage.saveSkill('splitArrow', {chargeCount: 5})
+    // storage.saveSkill('cannonball', {chargeCount: 5})
+
     this.registry.set(config.registryKeys.gold, storage.loadGold());
 
     this.registry.set(config.registryKeys.skills.spectralArrow, storage.loadSkill('spectralArrow'));
+    this.registry.set(config.registryKeys.skills.splitArrow, storage.loadSkill('splitArrow'));
     this.registry.set(config.registryKeys.skills.cannonball, storage.loadSkill('cannonball'));
   }
 }

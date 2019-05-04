@@ -2,6 +2,7 @@ import { config } from '../config';
 
 import { RestartLevelButton } from '../ui/restart-level-button';
 import { SpectralArrowButton } from '../ui/spectral-arrow-button';
+import { SplitArrowButton } from '../ui/split-arrow-button';
 import { CannonballButton } from '../ui/cannonball-button';
 
 const arrowConfig = config.entities.level.arrow;
@@ -54,6 +55,7 @@ export class UiScene extends Phaser.Scene {
     this.skillButtons = [
       new SpectralArrowButton(this, skillManager, 380, 270),
       new CannonballButton(this, skillManager, 430, 270),
+      new SplitArrowButton(this, skillManager, 480, 270),
     ];
 
     this._updateArrows(null, this.registry.get(config.registryKeys.level.remainingArrows));

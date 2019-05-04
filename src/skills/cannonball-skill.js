@@ -1,4 +1,3 @@
-import { config } from '../config';
 import * as STATES from '../level-states';
 import { Cannonball } from '../entities/cannonball';
 import { CannonballGroundCollider } from '../colliders/cannonball-ground-collider';

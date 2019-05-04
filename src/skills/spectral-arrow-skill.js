@@ -1,4 +1,3 @@
-import { config } from '../config';
 import * as STATES from '../level-states';
 
 export class SpectralArrowSkill {

@@ -19,7 +19,10 @@ export class Storage {
         },
         cannonball: {
           chargeCount: 0,
-        }
+        },
+        splitArrow: {
+          chargeCount: 0,
+        },
       });
     }
   }

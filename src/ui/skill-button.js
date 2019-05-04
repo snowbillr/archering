@@ -28,7 +28,7 @@ export class SkillButton {
   _updateButton(parent, skillConfig) {
     if (skillConfig.chargeCount === 0) {
       this.background.setTint(0xcccccc);
-      this.icon.setTint(0xcccccc);
+      // this.icon.setTint(0xcccccc);
     }
 
     this.chargeCountText.text = skillConfig.chargeCount;
