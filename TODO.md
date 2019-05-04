@@ -1,5 +1,4 @@
 current:
-- dry up duplicate code in split arrow colliders/arrow colliders
 
 next up:
 - skill store
