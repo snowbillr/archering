@@ -14,6 +14,7 @@ export class PreloadScene extends Phaser.Scene {
 
     this._loadSharedImages();
     this._loadLevelSelectImages();
+    this._loadStoreImages();
     this._loadLevelImages();
     this._loadUiImages();
     this._loadResultsImages();
@@ -52,6 +53,13 @@ export class PreloadScene extends Phaser.Scene {
     this.load.image('menu-bg-2', 'assets/menu-bg-2.png');
     this.load.image('menu-bg-3', 'assets/menu-bg-3.png');
     this.load.image('menu-bg-4', 'assets/menu-bg-4.png');
+  }
+
+  _loadStoreImages() {
+    this.load.image('store-bg-0', 'assets/store-bg-0.png');
+    this.load.image('store-bg-1', 'assets/store-bg-1.png');
+    this.load.image('store-bg-2', 'assets/store-bg-2.png');
+    this.load.image('store-bg-3', 'assets/store-bg-3.png');
   }
 
   _loadLevelImages() {
