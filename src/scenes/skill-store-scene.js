@@ -38,48 +38,31 @@ export class SkillStoreScene extends Phaser.Scene {
   }
 
   _createSpectralArrowButton() {
-    const x = 130;
-    const y = 120;
+    this._createSkillButton(130, 120, SpectralArrowIcon, 'spectralArrow', 25);
+  }
 
+  _createSplitArrowButton() {
+    this._createSkillButton(310, 120, SplitArrowIcon, 'splitArrow', 25);
+  }
+
+  _createCannonballButton() {
+    this._createSkillButton(490, 120, CannonballIcon, 'cannonball', 25);
+  }
+
+  _createSkillButton(x, y, iconClass, descriptionKey, cost, registryKey) {
     this.add.image(x, y, 'skill-background')
       .setDisplaySize(42, 42)
       .setInteractive({ cursor: 'pointer' })
-      .on('pointerover', () => this._displayDescriptionFor('spectralArrow'))
+      .on('pointerover', () => this._displayDescriptionFor(descriptionKey))
       .on('pointerout', () => this._hideDescription());
-    new SpectralArrowIcon(this, x, y);
+    new iconClass(this, x, y);
 
-    const costText = this.add.bitmapText(x - 5, y + 40, 'font', '25', 18)
+    const costText = this.add.bitmapText(x - 5, y + 40, 'font', cost, 18)
       .setOrigin(0.5);
      this.add.image(x + costText.width - 5, y + 40, 'gold-3');
 
     this.add.bitmapText(x, y + 65, 'font', `Charges: `, 18)
       .setOrigin(0.5);
-  }
-
-  _createSplitArrowButton() {
-    const x = 310;
-    const y = 120;
-
-    this.add.image(x, y, 'skill-background')
-      .setDisplaySize(42, 42)
-      .setInteractive({ cursor: 'pointer' })
-      .on('pointerover', () => this._displayDescriptionFor('splitArrow'))
-      .on('pointerout', () => this._hideDescription());
-
-    new SplitArrowIcon(this, x, y);
-  }
-
-  _createCannonballButton() {
-    const x = 490;
-    const y = 120;
-
-    this.add.image(x, y, 'skill-background')
-      .setDisplaySize(42, 42)
-      .setInteractive({ cursor: 'pointer' })
-      .on('pointerover', () => this._displayDescriptionFor('cannonball'))
-      .on('pointerout', () => this._hideDescription());
-
-    new CannonballIcon(this, x, y);
   }
 
   _createDescriptionBackground() {
