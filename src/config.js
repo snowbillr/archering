@@ -118,6 +118,17 @@ export const config = {
       }
     }
   },
+  skills: {
+    spectralArrow: {
+      cost: 25,
+    },
+    splitArrow: {
+      cost: 25,
+    },
+    cannonball: {
+      cost: 25,
+    },
+  },
   entities: {
     level: {
       arrow: {

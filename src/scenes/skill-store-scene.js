@@ -61,15 +61,15 @@ export class SkillStoreScene extends Phaser.Scene {
   }
 
   _createSpectralArrowButton() {
-    this._createSkillButton(130, 150, SpectralArrowIcon, 'spectralArrow', 25, config.registryKeys.skills.spectralArrow);
+    this._createSkillButton(130, 150, SpectralArrowIcon, 'spectralArrow', config.skills.spectralArrow.cost, config.registryKeys.skills.spectralArrow);
   }
 
   _createCannonballButton() {
-    this._createSkillButton(310, 150, CannonballIcon, 'cannonball', 25, config.registryKeys.skills.cannonball);
+    this._createSkillButton(310, 150, CannonballIcon, 'cannonball', config.skills.cannonball.cost, config.registryKeys.skills.cannonball);
   }
 
   _createSplitArrowButton() {
-    this._createSkillButton(490, 150, SplitArrowIcon, 'splitArrow', 25, config.registryKeys.skills.splitArrow);
+    this._createSkillButton(490, 150, SplitArrowIcon, 'splitArrow', config.skills.splitArrow.cost, config.registryKeys.skills.splitArrow);
   }
 
   _createSkillButton(x, y, iconClass, descriptionKey, cost, registryKey) {
