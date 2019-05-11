@@ -1,28 +1,6 @@
 webpackJsonp([0],{
 
-/***/ 116:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Effects = undefined;
-
-var _flashOut = __webpack_require__(1393);
-
-var _notify = __webpack_require__(1394);
-
-var Effects = exports.Effects = {
-  flashOut: _flashOut.flashOut,
-  notify: _notify.notify
-};
-
-/***/ }),
-
-/***/ 13:
+/***/ 11:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -151,6 +129,17 @@ var config = exports.config = {
       }
     }
   },
+  skills: {
+    spectralArrow: {
+      cost: 25
+    },
+    splitArrow: {
+      cost: 25
+    },
+    cannonball: {
+      cost: 25
+    }
+  },
   entities: {
     level: {
       arrow: {
@@ -175,7 +164,8 @@ var config = exports.config = {
     gold: 'gold',
     skills: {
       spectralArrow: 'skills.spectralArrow',
-      cannonball: 'skills.cannonball'
+      cannonball: 'skills.cannonball',
+      splitArrow: 'skills.splitArrow'
     },
     level: {
       gold: 'level.gold',
@@ -191,10 +181,6 @@ var config = exports.config = {
       poppedBalloons: 'level.poppedBalloons',
       arrow: {
         charge: 'level.arrow.charge'
-      },
-      skills: {
-        spectralArrow: 'level.skills.spectralArrow',
-        cannonball: 'level.skills.cannonball'
       }
     }
   }
@@ -202,7 +188,7 @@ var config = exports.config = {
 
 /***/ }),
 
-/***/ 1389:
+/***/ 1397:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -337,7 +323,7 @@ var ArcadeHitboxPlugin = exports.ArcadeHitboxPlugin = function (_Phaser$Plugins$
 
 /***/ }),
 
-/***/ 1390:
+/***/ 1398:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -350,7 +336,7 @@ exports.TestScene = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _balloon = __webpack_require__(505);
+var _balloon = __webpack_require__(506);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -397,7 +383,7 @@ var TestScene = exports.TestScene = function (_Phaser$Scene) {
 
 /***/ }),
 
-/***/ 1391:
+/***/ 1399:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -410,13 +396,13 @@ exports.PreloadScene = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _phaser = __webpack_require__(96);
+var _phaser = __webpack_require__(97);
 
 var _phaser2 = _interopRequireDefault(_phaser);
 
-var _storage = __webpack_require__(241);
+var _storage = __webpack_require__(156);
 
-var _config = __webpack_require__(13);
+var _config = __webpack_require__(11);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -442,6 +428,7 @@ var PreloadScene = exports.PreloadScene = function (_Phaser$Scene) {
 
       this._loadSharedImages();
       this._loadLevelSelectImages();
+      this._loadStoreImages();
       this._loadLevelImages();
       this._loadUiImages();
       this._loadResultsImages();
@@ -484,6 +471,14 @@ var PreloadScene = exports.PreloadScene = function (_Phaser$Scene) {
       this.load.image('menu-bg-2', 'assets/menu-bg-2.png');
       this.load.image('menu-bg-3', 'assets/menu-bg-3.png');
       this.load.image('menu-bg-4', 'assets/menu-bg-4.png');
+    }
+  }, {
+    key: '_loadStoreImages',
+    value: function _loadStoreImages() {
+      this.load.image('store-bg-0', 'assets/store-bg-0.png');
+      this.load.image('store-bg-1', 'assets/store-bg-1.png');
+      this.load.image('store-bg-2', 'assets/store-bg-2.png');
+      this.load.image('store-bg-3', 'assets/store-bg-3.png');
     }
   }, {
     key: '_loadLevelImages',
@@ -541,9 +536,14 @@ var PreloadScene = exports.PreloadScene = function (_Phaser$Scene) {
     value: function _loadSaveData() {
       var storage = new _storage.Storage();
 
+      // storage.saveSkill('spectralArrow', {chargeCount: 5})
+      // storage.saveSkill('splitArrow', {chargeCount: 5})
+      // storage.saveSkill('cannonball', {chargeCount: 5})
+
       this.registry.set(_config.config.registryKeys.gold, storage.loadGold());
 
       this.registry.set(_config.config.registryKeys.skills.spectralArrow, storage.loadSkill('spectralArrow'));
+      this.registry.set(_config.config.registryKeys.skills.splitArrow, storage.loadSkill('splitArrow'));
       this.registry.set(_config.config.registryKeys.skills.cannonball, storage.loadSkill('cannonball'));
     }
   }]);
@@ -553,7 +553,7 @@ var PreloadScene = exports.PreloadScene = function (_Phaser$Scene) {
 
 /***/ }),
 
-/***/ 1392:
+/***/ 1400:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -566,31 +566,33 @@ exports.LevelScene = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _levelStates = __webpack_require__(79);
+var _levelStates = __webpack_require__(42);
 
 var STATES = _interopRequireWildcard(_levelStates);
 
-var _effects = __webpack_require__(116);
+var _effects = __webpack_require__(80);
 
-var _arrow = __webpack_require__(1395);
+var _arrow = __webpack_require__(507);
 
-var _parallaxBackground = __webpack_require__(1396);
+var _parallaxBackground = __webpack_require__(1403);
 
-var _targets = __webpack_require__(1397);
+var _targets = __webpack_require__(1404);
 
-var _groundZone = __webpack_require__(1399);
+var _groundZone = __webpack_require__(1406);
 
-var _scrollZone = __webpack_require__(1400);
+var _scrollZone = __webpack_require__(1407);
 
-var _balloons = __webpack_require__(1401);
+var _balloons = __webpack_require__(1408);
 
-var _config = __webpack_require__(13);
+var _config = __webpack_require__(11);
 
-var _arrowBalloonCollider = __webpack_require__(1402);
+var _arrowBalloonCollider = __webpack_require__(508);
 
-var _arrowTargetCollider = __webpack_require__(1403);
+var _arrowTargetCollider = __webpack_require__(509);
 
-var _arrowGroundCollider = __webpack_require__(1404);
+var _arrowGroundCollider = __webpack_require__(510);
+
+var _skillManager = __webpack_require__(1409);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -615,25 +617,29 @@ var LevelScene = exports.LevelScene = function (_Phaser$Scene) {
       var levelConfig = _ref.levelConfig;
 
       this.levelConfig = levelConfig;
+      this.skillManager = new _skillManager.SkillManager(this);
 
-      this.events.on('shutdown', this._cleanupRegistryListeners, this);
-
-      this.parallaxBackground = new _parallaxBackground.ParallaxBackground(this, 'background-back', 'background-middle', 'background-front');
-      this.arrow = new _arrow.Arrow(this);
-      this.targets = new _targets.Targets(this);
-      this.balloons = new _balloons.Balloons(this);
-      this.groundZone = new _groundZone.GroundZone(this);
-      this.leftScrollZone = new _scrollZone.ScrollZone(this, -1);
-      this.rightScrollZone = new _scrollZone.ScrollZone(this, 1);
-
+      // camera
       this.cameras.main.setBounds(0, 0, _config.config.dimensions.world.width, _config.config.dimensions.world.height);
 
+      // input
       this.input.setDefaultCursor('crosshair');
       this.input.on('pointerdown', this._startCharge, this);
       this.input.on('pointerup', this._fireArrow, this);
 
+      // entities
+      this.parallaxBackground = new _parallaxBackground.ParallaxBackground(this, 'background-back', 'background-middle', 'background-front');
+      this.groundZone = new _groundZone.GroundZone(this);
+      this.leftScrollZone = new _scrollZone.ScrollZone(this, -1);
+      this.rightScrollZone = new _scrollZone.ScrollZone(this, 1);
+      this.arrow = new _arrow.Arrow(this);
+      this.targets = new _targets.Targets(this);
+      this.balloons = new _balloons.Balloons(this);
+
+      // load level (must come after entities because it uses targets and balloons)
       this._loadLevel();
 
+      // physics
       var arrowBalloonCollider = new _arrowBalloonCollider.ArrowBalloonCollider(this);
       var arrowTargetCollider = new _arrowTargetCollider.ArrowTargetCollider(this, this.arrowColliderCallback);
       var arrowGroundCollider = new _arrowGroundCollider.ArrowGroundCollider(this, this.arrowColliderCallback);
@@ -644,12 +650,15 @@ var LevelScene = exports.LevelScene = function (_Phaser$Scene) {
       this.physics.add.overlap(this.arrow.getHitbox(), this.balloons.getStringHitboxes(), arrowBalloonCollider.onStringHit);
       this.physics.add.collider(this.arrow.getHitbox(), this.groundZone, arrowGroundCollider.onHit);
 
+      // launch ui
       this.scene.launch('ui');
     }
   }, {
     key: 'update',
     value: function update() {
       this.arrow.update();
+
+      this.skillManager.update();
 
       var state = this.registry.get(_config.config.registryKeys.level.state);
 
@@ -668,6 +677,7 @@ var LevelScene = exports.LevelScene = function (_Phaser$Scene) {
     value: function restartLevel() {
       this._immediateScroll(0, true);
 
+      this.skillManager.deactivateAll();
       this._resetRegistry();
 
       this.targets.resetTargetsForLevel(this.levelConfig);
@@ -680,11 +690,6 @@ var LevelScene = exports.LevelScene = function (_Phaser$Scene) {
     value: function arrowColliderCallback() {
       this._checkLevelOver();
       this._reset();
-    }
-  }, {
-    key: '_cleanupRegistryListeners',
-    value: function _cleanupRegistryListeners() {
-      this.arrow.cleanupRegistryListeners();
     }
   }, {
     key: '_loadLevel',
@@ -703,8 +708,6 @@ var LevelScene = exports.LevelScene = function (_Phaser$Scene) {
       this.registry.set(_config.config.registryKeys.level.scrollingDirection, 0);
 
       this.registry.set(_config.config.registryKeys.level.gold, 0);
-
-      this.registry.set(_config.config.registryKeys.level.skills.spectralArrow, false);
 
       this.registry.set(_config.config.registryKeys.level.initialArrows, this.levelConfig.arrows);
       this.registry.set(_config.config.registryKeys.level.initialTargets, this.levelConfig.targets.length);
@@ -776,6 +779,8 @@ var LevelScene = exports.LevelScene = function (_Phaser$Scene) {
   }, {
     key: '_endLevel',
     value: function _endLevel() {
+      this.skillManager.deactivateAll();
+
       this.scene.stop('level');
       this.scene.stop('ui');
       this.scene.start('results');
@@ -783,7 +788,7 @@ var LevelScene = exports.LevelScene = function (_Phaser$Scene) {
   }, {
     key: '_reset',
     value: function _reset() {
-      this.registry.set(_config.config.registryKeys.level.skills.spectralArrow, false);
+      this.skillManager.deactivateAll();
       this.cameras.main.stopFollow();
       this._tweenScroll(0, 300);
       this.arrow.reset();
@@ -828,7 +833,7 @@ var LevelScene = exports.LevelScene = function (_Phaser$Scene) {
 
 /***/ }),
 
-/***/ 1393:
+/***/ 1401:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -871,7 +876,7 @@ function flashOut(gameObjects) {
 
 /***/ }),
 
-/***/ 1394:
+/***/ 1402:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -882,7 +887,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.notify = notify;
 
-var _config = __webpack_require__(13);
+var _config = __webpack_require__(11);
 
 function notify(scene, x, y, string) {
   var size = _config.config.entities.level.notify.size;
@@ -925,164 +930,7 @@ function notify(scene, x, y, string) {
 
 /***/ }),
 
-/***/ 1395:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Arrow = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _phaser = __webpack_require__(96);
-
-var _phaser2 = _interopRequireDefault(_phaser);
-
-var _levelStates = __webpack_require__(79);
-
-var STATES = _interopRequireWildcard(_levelStates);
-
-var _config = __webpack_require__(13);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var arrowLayoutConfig = _config.config.layouts.level.arrow;
-var arrowConfig = _config.config.entities.level.arrow;
-
-var Arrow = exports.Arrow = function () {
-  function Arrow(scene) {
-    _classCallCheck(this, Arrow);
-
-    this.scene = scene;
-
-    this.sprite = this.scene.physics.add.sprite(0, 0, 'arrow');
-    this.sprite.setDisplaySize(48, 12);
-
-    this.hitbox = this.scene.arcadeHitbox.add(this.sprite, {
-      parent: this,
-      xOffset: 24,
-      yOffset: 0,
-      width: 6,
-      height: 6
-    });
-
-    this.releaseSounds = {
-      low: this.scene.sound.add('arrow-release-low'),
-      medium: this.scene.sound.add('arrow-release-medium'),
-      high: this.scene.sound.add('arrow-release-high')
-    };
-
-    this.scene.registry.events.on('changedata-' + _config.config.registryKeys.level.skills.spectralArrow, this._updateTextureForSkill, this);
-
-    this.reset();
-  }
-
-  _createClass(Arrow, [{
-    key: 'cleanupRegistryListeners',
-    value: function cleanupRegistryListeners() {
-      this.scene.registry.events.off('changedata-' + _config.config.registryKeys.level.skills.spectralArrow, this._updateTextureForSkill);
-    }
-  }, {
-    key: '_updateTextureForSkill',
-    value: function _updateTextureForSkill(parent, spectralArrow) {
-      if (spectralArrow) {
-        this.sprite.setTexture('arrow-glow');
-      } else {
-        this.sprite.setTexture('arrow');
-      }
-    }
-  }, {
-    key: 'update',
-    value: function update() {
-      var state = this.scene.registry.get(_config.config.registryKeys.level.state);
-
-      if (state === STATES.FLY) {
-        this.sprite.rotation = _phaser2.default.Math.Angle.BetweenPoints(_phaser2.default.Math.Vector2.ZERO, this.sprite.body.velocity);
-      }
-
-      if (state === STATES.REST || state === STATES.CHARGE) {
-        this._angleToPointer();
-      }
-
-      if (state === STATES.CHARGE) {
-        var chargeAmount = this.scene.registry.get(_config.config.registryKeys.level.arrow.charge);
-        var newCharge = _phaser2.default.Math.Clamp(chargeAmount + 5, arrowConfig.minCharge, arrowConfig.maxCharge);
-        this.scene.registry.set(_config.config.registryKeys.level.arrow.charge, newCharge);
-      }
-    }
-  }, {
-    key: 'getSprite',
-    value: function getSprite() {
-      return this.sprite;
-    }
-  }, {
-    key: 'getHitbox',
-    value: function getHitbox() {
-      return this.hitbox;
-    }
-  }, {
-    key: 'fire',
-    value: function fire() {
-      var chargePercent = (this.scene.registry.get(_config.config.registryKeys.level.arrow.charge) - arrowConfig.minCharge) / (arrowConfig.maxCharge - arrowConfig.minCharge);
-      if (chargePercent < 0.33) {
-        this.releaseSounds.low.play();
-      } else if (chargePercent < 0.66) {
-        this.releaseSounds.medium.play();
-      } else {
-        this.releaseSounds.high.play();
-      }
-
-      this.hitbox.body.enable = true;
-      this.sprite.body.allowGravity = true;
-      this.scene.physics.velocityFromRotation(this.sprite.rotation, this.scene.registry.get(_config.config.registryKeys.level.arrow.charge), this.sprite.body.velocity);
-    }
-  }, {
-    key: 'reset',
-    value: function reset() {
-      this.scene.registry.set(_config.config.registryKeys.level.arrow.charge, arrowConfig.minCharge);
-
-      this.sprite.body.enable = true;
-      this.hitbox.body.enable = false;
-
-      this.sprite.x = arrowLayoutConfig.x;
-      this.sprite.y = arrowLayoutConfig.y;
-
-      this.sprite.alpha = 1;
-
-      this.sprite.body.allowGravity = false;
-      this.sprite.body.velocity.x = 0;
-      this.sprite.body.velocity.y = 0;
-
-      this.hitbox.body.allowGravity = false;
-    }
-  }, {
-    key: 'onHit',
-    value: function onHit() {
-      this.sprite.body.enable = false;
-      this.hitbox.body.enable = false;
-    }
-  }, {
-    key: '_angleToPointer',
-    value: function _angleToPointer() {
-      var angle = _phaser2.default.Math.Angle.BetweenPoints(this.sprite, this.scene.input.activePointer);
-      this.sprite.rotation = angle;
-    }
-  }]);
-
-  return Arrow;
-}();
-
-/***/ }),
-
-/***/ 1396:
+/***/ 1403:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1095,7 +943,7 @@ exports.ParallaxBackground = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _config = __webpack_require__(13);
+var _config = __webpack_require__(11);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1138,7 +986,7 @@ var ParallaxBackground = exports.ParallaxBackground = function () {
 
 /***/ }),
 
-/***/ 1397:
+/***/ 1404:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1151,9 +999,9 @@ exports.Targets = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _config = __webpack_require__(13);
+var _config = __webpack_require__(11);
 
-var _target = __webpack_require__(1398);
+var _target = __webpack_require__(1405);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1215,7 +1063,7 @@ var Targets = exports.Targets = function () {
 
 /***/ }),
 
-/***/ 1398:
+/***/ 1405:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1315,7 +1163,7 @@ var Target = exports.Target = function () {
 
 /***/ }),
 
-/***/ 1399:
+/***/ 1406:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1328,7 +1176,7 @@ exports.GroundZone = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _config = __webpack_require__(13);
+var _config = __webpack_require__(11);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1367,7 +1215,7 @@ var GroundZone = exports.GroundZone = function (_Phaser$GameObjects$Z) {
 
 /***/ }),
 
-/***/ 1400:
+/***/ 1407:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1380,11 +1228,11 @@ exports.ScrollZone = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _levelStates = __webpack_require__(79);
+var _levelStates = __webpack_require__(42);
 
 var STATES = _interopRequireWildcard(_levelStates);
 
-var _config = __webpack_require__(13);
+var _config = __webpack_require__(11);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -1438,7 +1286,7 @@ var ScrollZone = exports.ScrollZone = function () {
 
 /***/ }),
 
-/***/ 1401:
+/***/ 1408:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1451,7 +1299,7 @@ exports.Balloons = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _balloon = __webpack_require__(505);
+var _balloon = __webpack_require__(506);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1521,7 +1369,7 @@ var Balloons = exports.Balloons = function () {
 
 /***/ }),
 
-/***/ 1402:
+/***/ 1409:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1530,51 +1378,95 @@ var Balloons = exports.Balloons = function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.ArrowBalloonCollider = undefined;
+exports.SkillManager = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _config = __webpack_require__(13);
+var _config = __webpack_require__(11);
+
+var _spectralArrowSkill = __webpack_require__(1410);
+
+var _splitArrowSkill = __webpack_require__(1411);
+
+var _cannonballSkill = __webpack_require__(1414);
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var ArrowBalloonCollider = exports.ArrowBalloonCollider = function () {
-  function ArrowBalloonCollider(scene) {
-    _classCallCheck(this, ArrowBalloonCollider);
+var SkillManager = exports.SkillManager = function () {
+  function SkillManager(scene) {
+    var _skills;
+
+    _classCallCheck(this, SkillManager);
 
     this.scene = scene;
 
-    this.onBalloonHit = this.onBalloonHit.bind(this);
-    this.onStringHit = this.onStringHit.bind(this);
+    this.skills = (_skills = {}, _defineProperty(_skills, _config.config.registryKeys.skills.spectralArrow, {
+      skill: new _spectralArrowSkill.SpectralArrowSkill(this.scene),
+      isActive: false
+    }), _defineProperty(_skills, _config.config.registryKeys.skills.cannonball, {
+      skill: new _cannonballSkill.CannonballSkill(this.scene),
+      isActive: false
+    }), _defineProperty(_skills, _config.config.registryKeys.skills.splitArrow, {
+      skill: new _splitArrowSkill.SplitArrowSkill(this.scene),
+      isActive: false
+    }), _skills);
   }
 
-  _createClass(ArrowBalloonCollider, [{
-    key: 'onBalloonHit',
-    value: function onBalloonHit(arrow, balloonHitbox) {
-      var balloon = balloonHitbox.hitboxParent.balloonParent;
+  _createClass(SkillManager, [{
+    key: 'canActivate',
+    value: function canActivate(skillKey) {
+      var hasCharges = this.scene.registry.get(skillKey).chargeCount > 0;
+      var sceneIsInValidState = this.skills[skillKey].skill.validStates.includes(this.scene.registry.get(_config.config.registryKeys.level.state));
 
-      this.scene.registry.set(_config.config.registryKeys.level.remainingBalloons, this.scene.registry.get(_config.config.registryKeys.level.remainingBalloons) - 1);
-      this.scene.registry.set(_config.config.registryKeys.level.poppedBalloons, this.scene.registry.get(_config.config.registryKeys.level.poppedBalloons) + 1);
-
-      this.scene.registry.set(_config.config.registryKeys.level.gold, this.scene.registry.get(_config.config.registryKeys.level.gold) + _config.config.entities.level.balloon.gold);
-
-      balloon.pop();
+      return hasCharges && sceneIsInValidState;
     }
   }, {
-    key: 'onStringHit',
-    value: function onStringHit(arrow, stringHitbox) {
-      this.scene.registry.set(_config.config.registryKeys.level.remainingBalloons, this.scene.registry.get(_config.config.registryKeys.level.remainingBalloons) - 1);
+    key: 'activate',
+    value: function activate(skillKey) {
+      var skillConfig = this.scene.registry.get(skillKey);
+      skillConfig.chargeCount -= 1;
 
-      stringHitbox.hitboxParent.balloonParent.cutString();
+      this.scene.registry.set(skillKey, skillConfig);
+      this.skills[skillKey].isActive = true;
+
+      this.skills[skillKey].skill.activate();
+    }
+  }, {
+    key: 'update',
+    value: function update() {
+      Object.values(this.skills).filter(function (s) {
+        return s.isActive;
+      }).forEach(function (s) {
+        return s.skill.update();
+      });
+    }
+  }, {
+    key: 'isActive',
+    value: function isActive(skillKey) {
+      return this.skills[skillKey].isActive;
+    }
+  }, {
+    key: 'deactivateAll',
+    value: function deactivateAll() {
+      this.skills[_config.config.registryKeys.skills.spectralArrow].isActive = false;
+      this.skills[_config.config.registryKeys.skills.spectralArrow].skill.deactivate();
+
+      this.skills[_config.config.registryKeys.skills.cannonball].isActive = false;
+      this.skills[_config.config.registryKeys.skills.cannonball].skill.deactivate();
+
+      this.skills[_config.config.registryKeys.skills.splitArrow].isActive = false;
+      this.skills[_config.config.registryKeys.skills.splitArrow].skill.deactivate();
     }
   }]);
 
-  return ArrowBalloonCollider;
+  return SkillManager;
 }();
 
 /***/ }),
 
-/***/ 1403:
+/***/ 1410:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1583,38 +1475,185 @@ var ArrowBalloonCollider = exports.ArrowBalloonCollider = function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.ArrowTargetCollider = undefined;
+exports.SpectralArrowSkill = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _config = __webpack_require__(13);
-
-var _levelStates = __webpack_require__(79);
+var _levelStates = __webpack_require__(42);
 
 var STATES = _interopRequireWildcard(_levelStates);
-
-var _effects = __webpack_require__(116);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var ArrowTargetCollider = exports.ArrowTargetCollider = function () {
-  function ArrowTargetCollider(scene, sceneCallback) {
-    _classCallCheck(this, ArrowTargetCollider);
+var SpectralArrowSkill = exports.SpectralArrowSkill = function () {
+  function SpectralArrowSkill(scene) {
+    _classCallCheck(this, SpectralArrowSkill);
 
     this.scene = scene;
-    this.sceneCallback = sceneCallback;
 
-    this.onTargetHit = this.onTargetHit.bind(this);
-    this.onBullseyeHit = this.onBullseyeHit.bind(this);
+    this.validStates = [STATES.REST, STATES.CHARGE, STATES.FLY];
   }
 
-  _createClass(ArrowTargetCollider, [{
+  _createClass(SpectralArrowSkill, [{
+    key: 'activate',
+    value: function activate() {
+      this.scene.arrow.activateSpectralArrowSprite();
+    }
+  }, {
+    key: 'update',
+    value: function update() {
+      // no op
+    }
+  }, {
+    key: 'deactivate',
+    value: function deactivate() {
+      this.scene.arrow.deactivateSpectralArrowSprite();
+    }
+  }]);
+
+  return SpectralArrowSkill;
+}();
+
+/***/ }),
+
+/***/ 1411:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.SplitArrowSkill = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _levelStates = __webpack_require__(42);
+
+var STATES = _interopRequireWildcard(_levelStates);
+
+var _arrow = __webpack_require__(507);
+
+var _arrowBalloonCollider = __webpack_require__(508);
+
+var _splitArrowTargetCollider = __webpack_require__(1412);
+
+var _splitArrowGroundCollider = __webpack_require__(1413);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var SplitArrowSkill = exports.SplitArrowSkill = function () {
+  function SplitArrowSkill(scene) {
+    _classCallCheck(this, SplitArrowSkill);
+
+    this.scene = scene;
+
+    this.validStates = [STATES.FLY];
+  }
+
+  _createClass(SplitArrowSkill, [{
+    key: 'activate',
+    value: function activate() {
+      var levelScene = this.scene.scene.get('level');
+      var arrow = levelScene.arrow;
+
+      this.arrows = [this._createSplitArrow(levelScene, arrow, -20), this._createSplitArrow(levelScene, arrow, 20)];
+    }
+  }, {
+    key: 'update',
+    value: function update() {
+      this.arrows.forEach(function (arrow) {
+        return arrow.update();
+      });
+    }
+  }, {
+    key: 'deactivate',
+    value: function deactivate() {
+      // no-op
+    }
+  }, {
+    key: '_createSplitArrow',
+    value: function _createSplitArrow(levelScene, originalArrow, angleDelta) {
+      var ax = originalArrow.sprite.body.velocity.x;
+      var ay = originalArrow.sprite.body.velocity.y;
+      var originalArrowMagnitude = Math.sqrt(ax * ax + ay * ay);
+      var splitArrowAngle = Phaser.Math.DegToRad(originalArrow.sprite.angle + angleDelta);
+
+      var splitArrow = new _arrow.Arrow(levelScene);
+      splitArrow.sprite.x = originalArrow.sprite.x;
+      splitArrow.sprite.y = originalArrow.sprite.y;
+      splitArrow.sprite.angle = splitArrowAngle;
+      splitArrow.sprite.body.allowGravity = true;
+      splitArrow.hitbox.body.enable = true;
+      this.scene.physics.velocityFromRotation(splitArrowAngle, originalArrowMagnitude, splitArrow.sprite.body.velocity);
+
+      var arrowBalloonCollider = new _arrowBalloonCollider.ArrowBalloonCollider(levelScene);
+      var splitArrowTargetCollider = new _splitArrowTargetCollider.SplitArrowTargetCollider(levelScene);
+      var splitArrowGroundCollider = new _splitArrowGroundCollider.SplitArrowGroundCollider(levelScene, function () {});
+
+      levelScene.physics.add.overlap(splitArrow.getHitbox(), levelScene.targets.getHitboxes(), splitArrowTargetCollider.onTargetHit);
+      levelScene.physics.add.overlap(splitArrow.getHitbox(), levelScene.targets.getBullseyeHitboxes(), splitArrowTargetCollider.onBullseyeHit);
+      levelScene.physics.add.overlap(splitArrow.getHitbox(), levelScene.balloons.getBalloonHitboxes(), arrowBalloonCollider.onBalloonHit);
+      levelScene.physics.add.overlap(splitArrow.getHitbox(), levelScene.balloons.getStringHitboxes(), arrowBalloonCollider.onStringHit);
+      levelScene.physics.add.collider(splitArrow.getHitbox(), levelScene.groundZone, splitArrowGroundCollider.onHit);
+
+      return splitArrow;
+    }
+  }]);
+
+  return SplitArrowSkill;
+}();
+
+/***/ }),
+
+/***/ 1412:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.SplitArrowTargetCollider = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _config = __webpack_require__(11);
+
+var _levelStates = __webpack_require__(42);
+
+var STATES = _interopRequireWildcard(_levelStates);
+
+var _effects = __webpack_require__(80);
+
+var _arrowTargetCollider = __webpack_require__(509);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var SplitArrowTargetCollider = exports.SplitArrowTargetCollider = function (_ArrowTargetCollider) {
+  _inherits(SplitArrowTargetCollider, _ArrowTargetCollider);
+
+  function SplitArrowTargetCollider(scene) {
+    _classCallCheck(this, SplitArrowTargetCollider);
+
+    return _possibleConstructorReturn(this, (SplitArrowTargetCollider.__proto__ || Object.getPrototypeOf(SplitArrowTargetCollider)).call(this, scene, function () {}));
+  }
+
+  _createClass(SplitArrowTargetCollider, [{
     key: 'onTargetHit',
     value: function onTargetHit(arrowHitbox, targetHitbox) {
-      var _this = this;
-
       var gold = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : _config.config.entities.level.target.gold;
 
       this.scene.registry.set(_config.config.registryKeys.level.remainingTargets, this.scene.registry.get(_config.config.registryKeys.level.remainingTargets) - 1);
@@ -1622,18 +1661,11 @@ var ArrowTargetCollider = exports.ArrowTargetCollider = function () {
 
       targetHitbox.hitboxParent.onHit();
 
-      if (this.scene.registry.get(_config.config.registryKeys.level.skills.spectralArrow)) {
+      if (this.scene.skillManager.isActive(_config.config.registryKeys.skills.spectralArrow)) {
         _effects.Effects.flashOut([targetHitbox.hitboxParent.getSprite()]);
       } else {
-        this.scene.registry.set(_config.config.registryKeys.level.state, STATES.HIT);
-        this.scene.registry.set(_config.config.registryKeys.level.remainingArrows, this.scene.registry.get(_config.config.registryKeys.level.remainingArrows) - 1);
-
         arrowHitbox.hitboxParent.onHit();
-        _effects.Effects.flashOut([arrowHitbox.hitboxParent.getSprite(), targetHitbox.hitboxParent.getSprite()], function () {
-          _this.scene.registry.set(_config.config.registryKeys.level.state, STATES.REST);
-
-          _this.sceneCallback.call(_this.scene);
-        });
+        _effects.Effects.flashOut([arrowHitbox.hitboxParent.getSprite(), targetHitbox.hitboxParent.getSprite()]);
       }
     }
   }, {
@@ -1646,12 +1678,12 @@ var ArrowTargetCollider = exports.ArrowTargetCollider = function () {
     }
   }]);
 
-  return ArrowTargetCollider;
-}();
+  return SplitArrowTargetCollider;
+}(_arrowTargetCollider.ArrowTargetCollider);
 
 /***/ }),
 
-/***/ 1404:
+/***/ 1413:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1660,56 +1692,322 @@ var ArrowTargetCollider = exports.ArrowTargetCollider = function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.ArrowGroundCollider = undefined;
+exports.SplitArrowGroundCollider = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _config = __webpack_require__(13);
+var _config = __webpack_require__(11);
 
-var _levelStates = __webpack_require__(79);
+var _levelStates = __webpack_require__(42);
 
 var STATES = _interopRequireWildcard(_levelStates);
 
-var _effects = __webpack_require__(116);
+var _effects = __webpack_require__(80);
+
+var _arrowGroundCollider = __webpack_require__(510);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var ArrowGroundCollider = exports.ArrowGroundCollider = function () {
-  function ArrowGroundCollider(scene, sceneCallback) {
-    _classCallCheck(this, ArrowGroundCollider);
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-    this.scene = scene;
-    this.sceneCallback = sceneCallback;
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-    this.onHit = this.onHit.bind(this);
+var SplitArrowGroundCollider = exports.SplitArrowGroundCollider = function (_ArrowGroundCollider) {
+  _inherits(SplitArrowGroundCollider, _ArrowGroundCollider);
+
+  function SplitArrowGroundCollider(scene) {
+    _classCallCheck(this, SplitArrowGroundCollider);
+
+    return _possibleConstructorReturn(this, (SplitArrowGroundCollider.__proto__ || Object.getPrototypeOf(SplitArrowGroundCollider)).call(this, scene));
   }
 
-  _createClass(ArrowGroundCollider, [{
+  _createClass(SplitArrowGroundCollider, [{
     key: 'onHit',
     value: function onHit(arrowHitbox, ground) {
-      var _this = this;
-
-      this.scene.registry.set(_config.config.registryKeys.level.remainingArrows, this.scene.registry.get(_config.config.registryKeys.level.remainingArrows) - 1);
-      this.scene.registry.set(_config.config.registryKeys.level.state, STATES.HIT);
-
       arrowHitbox.hitboxParent.onHit();
 
-      _effects.Effects.flashOut([arrowHitbox.hitboxParent.getSprite()], function () {
-        _this.scene.registry.set(_config.config.registryKeys.level.state, STATES.REST);
-
-        _this.sceneCallback.call(_this.scene);
-      });
+      _effects.Effects.flashOut([arrowHitbox.hitboxParent.getSprite()]);
     }
   }]);
 
-  return ArrowGroundCollider;
+  return SplitArrowGroundCollider;
+}(_arrowGroundCollider.ArrowGroundCollider);
+
+/***/ }),
+
+/***/ 1414:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.CannonballSkill = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _levelStates = __webpack_require__(42);
+
+var STATES = _interopRequireWildcard(_levelStates);
+
+var _cannonball = __webpack_require__(1415);
+
+var _cannonballGroundCollider = __webpack_require__(1416);
+
+var _cannonballTargetCollider = __webpack_require__(1417);
+
+var _cannonballBalloonCollider = __webpack_require__(1418);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var CannonballSkill = exports.CannonballSkill = function () {
+  function CannonballSkill(scene) {
+    _classCallCheck(this, CannonballSkill);
+
+    this.scene = scene;
+
+    this.validStates = [STATES.FLY];
+  }
+
+  _createClass(CannonballSkill, [{
+    key: 'activate',
+    value: function activate() {
+      var levelScene = this.scene.scene.get('level');
+      var cannonball = new _cannonball.Cannonball(levelScene, levelScene.arrow.getSprite().x, levelScene.arrow.getSprite().y);
+
+      var ground = levelScene.groundZone;
+      var targets = levelScene.targets;
+      var balloons = levelScene.balloons;
+
+      var cannonballGroundCollider = new _cannonballGroundCollider.CannonballGroundCollider();
+      levelScene.physics.add.collider(cannonball.hitbox, ground, cannonballGroundCollider.onHit);
+
+      var cannonballBalloonCollider = new _cannonballBalloonCollider.CannonballBalloonCollider(levelScene);
+      levelScene.physics.add.collider(cannonball.hitbox, balloons.getBalloonHitboxes(), cannonballBalloonCollider.onBalloonHit);
+
+      /*
+       * This looks like a bug with 3.16.2.
+       * It seems that if the first arg's body is a circle, the second arg can't be a group.
+       * So the workaround is to iterate over the group and add individual colliders.
+       *
+       * this.scene.physics.add.collider(cannonball.sprite, targets.getHitboxes());
+      */
+      var cannonballTargetCollider = new _cannonballTargetCollider.CannonballTargetCollider(levelScene);
+      targets.getHitboxes().forEach(function (group) {
+        group.children.entries.forEach(function (zone) {
+          levelScene.physics.add.collider(cannonball.hitbox, zone, cannonballTargetCollider.onTargetHit);
+        });
+      });
+
+      // TODO - add on hit handler for bullseyes
+      // levelScene.physics.add.collider(cannonball.sprite, targets.getBullseyeHitboxes());
+    }
+  }, {
+    key: 'update',
+    value: function update() {
+      // no op
+    }
+  }, {
+    key: 'deactivate',
+    value: function deactivate() {
+      // no op
+    }
+  }]);
+
+  return CannonballSkill;
 }();
 
 /***/ }),
 
-/***/ 1405:
+/***/ 1415:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Cannonball = exports.Cannonball = function () {
+  function Cannonball(scene, x, y) {
+    _classCallCheck(this, Cannonball);
+
+    this.scene = scene;
+
+    this.sprite = scene.physics.add.sprite(x, y, 'cannonball').setDisplaySize(32, 32);
+
+    this.hitbox = this.scene.arcadeHitbox.add(this.sprite, {
+      parent: this,
+      xOffset: -16,
+      yOffset: -16,
+      shape: 'circle',
+      radius: 16,
+      onCreate: function onCreate(hitbox) {
+        hitbox.body.allowGravity = false;
+      }
+    });
+  }
+
+  _createClass(Cannonball, [{
+    key: 'onHit',
+    value: function onHit() {
+      this.sprite.body.enable = false;
+      this.sprite.body.allowGravity = false;
+
+      this.hitbox.body.enable = false;
+    }
+  }]);
+
+  return Cannonball;
+}();
+
+/***/ }),
+
+/***/ 1416:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.CannonballGroundCollider = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _effects = __webpack_require__(80);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var CannonballGroundCollider = exports.CannonballGroundCollider = function () {
+  function CannonballGroundCollider() {
+    _classCallCheck(this, CannonballGroundCollider);
+  }
+
+  _createClass(CannonballGroundCollider, [{
+    key: 'onHit',
+    value: function onHit(cannonballHitbox, ground) {
+      var cannonball = cannonballHitbox.hitboxParent;
+
+      cannonball.onHit();
+      _effects.Effects.flashOut([cannonball.sprite]);
+    }
+  }]);
+
+  return CannonballGroundCollider;
+}();
+
+/***/ }),
+
+/***/ 1417:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.CannonballTargetCollider = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _effects = __webpack_require__(80);
+
+var _config = __webpack_require__(11);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var CannonballTargetCollider = exports.CannonballTargetCollider = function () {
+  function CannonballTargetCollider(scene) {
+    _classCallCheck(this, CannonballTargetCollider);
+
+    this.scene = scene;
+
+    this.onTargetHit = this.onTargetHit.bind(this);
+  }
+
+  _createClass(CannonballTargetCollider, [{
+    key: 'onTargetHit',
+    value: function onTargetHit(cannonballHitbox, targetHitbox) {
+      var gold = _config.config.entities.level.target.gold;
+
+      this.scene.registry.set(_config.config.registryKeys.level.remainingTargets, this.scene.registry.get(_config.config.registryKeys.level.remainingTargets) - 1);
+      this.scene.registry.set(_config.config.registryKeys.level.gold, this.scene.registry.get(_config.config.registryKeys.level.gold) + gold);
+
+      cannonballHitbox.hitboxParent.onHit();
+      targetHitbox.hitboxParent.onHit();
+
+      _effects.Effects.flashOut([targetHitbox.hitboxParent.getSprite(), cannonballHitbox.hitboxParent.sprite]);
+    }
+  }, {
+    key: 'onBullseyeHit',
+    value: function onBullseyeHit(cannonball, bullseyeHitbox) {}
+  }]);
+
+  return CannonballTargetCollider;
+}();
+
+/***/ }),
+
+/***/ 1418:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.CannonballBalloonCollider = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _config = __webpack_require__(11);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var CannonballBalloonCollider = exports.CannonballBalloonCollider = function () {
+  function CannonballBalloonCollider(scene) {
+    _classCallCheck(this, CannonballBalloonCollider);
+
+    this.scene = scene;
+
+    this.onBalloonHit = this.onBalloonHit.bind(this);
+  }
+
+  _createClass(CannonballBalloonCollider, [{
+    key: 'onBalloonHit',
+    value: function onBalloonHit(cannonball, balloonHitbox) {
+      var balloon = balloonHitbox.hitboxParent.balloonParent;
+
+      this.scene.registry.set(_config.config.registryKeys.level.remainingBalloons, this.scene.registry.get(_config.config.registryKeys.level.remainingBalloons) - 1);
+      this.scene.registry.set(_config.config.registryKeys.level.poppedBalloons, this.scene.registry.get(_config.config.registryKeys.level.poppedBalloons) + 1);
+
+      this.scene.registry.set(_config.config.registryKeys.level.gold, this.scene.registry.get(_config.config.registryKeys.level.gold) + _config.config.entities.level.balloon.gold);
+
+      balloon.pop();
+    }
+  }]);
+
+  return CannonballBalloonCollider;
+}();
+
+/***/ }),
+
+/***/ 1419:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1722,21 +2020,15 @@ exports.UiScene = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _config = __webpack_require__(13);
+var _config = __webpack_require__(11);
 
-var _levelStates = __webpack_require__(79);
+var _restartLevelButton = __webpack_require__(1420);
 
-var STATES = _interopRequireWildcard(_levelStates);
+var _spectralArrowButton = __webpack_require__(1421);
 
-var _restartLevelButton = __webpack_require__(1406);
+var _splitArrowButton = __webpack_require__(1422);
 
-var _skillButton = __webpack_require__(1407);
-
-var _spectralArrowSkill = __webpack_require__(1408);
-
-var _cannonballSkill = __webpack_require__(1409);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+var _cannonballButton = __webpack_require__(1423);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1765,7 +2057,7 @@ var UiScene = exports.UiScene = function (_Phaser$Scene) {
       this.registry.events.on('changedata-' + _config.config.registryKeys.level.arrow.charge, this._updateCharge, this);
       this.registry.events.on('changedata-' + _config.config.registryKeys.level.gold, this._updateLevelGold, this);
 
-      this.add.image(uiConfig.background.x, uiConfig.background.y, 'background-parchment').setDisplaySize(uiConfig.background.width, uiConfig.background.height).setOrigin(0, 0);
+      this.add.image(uiConfig.background.x, uiConfig.background.y, 'background-parchment').setDisplaySize(uiConfig.background.width, uiConfig.background.height).setOrigin(0, 0).setInteractive();
 
       this.restartButton = new _restartLevelButton.RestartLevelButton(this);
 
@@ -1786,10 +2078,8 @@ var UiScene = exports.UiScene = function (_Phaser$Scene) {
       this.goldIcon = this.add.image(uiConfig.goldIcon.x, uiConfig.goldIcon.y, 'gold-5').setDisplaySize(uiConfig.goldIcon.width, uiConfig.goldIcon.height).setOrigin(0, 1);
       this.goldText = this.add.bitmapText(uiConfig.goldText.x, uiConfig.goldText.y, 'font', 0, uiConfig.goldText.size).setOrigin(0, 1);
 
-      var spectralArrowSkill = new _spectralArrowSkill.SpectralArrowSkill(this);
-      var cannonballSkill = new _cannonballSkill.CannonballSkill(this);
-      this.spectralArrowButton = new _skillButton.SkillButton(this, 380, 270, 'arrow-glow', _config.config.registryKeys.skills.spectralArrow, spectralArrowSkill, Phaser.Input.Keyboard.KeyCodes.ONE, [STATES.REST, STATES.CHARGE, STATES.FLY]);
-      this.cannonballButton = new _skillButton.SkillButton(this, 430, 270, 'cannonball', _config.config.registryKeys.skills.cannonball, cannonballSkill, Phaser.Input.Keyboard.KeyCodes.TWO, [STATES.FLY]);
+      var skillManager = this.scene.get('level').skillManager;
+      this.skillButtons = [new _spectralArrowButton.SpectralArrowButton(this, skillManager, 380, 270), new _cannonballButton.CannonballButton(this, skillManager, 430, 270), new _splitArrowButton.SplitArrowButton(this, skillManager, 480, 270)];
 
       this._updateArrows(null, this.registry.get(_config.config.registryKeys.level.remainingArrows));
       this._updateCharge(null, this.registry.get(_config.config.registryKeys.level.arrow.charge));
@@ -1802,7 +2092,9 @@ var UiScene = exports.UiScene = function (_Phaser$Scene) {
       this.registry.events.off('changedata-' + _config.config.registryKeys.level.arrow.charge, this._updateCharge, this);
       this.registry.events.off('changedata-' + _config.config.registryKeys.level.gold, this._updateLevelGold, this);
 
-      this.spectralArrowButton.cleanupRegistryListeners();
+      this.skillButtons.forEach(function (button) {
+        return button.cleanupRegistryListeners();
+      });
     }
   }, {
     key: '_updateArrows',
@@ -1856,7 +2148,7 @@ var UiScene = exports.UiScene = function (_Phaser$Scene) {
 
 /***/ }),
 
-/***/ 1406:
+/***/ 1420:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1869,7 +2161,7 @@ exports.RestartLevelButton = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _config = __webpack_require__(13);
+var _config = __webpack_require__(11);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1894,7 +2186,7 @@ var RestartLevelButton = exports.RestartLevelButton = function () {
 
 /***/ }),
 
-/***/ 1407:
+/***/ 1421:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1903,80 +2195,38 @@ var RestartLevelButton = exports.RestartLevelButton = function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.SkillButton = undefined;
+exports.SpectralArrowButton = undefined;
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _config = __webpack_require__(11);
 
-var _levelStates = __webpack_require__(79);
+var _skillButton = __webpack_require__(242);
 
-var STATES = _interopRequireWildcard(_levelStates);
-
-var _config = __webpack_require__(13);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+var _spectralArrowIcon = __webpack_require__(511);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var SkillButton = exports.SkillButton = function () {
-  function SkillButton(scene, x, y, iconKey, skillConfigKey, skill, shortcutKey, validStates) {
-    _classCallCheck(this, SkillButton);
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-    this.scene = scene;
-    this.skillConfigKey = skillConfigKey;
-    this.skill = skill;
-    this.validStates = validStates;
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-    this.background = this.scene.add.image(x, y, 'skill-background').setDisplaySize(42, 42);
-    this.icon = this.scene.add.image(x, y, iconKey).setScale(0.45).setAngle(-45);
+var SpectralArrowButton = exports.SpectralArrowButton = function (_SkillButton) {
+  _inherits(SpectralArrowButton, _SkillButton);
 
-    this.chargeCountText = this.scene.add.bitmapText(x + 16, y + 16, 'font', '', 12).setOrigin(1, 1);
+  function SpectralArrowButton(scene, skillManager, x, y) {
+    _classCallCheck(this, SpectralArrowButton);
 
-    this.clickZone = this.scene.add.zone(x, y, 42, 42).setInteractive({ cursor: 'pointer' }).on('pointerdown', this.onUse, this);
-    this.shortcutKey = this.scene.input.keyboard.addKey(shortcutKey).on('down', this.onUse, this);
+    var _this = _possibleConstructorReturn(this, (SpectralArrowButton.__proto__ || Object.getPrototypeOf(SpectralArrowButton)).call(this, scene, skillManager, x, y, _config.config.registryKeys.skills.spectralArrow, Phaser.Input.Keyboard.KeyCodes.ONE));
 
-    this.scene.registry.events.on('changedata-' + skillConfigKey, this._updateButton, this);
-    this._updateButton(null, this.scene.registry.get(skillConfigKey));
+    new _spectralArrowIcon.SpectralArrowIcon(scene, x, y);
+    return _this;
   }
 
-  _createClass(SkillButton, [{
-    key: 'onUse',
-    value: function onUse() {
-      var skillConfig = this.scene.registry.get(this.skillConfigKey);
-
-      var hasCharges = skillConfig.chargeCount > 0;
-      var isValidState = this.validStates == null ? true : this.validStates.includes(this.scene.registry.get(_config.config.registryKeys.level.state));
-
-      if (hasCharges && isValidState) {
-        skillConfig.chargeCount -= 1;
-        this.scene.registry.set(this.skillConfigKey, skillConfig);
-
-        this.skill.activate();
-      }
-    }
-  }, {
-    key: '_updateButton',
-    value: function _updateButton(parent, skillConfig) {
-      if (skillConfig.chargeCount === 0) {
-        this.background.setTint(0xcccccc);
-        this.icon.setTint(0xcccccc);
-      }
-
-      this.chargeCountText.text = skillConfig.chargeCount;
-    }
-  }, {
-    key: 'cleanupRegistryListeners',
-    value: function cleanupRegistryListeners() {
-      this.scene.registry.events.off('changedata-' + this.skillConfigKey, this._updateButton);
-      this.shortcutKey.off('down', this.onUse, this);
-    }
-  }]);
-
-  return SkillButton;
-}();
+  return SpectralArrowButton;
+}(_skillButton.SkillButton);
 
 /***/ }),
 
-/***/ 1408:
+/***/ 1422:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1985,36 +2235,38 @@ var SkillButton = exports.SkillButton = function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.SpectralArrowSkill = undefined;
+exports.SplitArrowButton = undefined;
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _config = __webpack_require__(11);
 
-var _config = __webpack_require__(13);
+var _skillButton = __webpack_require__(242);
+
+var _splitArrowIcon = __webpack_require__(512);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var LEVEL_KEY = _config.config.registryKeys.level.skills.spectralArrow;
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-var SpectralArrowSkill = exports.SpectralArrowSkill = function () {
-  function SpectralArrowSkill(scene) {
-    _classCallCheck(this, SpectralArrowSkill);
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-    this.scene = scene;
+var SplitArrowButton = exports.SplitArrowButton = function (_SkillButton) {
+  _inherits(SplitArrowButton, _SkillButton);
+
+  function SplitArrowButton(scene, skillManager, x, y) {
+    _classCallCheck(this, SplitArrowButton);
+
+    var _this = _possibleConstructorReturn(this, (SplitArrowButton.__proto__ || Object.getPrototypeOf(SplitArrowButton)).call(this, scene, skillManager, x, y, _config.config.registryKeys.skills.splitArrow, Phaser.Input.Keyboard.KeyCodes.THREE));
+
+    new _splitArrowIcon.SplitArrowIcon(scene, x, y);
+    return _this;
   }
 
-  _createClass(SpectralArrowSkill, [{
-    key: 'activate',
-    value: function activate() {
-      this.scene.registry.set(LEVEL_KEY, true);
-    }
-  }]);
-
-  return SpectralArrowSkill;
-}();
+  return SplitArrowButton;
+}(_skillButton.SkillButton);
 
 /***/ }),
 
-/***/ 1409:
+/***/ 1423:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2023,254 +2275,38 @@ var SpectralArrowSkill = exports.SpectralArrowSkill = function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.CannonballSkill = undefined;
+exports.CannonballButton = undefined;
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _config = __webpack_require__(11);
 
-var _config = __webpack_require__(13);
+var _skillButton = __webpack_require__(242);
 
-var _cannonball = __webpack_require__(1410);
-
-var _cannonballGroundCollider = __webpack_require__(1411);
-
-var _cannonballTargetCollider = __webpack_require__(1412);
-
-var _cannonballBalloonCollider = __webpack_require__(1413);
+var _cannonballIcon = __webpack_require__(513);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var SKILL_CONFIG_KEY = _config.config.registryKeys.skills.cannonball;
-var LEVEL_KEY = _config.config.registryKeys.level.skills.cannonball;
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-var CannonballSkill = exports.CannonballSkill = function () {
-  function CannonballSkill(scene) {
-    _classCallCheck(this, CannonballSkill);
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-    this.scene = scene;
+var CannonballButton = exports.CannonballButton = function (_SkillButton) {
+  _inherits(CannonballButton, _SkillButton);
+
+  function CannonballButton(scene, skillManager, x, y) {
+    _classCallCheck(this, CannonballButton);
+
+    var _this = _possibleConstructorReturn(this, (CannonballButton.__proto__ || Object.getPrototypeOf(CannonballButton)).call(this, scene, skillManager, x, y, _config.config.registryKeys.skills.cannonball, Phaser.Input.Keyboard.KeyCodes.TWO));
+
+    new _cannonballIcon.CannonballIcon(scene, x, y);
+    return _this;
   }
 
-  _createClass(CannonballSkill, [{
-    key: 'activate',
-    value: function activate() {
-      var levelScene = this.scene.scene.get('level');
-      var cannonball = new _cannonball.Cannonball(levelScene, levelScene.arrow.getSprite().x, levelScene.arrow.getSprite().y);
-
-      var ground = levelScene.groundZone;
-      var targets = levelScene.targets;
-      var balloons = levelScene.balloons;
-
-      var cannonballGroundCollider = new _cannonballGroundCollider.CannonballGroundCollider();
-      levelScene.physics.add.collider(cannonball.hitbox, ground, cannonballGroundCollider.onHit);
-
-      var cannonballBalloonCollider = new _cannonballBalloonCollider.CannonballBalloonCollider(levelScene);
-      levelScene.physics.add.collider(cannonball.hitbox, balloons.getBalloonHitboxes(), cannonballBalloonCollider.onBalloonHit);
-
-      /*
-       * This looks like a bug with 3.16.2.
-       * It seems that if the first arg's body is a circle, the second arg can't be a group.
-       * So the workaround is to iterate over the group and add individual colliders.
-      */
-      // this.scene.physics.add.collider(cannonball.sprite, targets.getHitboxes());
-      var cannonballTargetCollider = new _cannonballTargetCollider.CannonballTargetCollider(levelScene);
-      targets.getHitboxes().forEach(function (group) {
-        group.children.entries.forEach(function (zone) {
-          // hacky until i implement circles in the hitbox lib
-          levelScene.physics.add.collider(cannonball.hitbox, zone, cannonballTargetCollider.onTargetHit.bind(cannonballTargetCollider, cannonball, zone));
-        });
-      });
-      // TODO - add on hit handler for bullseyes
-      // levelScene.physics.add.collider(cannonball.sprite, targets.getBullseyeHitboxes());
-    }
-  }]);
-
-  return CannonballSkill;
-}();
+  return CannonballButton;
+}(_skillButton.SkillButton);
 
 /***/ }),
 
-/***/ 1410:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Cannonball = exports.Cannonball = function () {
-  function Cannonball(scene, x, y) {
-    _classCallCheck(this, Cannonball);
-
-    this.scene = scene;
-
-    this.sprite = scene.physics.add.sprite(x, y, 'cannonball').setDisplaySize(32, 32);
-
-    this.hitbox = this.scene.arcadeHitbox.add(this.sprite, {
-      parent: this,
-      xOffset: -16,
-      yOffset: -16,
-      shape: 'circle',
-      radius: 16,
-      onCreate: function onCreate(hitbox) {
-        hitbox.body.allowGravity = false;
-      }
-    });
-  }
-
-  _createClass(Cannonball, [{
-    key: 'onHit',
-    value: function onHit() {
-      this.sprite.body.enable = false;
-      this.sprite.body.allowGravity = false;
-
-      this.hitbox.body.enable = false;
-    }
-  }]);
-
-  return Cannonball;
-}();
-
-/***/ }),
-
-/***/ 1411:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.CannonballGroundCollider = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _effects = __webpack_require__(116);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var CannonballGroundCollider = exports.CannonballGroundCollider = function () {
-  function CannonballGroundCollider() {
-    _classCallCheck(this, CannonballGroundCollider);
-  }
-
-  _createClass(CannonballGroundCollider, [{
-    key: 'onHit',
-    value: function onHit(cannonballHitbox, ground) {
-      var cannonball = cannonballHitbox.hitboxParent;
-
-      cannonball.onHit();
-      _effects.Effects.flashOut([cannonball.sprite]);
-    }
-  }]);
-
-  return CannonballGroundCollider;
-}();
-
-/***/ }),
-
-/***/ 1412:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.CannonballTargetCollider = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _effects = __webpack_require__(116);
-
-var _config = __webpack_require__(13);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var CannonballTargetCollider = exports.CannonballTargetCollider = function () {
-  function CannonballTargetCollider(scene) {
-    _classCallCheck(this, CannonballTargetCollider);
-
-    this.scene = scene;
-
-    this.onTargetHit = this.onTargetHit.bind(this);
-  }
-
-  _createClass(CannonballTargetCollider, [{
-    key: 'onTargetHit',
-    value: function onTargetHit(cannonball, targetHitbox) {
-      var gold = _config.config.entities.level.target.gold;
-
-      this.scene.registry.set(_config.config.registryKeys.level.remainingTargets, this.scene.registry.get(_config.config.registryKeys.level.remainingTargets) - 1);
-      this.scene.registry.set(_config.config.registryKeys.level.gold, this.scene.registry.get(_config.config.registryKeys.level.gold) + gold);
-
-      cannonball.onHit();
-      targetHitbox.hitboxParent.onHit();
-
-      _effects.Effects.flashOut([targetHitbox.hitboxParent.getSprite(), cannonball.sprite]);
-    }
-  }, {
-    key: 'onBullseyeHit',
-    value: function onBullseyeHit(cannonball, bullseyeHitbox) {}
-  }]);
-
-  return CannonballTargetCollider;
-}();
-
-/***/ }),
-
-/***/ 1413:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.CannonballBalloonCollider = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _config = __webpack_require__(13);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var CannonballBalloonCollider = exports.CannonballBalloonCollider = function () {
-  function CannonballBalloonCollider(scene) {
-    _classCallCheck(this, CannonballBalloonCollider);
-
-    this.scene = scene;
-
-    this.onBalloonHit = this.onBalloonHit.bind(this);
-  }
-
-  _createClass(CannonballBalloonCollider, [{
-    key: 'onBalloonHit',
-    value: function onBalloonHit(cannonball, balloonHitbox) {
-      var balloon = balloonHitbox.hitboxParent.balloonParent;
-
-      this.scene.registry.set(_config.config.registryKeys.level.remainingBalloons, this.scene.registry.get(_config.config.registryKeys.level.remainingBalloons) - 1);
-      this.scene.registry.set(_config.config.registryKeys.level.poppedBalloons, this.scene.registry.get(_config.config.registryKeys.level.poppedBalloons) + 1);
-
-      this.scene.registry.set(_config.config.registryKeys.level.gold, this.scene.registry.get(_config.config.registryKeys.level.gold) + _config.config.entities.level.balloon.gold);
-
-      balloon.pop();
-    }
-  }]);
-
-  return CannonballBalloonCollider;
-}();
-
-/***/ }),
-
-/***/ 1414:
+/***/ 1424:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2283,17 +2319,17 @@ exports.LevelSelectScene = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _phaser = __webpack_require__(96);
+var _phaser = __webpack_require__(97);
 
 var _phaser2 = _interopRequireDefault(_phaser);
 
-var _config = __webpack_require__(13);
+var _config = __webpack_require__(11);
 
-var _levels = __webpack_require__(1415);
+var _levels = __webpack_require__(1425);
 
 var _levels2 = _interopRequireDefault(_levels);
 
-var _storage = __webpack_require__(241);
+var _storage = __webpack_require__(156);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2315,6 +2351,8 @@ var LevelSelectScene = exports.LevelSelectScene = function (_Phaser$Scene) {
   _createClass(LevelSelectScene, [{
     key: 'create',
     value: function create() {
+      var _this2 = this;
+
       this.storage = new _storage.Storage();
 
       this._createBackgroundImage('menu-bg-0');
@@ -2322,6 +2360,10 @@ var LevelSelectScene = exports.LevelSelectScene = function (_Phaser$Scene) {
       this._createBackgroundImage('menu-bg-2');
       this._createBackgroundImage('menu-bg-3');
       this._createBackgroundImage('menu-bg-4');
+
+      this.add.bitmapText(500, 40, 'font', 'Skill Store', 24).setInteractive({ cursor: 'pointer' }).on('pointerdown', function () {
+        _this2.scene.start('skill-store');
+      });
 
       this.add.bitmapText(320, 50, 'font-outline', 'Level Select', 12).setOrigin(0.5);
 
@@ -2338,7 +2380,7 @@ var LevelSelectScene = exports.LevelSelectScene = function (_Phaser$Scene) {
   }, {
     key: '_createLevelButton',
     value: function _createLevelButton(levelIndex, x, y) {
-      var _this2 = this;
+      var _this3 = this;
 
       var levelText = levelIndex;
       var starCount = this.storage.loadLevelStars(levelIndex);
@@ -2352,8 +2394,8 @@ var LevelSelectScene = exports.LevelSelectScene = function (_Phaser$Scene) {
       }
 
       this.add.zone(x - 14, y, 80, 54).setOrigin(0, 0).setInteractive({ cursor: 'pointer' }).once('pointerup', function () {
-        _this2.registry.set(_config.config.registryKeys.level.index, levelIndex);
-        _this2.scene.start('level', { levelConfig: _levels2.default[levelIndex] });
+        _this3.registry.set(_config.config.registryKeys.level.index, levelIndex);
+        _this3.scene.start('level', { levelConfig: _levels2.default[levelIndex] });
       });
     }
   }]);
@@ -2363,14 +2405,205 @@ var LevelSelectScene = exports.LevelSelectScene = function (_Phaser$Scene) {
 
 /***/ }),
 
-/***/ 1415:
+/***/ 1425:
 /***/ (function(module, exports) {
 
 module.exports = [{"arrows":3,"targets":[{"x":500},{"x":600},{"x":900}],"balloons":[]},{"arrows":3,"targets":[{"x":250},{"x":350}],"balloons":[]},{"arrows":3,"targets":[{"x":400}],"balloons":[{"x":200,"y":150},{"x":300,"y":150}]},{"arrows":2,"targets":[{"x":200}],"balloons":[]}]
 
 /***/ }),
 
-/***/ 1416:
+/***/ 1426:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.SkillStoreScene = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _config = __webpack_require__(11);
+
+var _spectralArrowIcon = __webpack_require__(511);
+
+var _splitArrowIcon = __webpack_require__(512);
+
+var _cannonballIcon = __webpack_require__(513);
+
+var _storage = __webpack_require__(156);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var SkillStoreScene = exports.SkillStoreScene = function (_Phaser$Scene) {
+  _inherits(SkillStoreScene, _Phaser$Scene);
+
+  function SkillStoreScene() {
+    _classCallCheck(this, SkillStoreScene);
+
+    return _possibleConstructorReturn(this, (SkillStoreScene.__proto__ || Object.getPrototypeOf(SkillStoreScene)).call(this, { key: 'skill-store' }));
+  }
+
+  _createClass(SkillStoreScene, [{
+    key: 'create',
+    value: function create() {
+      var _this2 = this;
+
+      this._createBackgroundImage('store-bg-0');
+      this._createBackgroundImage('store-bg-1');
+      this._createBackgroundImage('store-bg-2');
+      this._createBackgroundImage('store-bg-3');
+
+      this.add.bitmapText(500, 40, 'font', 'Level Select', 24).setInteractive({ cursor: 'pointer' }).on('pointerdown', function () {
+        _this2.scene.start('level-select');
+      });
+
+      this.add.bitmapText(320, 50, 'font-outline', 'Skill Store', 12).setOrigin(0.5);
+
+      this._createGoldText();
+
+      this._createSpectralArrowButton();
+      this._createSplitArrowButton();
+      this._createCannonballButton();
+
+      this._createDescriptionBackground();
+      this._createDescriptionTexts();
+    }
+  }, {
+    key: '_createBackgroundImage',
+    value: function _createBackgroundImage(key) {
+      this.add.image(0, 0, key).setDisplaySize(_config.config.dimensions.viewport.width, _config.config.dimensions.viewport.height).setOrigin(0);
+    }
+  }, {
+    key: '_createGoldText',
+    value: function _createGoldText() {
+      var goldAmount = this.registry.get(_config.config.registryKeys.gold);
+      var goldBackground = this.add.graphics().fillStyle(0x222222, 0.7);
+      var goldText = this.add.bitmapText(320, 95, 'font', 'Your gold: ' + goldAmount, 24).setOrigin(0.5);
+      var horizontalPadding = 10;
+      var verticalPadding = 10;
+      goldBackground.fillRect(320 - (goldText.width + horizontalPadding) / 2, 95 - (goldText.height + verticalPadding) / 2, goldText.width + horizontalPadding, goldText.height + verticalPadding);
+
+      this.registry.events.on('changedata-' + _config.config.registryKeys.gold, function (parent, value) {
+        goldText.text = 'Your gold: ' + value;
+      });
+    }
+  }, {
+    key: '_createSpectralArrowButton',
+    value: function _createSpectralArrowButton() {
+      this._createSkillButton(130, 150, _spectralArrowIcon.SpectralArrowIcon, 'spectralArrow', _config.config.skills.spectralArrow.cost, _config.config.registryKeys.skills.spectralArrow);
+    }
+  }, {
+    key: '_createCannonballButton',
+    value: function _createCannonballButton() {
+      this._createSkillButton(310, 150, _cannonballIcon.CannonballIcon, 'cannonball', _config.config.skills.cannonball.cost, _config.config.registryKeys.skills.cannonball);
+    }
+  }, {
+    key: '_createSplitArrowButton',
+    value: function _createSplitArrowButton() {
+      this._createSkillButton(490, 150, _splitArrowIcon.SplitArrowIcon, 'splitArrow', _config.config.skills.splitArrow.cost, _config.config.registryKeys.skills.splitArrow);
+    }
+  }, {
+    key: '_createSkillButton',
+    value: function _createSkillButton(x, y, iconClass, descriptionKey, cost, registryKey) {
+      var _this3 = this;
+
+      this.add.image(x, y, 'skill-background').setDisplaySize(42, 42).setInteractive({ cursor: 'pointer' }).on('pointerover', function () {
+        return _this3._displayDescriptionFor(descriptionKey);
+      }).on('pointerout', function () {
+        return _this3._hideDescription();
+      }).on('pointerdown', function () {
+        if (_this3._canBuySkill(cost)) {
+          _this3._buySkill(registryKey, descriptionKey, cost);
+        }
+      });
+      new iconClass(this, x, y);
+
+      var costText = this.add.bitmapText(x - 5, y + 40, 'font', cost, 18).setOrigin(0.5);
+      this.add.image(x + costText.width - 5, y + 40, 'gold-3');
+
+      var chargeCount = this.registry.get(registryKey).chargeCount;
+      var chargeText = this.add.bitmapText(x, y + 65, 'font', 'Charges: ' + chargeCount, 18).setOrigin(0.5);
+
+      this.registry.events.on('changedata-' + registryKey, function (parent, value) {
+        chargeText.text = 'Charges: ' + value.chargeCount;
+      });
+    }
+  }, {
+    key: '_createDescriptionBackground',
+    value: function _createDescriptionBackground() {
+      this.descriptionBackground = this.add.graphics();
+      this.descriptionBackground.fillStyle(0x222222, 0.7);
+      this.descriptionBackground.fillRect(50, 230, 540, 50);
+      this.descriptionBackground.alpha = 0;
+    }
+  }, {
+    key: '_createDescriptionTexts',
+    value: function _createDescriptionTexts() {
+      var skillDescriptions = {
+        'spectralArrow': 'Your arrow becomes spectral and can pass through targets.',
+        'cannonball': "Drop a cannonball from your arrow as it flies. Don't ask how.",
+        'splitArrow': 'Your single arrow splits into 3 new arrows.'
+      };
+
+      var spectralArrowText = this.add.bitmapText(320, 255, 'font', skillDescriptions['spectralArrow'], 18).setOrigin(0.5).setAlpha(0);
+      var splitArrowText = this.add.bitmapText(320, 255, 'font', skillDescriptions['splitArrow'], 18).setOrigin(0.5).setAlpha(0);
+      var cannonballText = this.add.bitmapText(320, 255, 'font', skillDescriptions['cannonball'], 18).setOrigin(0.5).setAlpha(0);
+
+      this.skillTexts = {
+        'spectralArrow': spectralArrowText,
+        'splitArrow': splitArrowText,
+        'cannonball': cannonballText
+      };
+    }
+  }, {
+    key: '_displayDescriptionFor',
+    value: function _displayDescriptionFor(skill) {
+      this.descriptionBackground.alpha = 1;
+      this.skillTexts[skill].alpha = 1;
+    }
+  }, {
+    key: '_hideDescription',
+    value: function _hideDescription() {
+      this.descriptionBackground.alpha = 0;
+      Object.values(this.skillTexts).forEach(function (text) {
+        return text.alpha = 0;
+      });
+    }
+  }, {
+    key: '_canBuySkill',
+    value: function _canBuySkill(amount) {
+      return this.registry.get(_config.config.registryKeys.gold) >= amount;
+    }
+  }, {
+    key: '_buySkill',
+    value: function _buySkill(registryKey, skillKey, amount) {
+      var storage = new _storage.Storage();
+
+      var skillConfig = this.registry.get(registryKey);
+      skillConfig.chargeCount += 1;
+      this.registry.set(registryKey, skillConfig);
+      storage.saveSkill(skillKey, skillConfig);
+
+      var goldAmount = this.registry.get(_config.config.registryKeys.gold);
+      goldAmount -= amount;
+      this.registry.set(_config.config.registryKeys.gold, goldAmount);
+      storage.saveGold(goldAmount);
+    }
+  }]);
+
+  return SkillStoreScene;
+}(Phaser.Scene);
+
+/***/ }),
+
+/***/ 1427:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2383,9 +2616,9 @@ exports.ResultsScene = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _storage = __webpack_require__(241);
+var _storage = __webpack_require__(156);
 
-var _config = __webpack_require__(13);
+var _config = __webpack_require__(11);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -2416,15 +2649,21 @@ var ResultsScene = exports.ResultsScene = function (_Phaser$Scene) {
 
       this.storage = new _storage.Storage();
 
+      var newGoldAmount = this.registry.get(_config.config.registryKeys.gold) + this.registry.get(_config.config.registryKeys.level.gold);
+
+      this.registry.set(_config.config.registryKeys.gold, newGoldAmount);
+
+      this.storage.saveGold(newGoldAmount);
+      this.storage.saveSkill('spectralArrow', this.registry.get(_config.config.registryKeys.skills.spectralArrow));
+      this.storage.saveSkill('splitArrow', this.registry.get(_config.config.registryKeys.skills.splitArrow));
+      this.storage.saveSkill('cannonball', this.registry.get(_config.config.registryKeys.skills.cannonball));
+
       this.add.image(resultsConfig.background.x, resultsConfig.background.y, 'background-parchment').setDisplaySize(resultsConfig.background.width, resultsConfig.background.height);
 
       var didWin = this.registry.get(_config.config.registryKeys.level.remainingTargets) === 0;
 
       var titleText = didWin ? 'Level Passed!' : 'Level Failed!';
       this.add.bitmapText(resultsConfig.title.x, resultsConfig.title.y, 'font', titleText, resultsConfig.title.size).setOrigin(0.5, 0);
-
-      this.storage.saveGold(this.registry.get(_config.config.registryKeys.gold) + this.registry.get(_config.config.registryKeys.level.gold));
-      this.storage.saveSkill('spectralArrow', this.registry.get(_config.config.registryKeys.skills.spectralArrow));
 
       if (didWin) {
         var scores = this._calculateScore();
@@ -2560,7 +2799,7 @@ var ResultsScene = exports.ResultsScene = function (_Phaser$Scene) {
 
 /***/ }),
 
-/***/ 241:
+/***/ 156:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2596,6 +2835,9 @@ var Storage = exports.Storage = function () {
           chargeCount: 0
         },
         cannonball: {
+          chargeCount: 0
+        },
+        splitArrow: {
           chargeCount: 0
         }
       });
@@ -2670,7 +2912,77 @@ window.Storage = new Storage();
 
 /***/ }),
 
-/***/ 505:
+/***/ 242:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var SkillButton = exports.SkillButton = function () {
+  function SkillButton(scene, skillManager, x, y, skillKey, shortcutKey) {
+    _classCallCheck(this, SkillButton);
+
+    this.scene = scene;
+    this.skillKey = skillKey;
+    this.skillManager = skillManager;
+
+    this.background = this.scene.add.image(x, y, 'skill-background').setDisplaySize(42, 42);
+
+    this.chargeCountText = this.scene.add.bitmapText(x + 16, y + 16, 'font', '', 12).setOrigin(1, 1);
+
+    this.clickZone = this.scene.add.zone(x, y, 42, 42).setInteractive({ cursor: 'pointer' }).on('pointerdown', this.onUse, this);
+    this.shortcutKey = this.scene.input.keyboard.addKey(shortcutKey).on('down', this.onUse, this);
+
+    this.scene.registry.events.on('changedata-' + skillKey, this._updateButton, this);
+    this._updateButton(null, this.scene.registry.get(skillKey));
+  }
+
+  _createClass(SkillButton, [{
+    key: 'onUse',
+    value: function onUse() {
+      if (this.skillManager.canActivate(this.skillKey)) {
+        this.skillManager.activate(this.skillKey);
+      }
+    }
+  }, {
+    key: '_updateButton',
+    value: function _updateButton(parent, skillConfig) {
+      if (skillConfig.chargeCount === 0) {
+        this.background.setTint(0xcccccc);
+        // this.icon.setTint(0xcccccc);
+      }
+
+      this.chargeCountText.text = skillConfig.chargeCount;
+    }
+  }, {
+    key: 'cleanupRegistryListeners',
+    value: function cleanupRegistryListeners() {
+      this.scene.registry.events.off('changedata-' + this.skillKey, this._updateButton);
+      this.shortcutKey.off('down', this.onUse, this);
+    }
+  }]);
+
+  return SkillButton;
+}();
+
+/***/ }),
+
+/***/ 42:
+/***/ (function(module, exports) {
+
+module.exports = {"PANNING_TO_TARGETS":0,"REST":1,"CHARGE":2,"FLY":3,"HIT":4}
+
+/***/ }),
+
+/***/ 506:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2683,7 +2995,7 @@ exports.Balloon = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _config = __webpack_require__(13);
+var _config = __webpack_require__(11);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -2815,29 +3127,432 @@ var Balloon = exports.Balloon = function () {
 
 /***/ }),
 
-/***/ 506:
+/***/ 507:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(96);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Arrow = undefined;
 
-var _config = __webpack_require__(13);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _arcadeHitbox = __webpack_require__(1389);
+var _phaser = __webpack_require__(97);
 
-var _testScene = __webpack_require__(1390);
+var _phaser2 = _interopRequireDefault(_phaser);
 
-var _preloadScene = __webpack_require__(1391);
+var _levelStates = __webpack_require__(42);
 
-var _levelScene = __webpack_require__(1392);
+var STATES = _interopRequireWildcard(_levelStates);
 
-var _uiScene = __webpack_require__(1405);
+var _config = __webpack_require__(11);
 
-var _levelSelectScene = __webpack_require__(1414);
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var _resultsScene = __webpack_require__(1416);
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var arrowLayoutConfig = _config.config.layouts.level.arrow;
+var arrowConfig = _config.config.entities.level.arrow;
+
+var Arrow = exports.Arrow = function () {
+  function Arrow(scene) {
+    _classCallCheck(this, Arrow);
+
+    this.scene = scene;
+
+    this.sprite = this.scene.physics.add.sprite(0, 0, 'arrow');
+    this.sprite.setDisplaySize(48, 12);
+
+    this.hitbox = this.scene.arcadeHitbox.add(this.sprite, {
+      parent: this,
+      xOffset: 24,
+      yOffset: 0,
+      width: 6,
+      height: 6
+    });
+
+    this.releaseSounds = {
+      low: this.scene.sound.add('arrow-release-low'),
+      medium: this.scene.sound.add('arrow-release-medium'),
+      high: this.scene.sound.add('arrow-release-high')
+    };
+
+    this.reset();
+  }
+
+  _createClass(Arrow, [{
+    key: 'activateSpectralArrowSprite',
+    value: function activateSpectralArrowSprite() {
+      this.sprite.setTexture('arrow-glow');
+    }
+  }, {
+    key: 'deactivateSpectralArrowSprite',
+    value: function deactivateSpectralArrowSprite() {
+      this.sprite.setTexture('arrow');
+    }
+  }, {
+    key: 'update',
+    value: function update() {
+      var state = this.scene.registry.get(_config.config.registryKeys.level.state);
+
+      if (state === STATES.FLY) {
+        this.sprite.rotation = _phaser2.default.Math.Angle.BetweenPoints(_phaser2.default.Math.Vector2.ZERO, this.sprite.body.velocity);
+      }
+
+      if (state === STATES.REST || state === STATES.CHARGE) {
+        this._angleToPointer();
+      }
+
+      if (state === STATES.CHARGE) {
+        var chargeAmount = this.scene.registry.get(_config.config.registryKeys.level.arrow.charge);
+        var newCharge = _phaser2.default.Math.Clamp(chargeAmount + 5, arrowConfig.minCharge, arrowConfig.maxCharge);
+        this.scene.registry.set(_config.config.registryKeys.level.arrow.charge, newCharge);
+      }
+    }
+  }, {
+    key: 'getSprite',
+    value: function getSprite() {
+      return this.sprite;
+    }
+  }, {
+    key: 'getHitbox',
+    value: function getHitbox() {
+      return this.hitbox;
+    }
+  }, {
+    key: 'fire',
+    value: function fire() {
+      var chargePercent = (this.scene.registry.get(_config.config.registryKeys.level.arrow.charge) - arrowConfig.minCharge) / (arrowConfig.maxCharge - arrowConfig.minCharge);
+      if (chargePercent < 0.33) {
+        this.releaseSounds.low.play();
+      } else if (chargePercent < 0.66) {
+        this.releaseSounds.medium.play();
+      } else {
+        this.releaseSounds.high.play();
+      }
+
+      this.hitbox.body.enable = true;
+      this.sprite.body.allowGravity = true;
+      this.scene.physics.velocityFromRotation(this.sprite.rotation, this.scene.registry.get(_config.config.registryKeys.level.arrow.charge), this.sprite.body.velocity);
+    }
+  }, {
+    key: 'reset',
+    value: function reset() {
+      this.scene.registry.set(_config.config.registryKeys.level.arrow.charge, arrowConfig.minCharge);
+
+      this.sprite.body.enable = true;
+      this.hitbox.body.enable = false;
+
+      this.sprite.x = arrowLayoutConfig.x;
+      this.sprite.y = arrowLayoutConfig.y;
+
+      this.sprite.alpha = 1;
+
+      this.sprite.body.allowGravity = false;
+      this.sprite.body.velocity.x = 0;
+      this.sprite.body.velocity.y = 0;
+
+      this.hitbox.body.allowGravity = false;
+    }
+  }, {
+    key: 'onHit',
+    value: function onHit() {
+      this.sprite.body.enable = false;
+      this.hitbox.body.enable = false;
+    }
+  }, {
+    key: '_angleToPointer',
+    value: function _angleToPointer() {
+      var angle = _phaser2.default.Math.Angle.BetweenPoints(this.sprite, this.scene.input.activePointer);
+      this.sprite.rotation = angle;
+    }
+  }]);
+
+  return Arrow;
+}();
+
+/***/ }),
+
+/***/ 508:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ArrowBalloonCollider = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _config = __webpack_require__(11);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var ArrowBalloonCollider = exports.ArrowBalloonCollider = function () {
+  function ArrowBalloonCollider(scene) {
+    _classCallCheck(this, ArrowBalloonCollider);
+
+    this.scene = scene;
+
+    this.onBalloonHit = this.onBalloonHit.bind(this);
+    this.onStringHit = this.onStringHit.bind(this);
+  }
+
+  _createClass(ArrowBalloonCollider, [{
+    key: 'onBalloonHit',
+    value: function onBalloonHit(arrow, balloonHitbox) {
+      var balloon = balloonHitbox.hitboxParent.balloonParent;
+
+      this.scene.registry.set(_config.config.registryKeys.level.remainingBalloons, this.scene.registry.get(_config.config.registryKeys.level.remainingBalloons) - 1);
+      this.scene.registry.set(_config.config.registryKeys.level.poppedBalloons, this.scene.registry.get(_config.config.registryKeys.level.poppedBalloons) + 1);
+
+      this.scene.registry.set(_config.config.registryKeys.level.gold, this.scene.registry.get(_config.config.registryKeys.level.gold) + _config.config.entities.level.balloon.gold);
+
+      balloon.pop();
+    }
+  }, {
+    key: 'onStringHit',
+    value: function onStringHit(arrow, stringHitbox) {
+      this.scene.registry.set(_config.config.registryKeys.level.remainingBalloons, this.scene.registry.get(_config.config.registryKeys.level.remainingBalloons) - 1);
+
+      stringHitbox.hitboxParent.balloonParent.cutString();
+    }
+  }]);
+
+  return ArrowBalloonCollider;
+}();
+
+/***/ }),
+
+/***/ 509:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ArrowTargetCollider = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _config = __webpack_require__(11);
+
+var _levelStates = __webpack_require__(42);
+
+var STATES = _interopRequireWildcard(_levelStates);
+
+var _effects = __webpack_require__(80);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var ArrowTargetCollider = exports.ArrowTargetCollider = function () {
+  function ArrowTargetCollider(scene, sceneCallback) {
+    _classCallCheck(this, ArrowTargetCollider);
+
+    this.scene = scene;
+    this.sceneCallback = sceneCallback;
+
+    this.onTargetHit = this.onTargetHit.bind(this);
+    this.onBullseyeHit = this.onBullseyeHit.bind(this);
+  }
+
+  _createClass(ArrowTargetCollider, [{
+    key: 'onTargetHit',
+    value: function onTargetHit(arrowHitbox, targetHitbox) {
+      var _this = this;
+
+      var gold = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : _config.config.entities.level.target.gold;
+
+      this.scene.registry.set(_config.config.registryKeys.level.remainingTargets, this.scene.registry.get(_config.config.registryKeys.level.remainingTargets) - 1);
+      this.scene.registry.set(_config.config.registryKeys.level.gold, this.scene.registry.get(_config.config.registryKeys.level.gold) + gold);
+
+      targetHitbox.hitboxParent.onHit();
+
+      if (this.scene.skillManager.isActive(_config.config.registryKeys.skills.spectralArrow)) {
+        _effects.Effects.flashOut([targetHitbox.hitboxParent.getSprite()]);
+      } else {
+        this.scene.registry.set(_config.config.registryKeys.level.state, STATES.HIT);
+        this.scene.registry.set(_config.config.registryKeys.level.remainingArrows, this.scene.registry.get(_config.config.registryKeys.level.remainingArrows) - 1);
+
+        arrowHitbox.hitboxParent.onHit();
+        _effects.Effects.flashOut([arrowHitbox.hitboxParent.getSprite(), targetHitbox.hitboxParent.getSprite()], function () {
+          _this.scene.registry.set(_config.config.registryKeys.level.state, STATES.REST);
+
+          _this.sceneCallback.call(_this.scene);
+        });
+      }
+    }
+  }, {
+    key: 'onBullseyeHit',
+    value: function onBullseyeHit(arrowHitbox, bullseyeHitbox) {
+      var target = bullseyeHitbox.hitboxParent;
+
+      _effects.Effects.notify(this.scene, target.sprite.x, target.sprite.y, 'Bullseye!');
+      this.onTargetHit(arrowHitbox, bullseyeHitbox, _config.config.entities.level.targetBullseye.gold);
+    }
+  }]);
+
+  return ArrowTargetCollider;
+}();
+
+/***/ }),
+
+/***/ 510:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ArrowGroundCollider = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _config = __webpack_require__(11);
+
+var _levelStates = __webpack_require__(42);
+
+var STATES = _interopRequireWildcard(_levelStates);
+
+var _effects = __webpack_require__(80);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var ArrowGroundCollider = exports.ArrowGroundCollider = function () {
+  function ArrowGroundCollider(scene, sceneCallback) {
+    _classCallCheck(this, ArrowGroundCollider);
+
+    this.scene = scene;
+    this.sceneCallback = sceneCallback;
+
+    this.onHit = this.onHit.bind(this);
+  }
+
+  _createClass(ArrowGroundCollider, [{
+    key: 'onHit',
+    value: function onHit(arrowHitbox, ground) {
+      var _this = this;
+
+      this.scene.registry.set(_config.config.registryKeys.level.remainingArrows, this.scene.registry.get(_config.config.registryKeys.level.remainingArrows) - 1);
+      this.scene.registry.set(_config.config.registryKeys.level.state, STATES.HIT);
+
+      arrowHitbox.hitboxParent.onHit();
+
+      _effects.Effects.flashOut([arrowHitbox.hitboxParent.getSprite()], function () {
+        _this.scene.registry.set(_config.config.registryKeys.level.state, STATES.REST);
+
+        _this.sceneCallback.call(_this.scene);
+      });
+    }
+  }]);
+
+  return ArrowGroundCollider;
+}();
+
+/***/ }),
+
+/***/ 511:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var SpectralArrowIcon = exports.SpectralArrowIcon = function SpectralArrowIcon(scene, x, y) {
+  _classCallCheck(this, SpectralArrowIcon);
+
+  scene.add.image(x, y, 'arrow-glow').setScale(0.45).setAngle(-45);
+};
+
+/***/ }),
+
+/***/ 512:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var SplitArrowIcon = exports.SplitArrowIcon = function SplitArrowIcon(scene, x, y) {
+  _classCallCheck(this, SplitArrowIcon);
+
+  scene.add.image(x, y, 'arrow').setAngle(-55).setScale(0.35);
+
+  scene.add.image(x, y, 'arrow').setAngle(-15).setScale(0.35);
+};
+
+/***/ }),
+
+/***/ 513:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var CannonballIcon = exports.CannonballIcon = function CannonballIcon(scene, x, y) {
+  _classCallCheck(this, CannonballIcon);
+
+  scene.add.image(x, y, 'cannonball').setScale(0.35);
+};
+
+/***/ }),
+
+/***/ 514:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(97);
+
+var _config = __webpack_require__(11);
+
+var _arcadeHitbox = __webpack_require__(1397);
+
+var _testScene = __webpack_require__(1398);
+
+var _preloadScene = __webpack_require__(1399);
+
+var _levelScene = __webpack_require__(1400);
+
+var _uiScene = __webpack_require__(1419);
+
+var _levelSelectScene = __webpack_require__(1424);
+
+var _skillStoreScene = __webpack_require__(1426);
+
+var _resultsScene = __webpack_require__(1427);
 
 var gameConfig = {
   width: _config.config.dimensions.viewport.width,
@@ -2862,18 +3577,33 @@ var gameConfig = {
       plugin: _arcadeHitbox.ArcadeHitboxPlugin,
       mapping: 'arcadeHitbox' }]
   },
-  scene: [_preloadScene.PreloadScene, _levelSelectScene.LevelSelectScene, _levelScene.LevelScene, _uiScene.UiScene, _resultsScene.ResultsScene]
+  scene: [_preloadScene.PreloadScene, _levelSelectScene.LevelSelectScene, _skillStoreScene.SkillStoreScene, _levelScene.LevelScene, _uiScene.UiScene, _resultsScene.ResultsScene]
 };
 
 new Phaser.Game(gameConfig);
 
 /***/ }),
 
-/***/ 79:
-/***/ (function(module, exports) {
+/***/ 80:
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = {"PANNING_TO_TARGETS":0,"REST":1,"CHARGE":2,"FLY":3,"HIT":4}
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Effects = undefined;
+
+var _flashOut = __webpack_require__(1401);
+
+var _notify = __webpack_require__(1402);
+
+var Effects = exports.Effects = {
+  flashOut: _flashOut.flashOut,
+  notify: _notify.notify
+};
 
 /***/ })
 
-},[506]);
+},[514]);
