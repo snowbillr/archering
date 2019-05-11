@@ -20,6 +20,12 @@ export class LevelSelectScene extends Phaser.Scene {
     this._createBackgroundImage('menu-bg-3');
     this._createBackgroundImage('menu-bg-4');
 
+    this.add.bitmapText(500, 40, 'font', 'Skill Store', 24)
+      .setInteractive({ cursor: 'pointer' })
+      .on('pointerdown', () => {
+        this.scene.start('skill-store');
+      });
+
     this.add.bitmapText(320, 50, 'font-outline', 'Level Select', 12)
       .setOrigin(0.5);
 

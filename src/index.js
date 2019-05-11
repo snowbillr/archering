@@ -11,6 +11,7 @@ import { PreloadScene } from './scenes/preload-scene';
 import { LevelScene } from './scenes/level-scene';
 import { UiScene } from './scenes/ui-scene';
 import { LevelSelectScene } from './scenes/level-select-scene';
+import { SkillStoreScene } from './scenes/skill-store-scene';
 import { ResultsScene } from './scenes/results-scene';
 
 const gameConfig = {
@@ -38,7 +39,7 @@ const gameConfig = {
         mapping: 'arcadeHitbox' }
     ]
   },
-  scene: [PreloadScene, LevelSelectScene, LevelScene, UiScene, ResultsScene],
+  scene: [PreloadScene, LevelSelectScene, SkillStoreScene, LevelScene, UiScene, ResultsScene],
 };
 
 new Phaser.Game(gameConfig);
