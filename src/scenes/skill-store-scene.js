@@ -2,6 +2,7 @@ import { config } from '../config';
 import { SpectralArrowIcon } from '../ui/spectral-arrow-icon';
 import { SplitArrowIcon } from '../ui/split-arrow-icon';
 import { CannonballIcon } from '../ui/cannonball-icon';
+import { Storage } from '../lib/storage';
 
 export class SkillStoreScene extends Phaser.Scene {
   constructor() {
@@ -23,6 +24,23 @@ export class SkillStoreScene extends Phaser.Scene {
     this.add.bitmapText(320, 50, 'font-outline', 'Skill Store', 12)
       .setOrigin(0.5);
 
+    this._createGoldText();
+
+    this._createSpectralArrowButton();
+    this._createSplitArrowButton();
+    this._createCannonballButton();
+
+    this._createDescriptionBackground();
+    this._createDescriptionTexts();
+  }
+
+  _createBackgroundImage(key) {
+    this.add.image(0, 0, key)
+      .setDisplaySize(config.dimensions.viewport.width, config.dimensions.viewport.height)
+      .setOrigin(0);
+  }
+
+  _createGoldText() {
     const goldAmount = this.registry.get(config.registryKeys.gold);
     const goldBackground = this.add.graphics()
       .fillStyle(0x222222, 0.7)
@@ -37,18 +55,9 @@ export class SkillStoreScene extends Phaser.Scene {
       goldText.height + verticalPadding,
     );
 
-    this._createSpectralArrowButton();
-    this._createSplitArrowButton();
-    this._createCannonballButton();
-
-    this._createDescriptionBackground();
-    this._createDescriptionTexts();
-  }
-
-  _createBackgroundImage(key) {
-    this.add.image(0, 0, key)
-      .setDisplaySize(config.dimensions.viewport.width, config.dimensions.viewport.height)
-      .setOrigin(0);
+    this.registry.events.on(`changedata-${config.registryKeys.gold}`, (parent, value) => {
+      goldText.text = `Your gold: ${value}`;
+    });
   }
 
   _createSpectralArrowButton() {
@@ -68,7 +77,12 @@ export class SkillStoreScene extends Phaser.Scene {
       .setDisplaySize(42, 42)
       .setInteractive({ cursor: 'pointer' })
       .on('pointerover', () => this._displayDescriptionFor(descriptionKey))
-      .on('pointerout', () => this._hideDescription());
+      .on('pointerout', () => this._hideDescription())
+      .on('pointerdown', () => {
+        if (this._canBuySkill(cost)) {
+          this._buySkill(registryKey, descriptionKey, cost);
+        }
+      })
     new iconClass(this, x, y);
 
     const costText = this.add.bitmapText(x - 5, y + 40, 'font', cost, 18)
@@ -76,8 +90,12 @@ export class SkillStoreScene extends Phaser.Scene {
      this.add.image(x + costText.width - 5, y + 40, 'gold-3');
 
     const chargeCount = this.registry.get(registryKey).chargeCount;
-    this.add.bitmapText(x, y + 65, 'font', `Charges: ${chargeCount}`, 18)
+    const chargeText = this.add.bitmapText(x, y + 65, 'font', `Charges: ${chargeCount}`, 18)
       .setOrigin(0.5);
+
+    this.registry.events.on(`changedata-${registryKey}`, (parent, value) => {
+      chargeText.text = `Charges: ${value.chargeCount}`;
+    });
   }
 
   _createDescriptionBackground() {
@@ -119,5 +137,23 @@ export class SkillStoreScene extends Phaser.Scene {
   _hideDescription() {
     this.descriptionBackground.alpha = 0;
     Object.values(this.skillTexts).forEach(text => text.alpha = 0);
+  }
+
+  _canBuySkill(amount) {
+    return this.registry.get(config.registryKeys.gold) >= amount;
+  }
+
+  _buySkill(registryKey, skillKey, amount) {
+    const storage = new Storage();
+
+    const skillConfig = this.registry.get(registryKey);
+    skillConfig.chargeCount += 1;
+    this.registry.set(registryKey, skillConfig);
+    storage.saveSkill(skillKey, skillConfig);
+
+    let goldAmount = this.registry.get(config.registryKeys.gold)
+    goldAmount -= amount;
+    this.registry.set(config.registryKeys.gold, goldAmount);
+    storage.saveGold(goldAmount);
   }
 }

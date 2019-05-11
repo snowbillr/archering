@@ -16,7 +16,11 @@ export class ResultsScene extends Phaser.Scene {
   create() {
     this.storage = new Storage();
 
-    this.storage.saveGold(this.registry.get(config.registryKeys.gold) + this.registry.get(config.registryKeys.level.gold));
+    const newGoldAmount = this.registry.get(config.registryKeys.gold) + this.registry.get(config.registryKeys.level.gold);
+
+    this.registry.set(config.registryKeys.gold, newGoldAmount);
+
+    this.storage.saveGold(newGoldAmount);
     this.storage.saveSkill('spectralArrow', this.registry.get(config.registryKeys.skills.spectralArrow));
     this.storage.saveSkill('splitArrow', this.registry.get(config.registryKeys.skills.splitArrow));
     this.storage.saveSkill('cannonball', this.registry.get(config.registryKeys.skills.cannonball));
