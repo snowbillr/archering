@@ -38,15 +38,15 @@ export class SkillStoreScene extends Phaser.Scene {
   }
 
   _createSpectralArrowButton() {
-    this._createSkillButton(130, 120, SpectralArrowIcon, 'spectralArrow', 25);
+    this._createSkillButton(130, 120, SpectralArrowIcon, 'spectralArrow', 25, config.registryKeys.skills.spectralArrow);
   }
 
   _createSplitArrowButton() {
-    this._createSkillButton(310, 120, SplitArrowIcon, 'splitArrow', 25);
+    this._createSkillButton(310, 120, SplitArrowIcon, 'splitArrow', 25, config.registryKeys.skills.splitArrow);
   }
 
   _createCannonballButton() {
-    this._createSkillButton(490, 120, CannonballIcon, 'cannonball', 25);
+    this._createSkillButton(490, 120, CannonballIcon, 'cannonball', 25, config.registryKeys.skills.cannonball);
   }
 
   _createSkillButton(x, y, iconClass, descriptionKey, cost, registryKey) {
@@ -61,7 +61,8 @@ export class SkillStoreScene extends Phaser.Scene {
       .setOrigin(0.5);
      this.add.image(x + costText.width - 5, y + 40, 'gold-3');
 
-    this.add.bitmapText(x, y + 65, 'font', `Charges: `, 18)
+    const chargeCount = this.registry.get(registryKey).chargeCount;
+    this.add.bitmapText(x, y + 65, 'font', `Charges: ${chargeCount}`, 18)
       .setOrigin(0.5);
   }
 
