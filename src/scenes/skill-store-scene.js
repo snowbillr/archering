@@ -23,6 +23,20 @@ export class SkillStoreScene extends Phaser.Scene {
     this.add.bitmapText(320, 50, 'font-outline', 'Skill Store', 12)
       .setOrigin(0.5);
 
+    const goldAmount = this.registry.get(config.registryKeys.gold);
+    const goldBackground = this.add.graphics()
+      .fillStyle(0x222222, 0.7)
+    const goldText = this.add.bitmapText(320, 95, 'font', `Your gold: ${goldAmount}`, 24)
+      .setOrigin(0.5);
+    const horizontalPadding = 10;
+    const verticalPadding = 10;
+    goldBackground.fillRect(
+      320 - (goldText.width + horizontalPadding) / 2,
+      95 - (goldText.height + verticalPadding) / 2,
+      goldText.width + horizontalPadding,
+      goldText.height + verticalPadding,
+    );
+
     this._createSpectralArrowButton();
     this._createSplitArrowButton();
     this._createCannonballButton();
@@ -38,15 +52,15 @@ export class SkillStoreScene extends Phaser.Scene {
   }
 
   _createSpectralArrowButton() {
-    this._createSkillButton(130, 120, SpectralArrowIcon, 'spectralArrow', 25, config.registryKeys.skills.spectralArrow);
+    this._createSkillButton(130, 150, SpectralArrowIcon, 'spectralArrow', 25, config.registryKeys.skills.spectralArrow);
   }
 
   _createSplitArrowButton() {
-    this._createSkillButton(310, 120, SplitArrowIcon, 'splitArrow', 25, config.registryKeys.skills.splitArrow);
+    this._createSkillButton(310, 150, SplitArrowIcon, 'splitArrow', 25, config.registryKeys.skills.splitArrow);
   }
 
   _createCannonballButton() {
-    this._createSkillButton(490, 120, CannonballIcon, 'cannonball', 25, config.registryKeys.skills.cannonball);
+    this._createSkillButton(490, 150, CannonballIcon, 'cannonball', 25, config.registryKeys.skills.cannonball);
   }
 
   _createSkillButton(x, y, iconClass, descriptionKey, cost, registryKey) {
@@ -69,7 +83,7 @@ export class SkillStoreScene extends Phaser.Scene {
   _createDescriptionBackground() {
     this.descriptionBackground = this.add.graphics();
     this.descriptionBackground.fillStyle(0x222222, 0.7);
-    this.descriptionBackground.fillRect(50, 200, 540, 80);
+    this.descriptionBackground.fillRect(50, 230, 540, 50);
     this.descriptionBackground.alpha = 0;
   }
 
@@ -80,13 +94,13 @@ export class SkillStoreScene extends Phaser.Scene {
       'splitArrow': 'Your single arrow splits into 3 new arrows.',
     };
 
-    const spectralArrowText = this.add.bitmapText(320, 240, 'font', skillDescriptions['spectralArrow'], 18)
+    const spectralArrowText = this.add.bitmapText(320, 255, 'font', skillDescriptions['spectralArrow'], 18)
       .setOrigin(0.5)
       .setAlpha(0);
-    const splitArrowText = this.add.bitmapText(320, 240, 'font', skillDescriptions['splitArrow'], 18)
+    const splitArrowText = this.add.bitmapText(320, 255, 'font', skillDescriptions['splitArrow'], 18)
       .setOrigin(0.5)
       .setAlpha(0);
-    const cannonballText = this.add.bitmapText(320, 240, 'font', skillDescriptions['cannonball'], 18)
+    const cannonballText = this.add.bitmapText(320, 255, 'font', skillDescriptions['cannonball'], 18)
       .setOrigin(0.5)
       .setAlpha(0);
 
